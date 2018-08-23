@@ -592,6 +592,16 @@ def bliz_zvonok_handler(message):
     func.log_me(message)
 
 
+@bot.message_handler(func=lambda mess: mess.text == emoji['bust_in_silhouette'],
+                     content_types=['text'])
+def educator_schedule_handler(message):
+    bot.send_chat_action(message.chat.id, 'typing')
+    answer = 'Введи Фамилию преподавателя: <i>(и И. О.)</i>'
+    markup = telebot.types.ForceReply()
+    bot.send_message(message.chat.id, answer, parse_mode='HTML',
+                     reply_markup=markup)
+
+
 @bot.message_handler(func=lambda mess: mess.reply_to_message is not None and
                      mess.reply_to_message.from_user.username ==
                      bot_username and
