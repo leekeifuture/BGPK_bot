@@ -2,18 +2,19 @@
 #!/usr/bin/python3.6
 
 
-import sqlite3
-from datetime import datetime, timedelta
+import datetime as dt
+from sqlite3 import connect
 
 
-if datetime.isoweekday(datetime.now()) != 7:
-    isoweekday = datetime.isoweekday(datetime.now())
+if dt.datetime.isoweekday(dt.datetime.now()) != 7:
+    isoweekday = dt.datetime.isoweekday(dt.datetime.now())
 else:
-    isoweekday = datetime.isoweekday(datetime.now() + timedelta(days=-1))
+    isoweekday = dt.datetime.isoweekday(
+        dt.datetime.now() + dt.timedelta(days=-1))
 
 
 def create_sql(db_name):
-    sql_con = sqlite3.connect(db_name)
+    sql_con = connect(db_name)
     cursor = sql_con.cursor()
 
     cursor.execute('''CREATE TABLE parsing_days
