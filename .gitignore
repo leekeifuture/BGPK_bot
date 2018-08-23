@@ -1,0 +1,7 @@
+﻿__pycache__
+venv
+Bot_db
+Parse_db
+test.py
+test_teachers.py
+*.pem
