@@ -2,11 +2,11 @@
 #!/usr/bin/python3.6
 
 
-import sqlite3
+from sqlite3 import connect
 
 
 def create_sql(db_name):
-    sql_con = sqlite3.connect(db_name)
+    sql_con = connect(db_name)
     cursor = sql_con.cursor()
 
     # user choice
