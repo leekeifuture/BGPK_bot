@@ -4,18 +4,16 @@
 
 import re
 import json
-import telebot
-import sqlite3
-import collections
-from datetime import datetime
+import sqlite3 as sl3
+import constants as const
+from telebot import types
 from bs4 import BeautifulSoup
-from constants import divisions, courses, student_groups, emoji, \
-    cap_teachers, low_teachers, sht_teachers, teacher_name, \
-    sub_pattern, pattern, existing_teachers
+from datetime import datetime
+from collections import Counter
 
 
 def set_next_step(user_id, next_step):
-    sql_con = sqlite3.connect('Bot_db')
+    sql_con = sl3.connect('Bot_db')
     cursor = sql_con.cursor()
     cursor.execute('''UPDATE user_choice
                          SET step = ? 
@@ -26,7 +24,7 @@ def set_next_step(user_id, next_step):
 
 
 def get_step(user_id):
-    sql_con = sqlite3.connect('Bot_db')
+    sql_con = sl3.connect('Bot_db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT step
                         FROM user_choice
@@ -41,24 +39,24 @@ def get_step(user_id):
 
 
 def regex_matches(query):
-    return re.match(pattern,
-                    re.sub(sub_pattern, '',
+    return re.match(const.pattern,
+                    re.sub(const.sub_pattern, '',
                            query.replace('ё', 'е').replace(' ', '').lower()))
 
 
 def check_teacher(teacher_names, full_teachers_name):
     names = []
-    teachers = []
     checked_indexes = []
     pre_checked_indexes = []
-    teachers = existing_teachers.copy()
+    teachers = const.existing_teachers.copy()
 
     for teacher in teacher_names:
-        for i in cap_teachers:
+        for i in const.cap_teachers:
             if teacher == i:
-                index = cap_teachers.index(i)
-                if teacher_name[index] not in names:
-                    names.append(teacher_name[index])
+                index = const.cap_teachers.index(i)
+
+                if const.teacher_name[index] not in names:
+                    names.append(const.teacher_name[index])
                     pre_checked_indexes.append(index)
 
     checked_names = []
@@ -70,16 +68,14 @@ def check_teacher(teacher_names, full_teachers_name):
             if name not in checked_names:
                 checked_names.append(name)
                 checked_indexes.append(pre_checked_indexes[names.index(name)])
-
-        else:
-            if name not in not_in_shedule:
-                not_in_shedule.append(name)
+        elif name not in not_in_shedule:
+            not_in_shedule.append(name)
 
     if not_in_shedule:
         db_teachers = []
 
         for i in range(1, 7):
-            sql_con = sqlite3.connect('Parse_db')
+            sql_con = sl3.connect('Parse_db')
             cursor = sql_con.cursor()
             cursor.execute('''SELECT day_{0}
                                 FROM zam_from_site'''.format(str(i)))
@@ -88,6 +84,7 @@ def check_teacher(teacher_names, full_teachers_name):
             sql_con.close()
 
             soup = BeautifulSoup(data[1], 'lxml')
+
             for tab in soup.find_all('table'):
                 for row in tab.find_all('tr')[1:]:
                     if 'strong' in str(row):
@@ -140,18 +137,19 @@ def check_teacher(teacher_names, full_teachers_name):
                 if surname in surnames:
                     if i not in checked_names:
                         checked_names.append(i)
-                        checked_indexes.append(teacher_name.index(i))
+                        checked_indexes.append(const.teacher_name.index(i))
 
     if len(checked_names) == 1:
-        index = teacher_name.index(checked_names[0])
-        return [cap_teachers[index]], checked_indexes
+        index = const.teacher_name.index(checked_names[0])
+        return [const.cap_teachers[index]], checked_indexes
     else:
         if full_teachers_name:
             checked_teachers = []
             indexes = []
+
             for name in checked_names:
-                index = teacher_name.index(name)
-                checked_teachers.append(cap_teachers[index])
+                index = const.teacher_name.index(name)
+                checked_teachers.append(const.cap_teachers[index])
                 indexes.append(index)
             return checked_teachers, indexes
 
@@ -168,32 +166,32 @@ def search_teacher(name_for_search, dot_except=False):
 
     teachers = []
 
-    for i in low_teachers:
+    for i in const.low_teachers:
         if i.startswith(teacher_name):
-            index = low_teachers.index(i)
-            full_teacher_name = cap_teachers[index]
+            index = const.low_teachers.index(i)
+            full_teacher_name = const.cap_teachers[index]
             teachers.append(full_teacher_name)
-    for i in cap_teachers:
+    for i in const.cap_teachers:
         if i.split()[1].lower().startswith(teacher_name):
-            index = cap_teachers.index(i)
-            full_teacher_name = cap_teachers[index]
+            index = const.cap_teachers.index(i)
+            full_teacher_name = const.cap_teachers[index]
             if full_teacher_name not in teachers:
                 teachers.append(full_teacher_name)
-    for i in cap_teachers:
+    for i in const.cap_teachers:
         if i.split()[2].lower().startswith(teacher_name):
-            index = cap_teachers.index(i)
-            full_teacher_name = cap_teachers[index]
+            index = const.cap_teachers.index(i)
+            full_teacher_name = const.cap_teachers[index]
             if full_teacher_name not in teachers:
                 teachers.append(full_teacher_name)
-    for i in low_teachers:
+    for i in const.low_teachers:
         if teacher_name in i:
-            index = low_teachers.index(i)
-            full_teacher_name = cap_teachers[index]
+            index = const.low_teachers.index(i)
+            full_teacher_name = const.cap_teachers[index]
             if full_teacher_name not in teachers:
                 teachers.append(full_teacher_name)
 
     if '.' in name_for_search:
-        match_teachers = [regex_matches(i).group() for i in sht_teachers]
+        match_teachers = [regex_matches(i).group() for i in const.sht_teachers]
         dot_except = True
         if teacher_name in match_teachers:
             full_teacher_name = search_teacher(
@@ -210,7 +208,7 @@ def select_status(message, change_group=False):
 
     answer = ''
 
-    sql_con = sqlite3.connect('Bot_db')
+    sql_con = sl3.connect('Bot_db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT types_json
                         FROM user_choice
@@ -227,17 +225,17 @@ def select_status(message, change_group=False):
         answer = ''
 
         answer += 'Укажи свое направление:'
-        division_names = [division['Name'] for division in divisions]
-        divisions_keyboard = telebot.types.ReplyKeyboardMarkup(True, False)
+        division_names = [division['Name'] for division in const.divisions]
+        divisions_keyboard = types.ReplyKeyboardMarkup(True, False)
         for division_name in division_names:
             divisions_keyboard.row(division_name)
         if change_group:
             divisions_keyboard.row('« Назад')
         else:
             divisions_keyboard.row('Другой способ регистрации')
-        data = json.dumps(divisions, ensure_ascii=False)
+        data = json.dumps(const.divisions, ensure_ascii=False)
 
-        sql_con = sqlite3.connect('Bot_db')
+        sql_con = sl3.connect('Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE user_choice
                              SET divisions_json = ?
@@ -263,12 +261,12 @@ def select_status(message, change_group=False):
             '      3) <i>Фамилия Имя Отчество</i>\n' \
             '{1} <b>Воспользоваться динамичным поиском:</b>\n' \
             '      Для этого введи "<code>@BGPK_bot </code>" и следуй дальнейшим ' \
-            'инструкциям.{2}'.format(emoji['bullet'],
-                                     emoji['bullet'],
+            'инструкциям.{2}'.format(const.emoji['bullet'],
+                                     const.emoji['bullet'],
                                      back_command)
-        remove_keyboard = telebot.types.ReplyKeyboardRemove()
+        remove_keyboard = types.ReplyKeyboardRemove()
 
-        sql_con = sqlite3.connect('Bot_db')
+        sql_con = sl3.connect('Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE user_choice 
                              SET alias = ?
@@ -293,8 +291,8 @@ def select_teacher(message):
 
     answer = ''
 
-    if message.text in cap_teachers:
-        sql_con = sqlite3.connect('Bot_db')
+    if message.text in const.cap_teachers:
+        sql_con = sl3.connect('Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE user_choice 
                              SET student_group_name = ?
@@ -306,7 +304,7 @@ def select_teacher(message):
 
         text = '>> ' + message.text
         answer += 'Подтверди выбор преподавателя:\n' + '<b>' + text + '</b>'
-        choice_keyboard = telebot.types.ReplyKeyboardMarkup(True, False)
+        choice_keyboard = types.ReplyKeyboardMarkup(True, False)
         buttons = ['Все верно',
                    'Другой преподаватель',
                    'Другой способ регистрации']
@@ -320,77 +318,73 @@ def select_teacher(message):
         teachers = search_teacher(message.text)
 
         if teachers[0] and len(teachers[0]) <= 10:
-            sht_teachers = []
+            short_teachers = []
             if len(teachers[0]) > 1:
-                bot.send_chat_action(message.chat.id, 'typing')
                 for teacher in teachers[0]:
                     sp_te = teacher.split()
-                    sht_teachers.append(sp_te[0] + ' ' +
+                    short_teachers.append(sp_te[0] + ' ' +
                                         sp_te[1][0] + '. ' +
                                         sp_te[2][0] + '.')
 
-                duplicate = [item for item, count in collections.Counter(
-                    sht_teachers).items() if count > 1]
+                duplicate = [item for item, count in Counter(
+                    short_teachers).items() if count > 1]
                 if duplicate:
                     seen = set()
                     result = []
-                    for idx, item in enumerate(sht_teachers):
+                    for idx, item in enumerate(short_teachers):
                         if item not in seen:
                             seen.add(item)
                         else:
                             result.append(idx)
 
                     for i in duplicate:
-                        index = sht_teachers.index(i)
+                        index = short_teachers.index(i)
                         for ind in result:
-                            if sht_teachers[index] == sht_teachers[ind]:
+                            if short_teachers[index] == short_teachers[ind]:
                                 sp_te = teachers[0][ind].split()
-                                sht_teachers[ind] = \
+                                short_teachers[ind] = \
                                     sp_te[0] + ' ' + \
                                     sp_te[1][:2] + '. ' + \
                                     sp_te[2][:2] + '.'
                         sp_te = teachers[0][index].split()
-                        sht_teachers[index] = \
+                        short_teachers[index] = \
                             sp_te[0] + ' ' + \
                             sp_te[1][:2] + '. ' + \
                             sp_te[2][:2] + '.'
             else:
-                sht_teachers = teachers[0]
+                short_teachers = teachers[0]
 
-            educators_keyboard = telebot.types.InlineKeyboardMarkup(
+            educators_keyboard = types.InlineKeyboardMarkup(
                 row_width=2)
 
             educators = []
             i = 0
-            for teacher in sht_teachers:
+            for teacher in short_teachers:
                 try:
-                    educators.append(telebot.types.InlineKeyboardButton(
+                    educators.append(types.InlineKeyboardButton(
                         text=teacher,
                         callback_data=teacher + '|' + str(teachers[1][i])))
                     i += 1
                 except:
                     continue
             educators_keyboard.add(*educators)
-
-            educators_keyboard.row(telebot.types.InlineKeyboardButton(
+            educators_keyboard.row(types.InlineKeyboardButton(
                 text='« Назад', callback_data='back_reg'))
 
-            if len(sht_teachers) == 1:
-                answer += emoji['mag_right'] + ' Найденный преподаватель:'
+            if len(short_teachers) == 1:
+                answer += const.emoji['mag_right'] + ' Найденный преподаватель:'
             else:
-                answer += emoji['mag_right'] + ' Найденные преподаватели:'
+                answer += const.emoji['mag_right'] + ' Найденные преподаватели:'
 
             bot.send_message(message.chat.id, answer,
                              reply_markup=educators_keyboard)
         elif len(teachers[0]) > 10:
-            bot.send_chat_action(message.chat.id, 'typing')
             answer += 'Слишком много преподавателей\n' \
                       'Пожалуйста, <b>уточни</b>'
 
             bot.send_message(message.chat.id, answer,
                              parse_mode='HTML')
         else:
-            bot.send_chat_action(message.chat.id, 'typing')
             if 'Никого не найдено' not in message.text and \
                'Введи ФИО преподавателя' not in message.text and \
                'Слишком много преподавателей' not in message.text:
@@ -408,7 +402,7 @@ def select_division(message):
 
     answer = ''
 
-    sql_con = sqlite3.connect('Bot_db')
+    sql_con = sl3.connect('Bot_db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT divisions_json 
                         FROM user_choice 
@@ -422,18 +416,18 @@ def select_division(message):
     aliases = [division['Alias'] for division in divisions]
     if message.text in division_names:
         answer += 'Выбери курс:'
-        study_programs_keyboard = telebot.types.ReplyKeyboardMarkup(
+        study_programs_keyboard = types.ReplyKeyboardMarkup(
             True, False)
         index = division_names.index(message.text)
         alias = aliases[index]
 
-        study_programs = [course['Course'] for course in courses]
+        study_programs = [course['Course'] for course in const.courses]
         for study_program in study_programs:
             study_programs_keyboard.row(study_program)
         study_programs_keyboard.row('Другое направление')
 
-        data = json.dumps(courses, ensure_ascii=False)
-        sql_con = sqlite3.connect('Bot_db')
+        data = json.dumps(const.courses, ensure_ascii=False)
+        sql_con = sl3.connect('Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE user_choice 
                              SET div_alias = ?,
@@ -462,7 +456,7 @@ def select_admission_year(message):
 
     answer = ''
 
-    sql_con = sqlite3.connect('Bot_db')
+    sql_con = sl3.connect('Bot_db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT study_programs_json, div_alias
                         FROM user_choice 
@@ -477,27 +471,27 @@ def select_admission_year(message):
     aliases = [course['Alias'] for course in courses]
     if message.text in admission_year_names:
         answer += 'Укажи группу:'
-        student_groups_keyboard = telebot.types.ReplyKeyboardMarkup(
+        student_groups_keyboard = types.ReplyKeyboardMarkup(
             True, False)
         index = admission_year_names.index(message.text)
         course_alias = aliases[index]
 
         alias = div_alias + course_alias
         student_group_names = []
-        for i in student_groups:
+        for i in const.student_groups:
             if alias in i:
                 gr = i[alias]
                 for student_group in gr:
                     student_group_names.append(
                         student_group['StudentGroupName'])
-        student_groups_keyboard = telebot.types.ReplyKeyboardMarkup(
+        student_groups_keyboard = types.ReplyKeyboardMarkup(
             True, False)
         for student_group_name in student_group_names:
             student_groups_keyboard.row(student_group_name)
         student_groups_keyboard.row('Другой курс')
-        data = json.dumps(student_groups, ensure_ascii=False)
+        data = json.dumps(const.student_groups, ensure_ascii=False)
 
-        sql_con = sqlite3.connect('Bot_db')
+        sql_con = sl3.connect('Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE user_choice 
                              SET alias = ?, admission_year_name = ?, 
@@ -512,7 +506,7 @@ def select_admission_year(message):
                          reply_markup=student_groups_keyboard)
         set_next_step(message.chat.id, 'select_student_group')
     elif message.text == 'Другое направление':
-        sql_con = sqlite3.connect('Bot_db')
+        sql_con = sl3.connect('Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT types_json
                             FROM user_choice 
@@ -536,7 +530,7 @@ def select_student_group(message):
 
     answer = ''
 
-    sql_con = sqlite3.connect('Bot_db')
+    sql_con = sl3.connect('Bot_db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT student_groups_json, alias
                         FROM user_choice 
@@ -554,14 +548,11 @@ def select_student_group(message):
             for student_group in gr:
                 student_group_names.append(student_group['StudentGroupName'])
     if message.text in student_group_names:
-        bot.send_chat_action(message.chat.id, 'typing')
         edit_msg = bot.send_message(message.chat.id,
                                     'Почти готово! '
                                     'Запоминаю твой выбор\U00002026')
 
-        bot.send_chat_action(message.chat.id, 'typing')
-
-        sql_con = sqlite3.connect('Bot_db')
+        sql_con = sl3.connect('Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE user_choice 
                              SET student_group_name = ?
@@ -579,7 +570,7 @@ def select_student_group(message):
 
         text = '>> ' + '\n>> '.join(data)
         answer += 'Подтверди выбор:\n' + '<b>' + text + '</b>'
-        choice_keyboard = telebot.types.ReplyKeyboardMarkup(True, False)
+        choice_keyboard = types.ReplyKeyboardMarkup(True, False)
         buttons = ['Все верно',
                    'Другая группа',
                    'Другой курс',
@@ -595,7 +586,7 @@ def select_student_group(message):
                          reply_markup=choice_keyboard)
         set_next_step(message.chat.id, 'confirm_choice')
     elif message.text == 'Другой курс':
-        sql_con = sqlite3.connect('Bot_db')
+        sql_con = sl3.connect('Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT division_name
                             FROM user_choice
@@ -615,12 +606,11 @@ def select_student_group(message):
 
 def confirm_choice_teacher(message):
     from flask_app import bot, start_handler, main_keyboard
-    from constants import emoji
 
     answer = ''
 
     if message.text == 'Все верно':
-        sql_con = sqlite3.connect('Bot_db')
+        sql_con = sl3.connect('Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT alias, student_group_name
                             FROM user_choice 
@@ -650,7 +640,7 @@ def confirm_choice_teacher(message):
                             message.chat.username,
                             alias, group_name,
                             str(datetime.now())[:-7],))
-        except sqlite3.IntegrityError:
+        except sl3.IntegrityError:
             sql_con.rollback()
             cursor.execute('''UPDATE user_data 
                                  SET alias = ?, group_name = ?
@@ -670,11 +660,11 @@ def confirm_choice_teacher(message):
                  '{1} – оценить бота\n' \
                  '{2} – настройки\n' \
                  '{3} – параметры уведомлений\n' \
-                 '{4} – расписание звонков'.format(emoji['info'],
-                                                   emoji['star'],
-                                                   emoji['settings'],
-                                                   emoji['alarm_clock'],
-                                                   emoji['bell'])
+                 '{4} – расписание звонков'.format(const.emoji['info'],
+                                                   const.emoji['star'],
+                                                   const.emoji['settings'],
+                                                   const.emoji['alarm_clock'],
+                                                   const.emoji['bell'])
         bot.send_message(message.chat.id, answer,
                          reply_markup=main_keyboard,
                          parse_mode='HTML')
@@ -694,12 +684,11 @@ def confirm_choice_teacher(message):
 
 def confirm_choice(message):
     from flask_app import bot, start_handler, main_keyboard
-    from constants import emoji
 
     answer = ''
 
     if message.text == 'Все верно':
-        sql_con = sqlite3.connect('Bot_db')
+        sql_con = sl3.connect('Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT alias, student_group_name
                             FROM user_choice 
@@ -729,7 +718,7 @@ def confirm_choice(message):
                             message.chat.username,
                             alias, group_name,
                             str(datetime.now())[:-7],))
-        except sqlite3.IntegrityError:
+        except sl3.IntegrityError:
             sql_con.rollback()
             cursor.execute('''UPDATE user_data 
                                  SET alias = ?, group_name = ?
@@ -749,16 +738,16 @@ def confirm_choice(message):
                  '{1} – оценить бота\n' \
                  '{2} – настройки\n' \
                  '{3} – параметры уведомлений\n' \
-                 '{4} – расписание звонков'.format(emoji['info'],
-                                                   emoji['star'],
-                                                   emoji['settings'],
-                                                   emoji['alarm_clock'],
-                                                   emoji['bell'])
+                 '{4} – расписание звонков'.format(const.emoji['info'],
+                                                   const.emoji['star'],
+                                                   const.emoji['settings'],
+                                                   const.emoji['alarm_clock'],
+                                                   const.emoji['bell'])
         bot.send_message(message.chat.id, answer,
                          reply_markup=main_keyboard,
                          parse_mode='HTML')
     elif message.text == 'Другая группа':
-        sql_con = sqlite3.connect('Bot_db')
+        sql_con = sl3.connect('Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT admission_year_name
                             FROM user_choice 
