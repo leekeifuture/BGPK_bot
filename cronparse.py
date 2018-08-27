@@ -2,17 +2,16 @@
 #!/usr/bin/python3.6
 
 
+import sys
 from re import sub
 import datetime as dt
 import config as conf
 from time import sleep
-from sys import exc_info
+import functions as func
 import constants as const
 from sqlite3 import connect
 from telebot import TeleBot
 from bs4 import BeautifulSoup
-from urllib.request import urlopen
-from functions import get_replacements_ansewer
 
 
 bot = TeleBot(conf.token)
@@ -21,76 +20,17 @@ have_repl = []
 not_have_repl = []
 
 
-def get_html(url):
-    try:
-        response = urlopen(url)
-        return response.read()
-    except:
-        print('\n\n' + str(dt.datetime.now())[:-7] + ' | ' +
-              str(exc_info()[1]) + '\n\n')
-        bot.send_message(conf.my_id, str(dt.datetime.now())[:-7] + ' | ' +
-                         str(exc_info()[1]))
-        exit()
-
-
-def day_of_parsing_week(request_day, parse_day):
-    if parse_day == dt.datetime.isoweekday(dt.datetime.now() + dt.timedelta(days=+1)):
-        return 'завтра'
-    elif parse_day == dt.datetime.isoweekday(dt.datetime.now()):
-        return 'сегодня'
-    else:
-        if 'ponedelnik' in request_day.lower():
-            return 'понедельник'
-        elif 'vtornik' in request_day.lower():
-            return 'вторник'
-        elif 'sreda' in request_day.lower():
-            return 'среду'
-        elif 'chetverg' in request_day.lower():
-            return 'четверг'
-        elif 'pyatnica' in request_day.lower():
-            return 'пятницу'
-        elif 'subotta' in request_day.lower():
-            return 'субботу'
-
-
-def get_student_group(user_id):
-    sql_con = connect(const.path + 'Bot_db')
-    cursor = sql_con.cursor()
-    cursor.execute('''SELECT group_name 
-                        FROM user_data 
-                       WHERE id = ?''', (user_id,))
-    data_group = cursor.fetchone()
-    cursor.close()
-    sql_con.close()
-
-    try:
-        return data_group[0]
-    except:
-        return ''
-
-
-def get_alias(chat_id):
-    sql_con = connect('Bot_db')
-    cursor = sql_con.cursor()
-    cursor.execute('''SELECT alias
-                        FROM user_data
-                       WHERE id = ?''', (chat_id,))
-    data = cursor.fetchone()[0]
-    cursor.close()
-    sql_con.close()
-    return data
-
-
 def parse(html, parse_day, request_day):
-
     try:
         soup = BeautifulSoup(sub(' +', ' ', html), 'lxml')
+    except TypeError:
+        soup = BeautifulSoup(sub(' +', ' ', html.decode('utf-8')), 'lxml')
     except:
         print('\n\n' + str(dt.datetime.now())[:-7] + ' | ' +
-              str(exc_info()[1]) + '\n\n')
+              str(sys.exc_info()[1]) + '\n\n')
         bot.send_message(conf.my_id, str(dt.datetime.now())[:-7] + ' | ' +
-                         str(exc_info()[1]))
-        exit()
+                         str(sys.exc_info()[1]))
+        sys.exit()
 
     data = soup.find('div', class_='item-page')
     dataa = data.find_all('h1')
@@ -113,7 +53,7 @@ def parse(html, parse_day, request_day):
     sql_con.close()
 
     if send_parse:
-        exit()
+        sys.exit()
 
     elif weekday == parse_day and c >= d:
         sql_con = connect(const.path + 'Parse_db')
@@ -132,23 +72,25 @@ def parse(html, parse_day, request_day):
         cursor.close()
         sql_con.close()
 
-        print('\n' + str(dt.datetime.now())[:-7] + ' | ' + '!!! PARSING '
-                   + str(weekday) + ' !!!' + '\n')
-
         try:
             all_page = soup.find_all('table')
+            valid_info = str(dataa) + str(all_page)
+            print(valid_info.replace('\n', ''))
+            print('\n' + str(dt.datetime.now())[:-7] + ' | ' + '!!! PARSING '
+                       + str(weekday) + ' !!!' + '\n')
         except:
             print('\n\n' + str(dt.datetime.now())[:-7] + ' | ' +
-                  str(exc_info()[1]) + '\n\n')
+                  str(sys.exc_info()[1]) + '\n\n')
             bot.send_message(conf.my_id, str(dt.datetime.now())[:-7] + ' | ' +
-                             str(exc_info()[1]))
-            exit()
+                             str(sys.exc_info()[1]))
+            sys.exit()
+
 
         sql_con = connect(const.path + 'Parse_db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE zam_from_site
                              SET day_{} = ?'''.format(str(parse_day)),
-                       (str(dataa) + str(all_page),))
+                       (valid_info,))
         sql_con.commit()
         cursor.close()
         sql_con.close()
@@ -286,7 +228,8 @@ def parse(html, parse_day, request_day):
                         if 'strong' in str(row):
                             continue
 
-                        answer += get_replacements_ansewer(row, id_send_repl)
+                        answer += func.get_replacements_ansewer(
+                            row, id_send_repl)
 
                 answer = const.emoji['anticlockwise'] + \
                     ' ' + dataaa.capitalize() + answer
@@ -336,8 +279,8 @@ def parse(html, parse_day, request_day):
 
         if id_non_repl_sending:
             for inzs in id_non_repl_sending:
-                group = get_student_group(inzs)
-                if get_alias(inzs) == 'PREP':
+                group = func.get_student_group(inzs)
+                if func.get_alias(inzs) == 'PREP':
                     index = const.cap_teachers.index(group)
                     for_any = 'преподавателя'
                     group = const.sht_teachers[index]
@@ -349,8 +292,8 @@ def parse(html, parse_day, request_day):
                                      ' Для ' + for_any +
                                      ' <b>{}</b> нет замен на {} ('
                                      .format(group,
-                                             day_of_parsing_week(request_day,
-                                                                 parse_day)) +
+                                             func.day_of_week_parsing_day(request_day,
+                                                                          parse_day)) +
                                      dataaa[-10:] + ').', parse_mode='HTML')
                     not_have_repl.append(inzs)
                 except Exception as err:
@@ -376,7 +319,7 @@ def parse(html, parse_day, request_day):
         print(str(len(sending_zam_one)) + ' - ' + str(len(shipped)))
         print(difference)
 
-        exit()
+        sys.exit()
 
     elif dt.datetime.strftime(dt.datetime.now(), '%H:%M') == '23:50' and \
         ((dt.datetime.isoweekday(dt.datetime.now()) == 6 and
@@ -401,10 +344,10 @@ def parse(html, parse_day, request_day):
         bot.send_message(conf.my_id, str(dt.datetime.now())[:-7] + ' | ' +
                          'Замены до сих пор не вывесили')
 
-        exit()
+        sys.exit()
 
     else:
-        exit()
+        sys.exit()
 
 
 def main():
@@ -418,7 +361,7 @@ def main():
     sql_con.close()
 
     if send_parse:
-        exit()
+        sys.exit()
 
     sql_con = connect(const.path + 'Parse_db')
     cursor = sql_con.cursor()
@@ -429,17 +372,23 @@ def main():
     sql_con.close()
 
     if pro_parsing_day == '1':
-        parse(get_html(const.vtornik), 2, const.vtornik)
+        parse(func.get_html(const.vtornik, printing=True), 2,
+              const.vtornik)
     elif pro_parsing_day == '2':
-        parse(get_html(const.sreda), 3, const.sreda)
+        parse(func.get_html(const.sreda, printing=True), 3,
+              const.sreda)
     elif pro_parsing_day == '3':
-        parse(get_html(const.chetverg), 4, const.chetverg)
+        parse(func.get_html(const.chetverg, printing=True), 4,
+              const.chetverg)
     elif pro_parsing_day == '4':
-        parse(get_html(const.pyatnica), 5, const.pyatnica)
+        parse(func.get_html(const.pyatnica, printing=True), 5,
+              const.pyatnica)
     elif pro_parsing_day == '5':
-        parse(get_html(const.subotta), 6, const.subotta)
+        parse(func.get_html(const.subotta, printing=True), 6,
+              const.subotta)
     elif pro_parsing_day == '6':
-        parse(get_html(const.ponedelnik), 1, const.ponedelnik)
+        parse(func.get_html(const.ponedelnik, printing=True), 1,
+              const.ponedelnik)
 
 
 if __name__ == '__main__':
