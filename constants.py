@@ -318,7 +318,8 @@ emoji = {
     'page_facing_up': u'\U0001F4C4', 'anticlockwise': u'\U0001F504',
     'no_entry': u'\U0001F6AB', 'negative_squared_cross_mark': u'\U0000274E',
     'black_arrow': u'\U00002B05', 'five_oclock': u'\U0001F554',
-    'nine_oclock': u'\U0001F558', 'warning_sign': u'\U000026A0'
+    'nine_oclock': u'\U0001F558', 'warning_sign': u'\U000026A0',
+    'magnifying_glass': u'\U0001F50E'
 }
 
 briefly_info_answer = (
@@ -1622,7 +1623,7 @@ for teacher in teachers_shedule:
 
         if week == list(teacher_shedule.keys())[-1]:
             if week_status:
-                if sum(week_status) == 0:
+                if len(week_status) == 2 and sum(week_status) == 0:
                     remove_teachers.append(teacher)
 
         for day in day_of_week:
