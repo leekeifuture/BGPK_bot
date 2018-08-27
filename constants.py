@@ -3,17 +3,14 @@
 
 
 import re
+from os import environ
 from platform import system
 from collections import Counter
 
 
 syst = system()
 
-if syst == 'Linux':
-    path = '/home/ubuntu/bot/'
-elif syst == 'Windows':
-    path = ''
-
+path = environ['path_to_bot_directory']
 
 types = [
     {'Alias': 'STUD',
@@ -286,6 +283,11 @@ for student_group in student_groups:
         for group in student_group[alias]:
             existing_groups.append(group['StudentGroupName'])
 
+existing_courses = [course['Course'] for course in courses]
+
+existing_divisions = [division['Name'] for division in divisions]
+
+existing_types = [type['Type'] for type in types]
 
 site_prefix = 'http://www.bspc.brest.by/ru/uchashchimsya/zamena-zanyatij/'
 
