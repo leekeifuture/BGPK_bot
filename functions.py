@@ -1004,6 +1004,12 @@ def delete_all_user_info(user_id):
     sql_con.close()
 
 
+def get_data_from_replacements(chat_id, teacher=False, group=False,
+                               course=False, division=False):
+    active_days = get_active_replace_days(chat_id)
+    print(active_days)
+
+
 def regex_matches(query):
     return re.match(const.pattern,
                     re.sub(const.sub_pattern, '',

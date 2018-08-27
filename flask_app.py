@@ -1155,13 +1155,12 @@ def show_briefly_info(call_back):
     call_back.data.split('|')[0] in const.sht_teachers or
     call_back.data.split('|')[0] in const.cap_teachers))
 def select_teacher_id_handler(call_back):
-    if 'Найденный' in call_back.message.text:
+    if 'Найденны' in call_back.message.text:
         index = int(call_back.data.split('|')[1])
         teacher = const.teacher_name[index]
         func.send_teacher_week_answer(call_back.message, teacher)
     elif 'Нaйденны' in call_back.message.text:
-        print(call_back.message.text)
-        pass
+        print(func.get_data_from_replacements())
     func.call_back_log_me(call_back)
 
 
@@ -1171,10 +1170,14 @@ def cancel_handler(call_back):
     answer = 'Отмена'
     bot.edit_message_text(text=answer, chat_id=call_back.message.chat.id,
                           message_id=call_back.message.message_id)
-
-    answer = 'Меню расписания'
-    bot.send_message(call_back.message.chat.id, answer,
-                     reply_markup=schedule_keyboard)
+    if 'Найденны' in call_back.message.text:
+        answer = 'Меню расписания'
+        bot.send_message(call_back.message.chat.id, answer,
+                         reply_markup=schedule_keyboard)
+    elif 'Нaйденны' in call_back.message.text:
+        answer = 'Меню замен'
+        bot.send_message(call_back.message.chat.id, answer,
+                         reply_markup=replacements_keyboard)
     func.call_back_log_me(call_back)
 
 
