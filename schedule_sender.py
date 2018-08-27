@@ -19,7 +19,7 @@ def main(date):
     id_real_sendig = []
     full_date = [False, False]
 
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     if date == '21':
         cursor.execute('''SELECT id 
@@ -37,7 +37,7 @@ def main(date):
         if sro[0] not in id_real_sendig:
             id_real_sendig.append(sro[0])
 
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT id_banned
                         FROM banned_users''')

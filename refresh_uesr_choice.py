@@ -7,7 +7,7 @@ from functions import sql_execute
 
 
 def main():
-    sql_execute(path + 'Bot_db', 'DELETE FROM user_choice')
+    sql_execute(path + 'Bot.db', 'DELETE FROM user_choice')
 
 
 if __name__ == '__main__':

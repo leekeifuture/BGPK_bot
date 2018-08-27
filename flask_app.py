@@ -92,7 +92,7 @@ def start_handler(message, back=False):
     types_keyboard.row('Поддержка', 'Завершить')
     data = dumps(const.types, ensure_ascii=False)
 
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''DELETE FROM user_choice
                             WHERE user_id = ?''', (message.chat.id,))
@@ -249,7 +249,7 @@ def home_registration_handler(message):
 def not_exist_user_handler(message):
     bot.send_chat_action(message.chat.id, 'typing')
 
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     if func.is_user_in_all_users(message.chat.id) == False:
         cursor.execute('''INSERT INTO all_users (id)
@@ -275,7 +275,7 @@ def change_group_handler(message):
     bot.send_chat_action(message.chat.id, 'typing')
 
     data = dumps(const.types, ensure_ascii=False)
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''DELETE FROM user_choice
                             WHERE user_id = ?''', (message.chat.id,))
@@ -486,7 +486,7 @@ def sending_handler(message):
     answer = 'Выбери, на рассылку чего ты хочешь <b>подписаться</b> или <b>отписаться</b>:\n' \
         + const.emoji['check_mark'] + ' – Рассылка включена.\n' \
         + const.emoji['negative_squared_cross_mark'] + ' – Рассылка отключена.'
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT sending_rasp, sending_rasp_5, sending_zam
                         FROM user_data
@@ -860,7 +860,7 @@ def save_abridged_call_handler(message):
     invalid_format_answer = 'Неверный формат'
 
     if re.match(r'\d\d.\d\d.\d\d\d\d', message.text):
-        sql_con = connect(const.path + 'Bot_db')
+        sql_con = connect(const.path + 'Bot.db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT abridged_calls
                             FROM offer''')
@@ -873,7 +873,7 @@ def save_abridged_call_handler(message):
         else:
             new_value = previous_value + '\n' + message.text
 
-        sql_con = connect(const.path + 'Bot_db')
+        sql_con = connect(const.path + 'Bot.db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE offer
                              SET abridged_calls = ?''', (new_value,))
@@ -1023,7 +1023,7 @@ def search_teacher_inline_handler(call_back):
     index = int(call_back.data.split('|')[1])
     teacher = const.cap_teachers[index]
 
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''UPDATE user_choice 
                          SET student_group_name = ?
@@ -1534,7 +1534,7 @@ def back_from_week_handler(call_back):
                             'Расписания' in call_back.data)
 def podpis_rasp_5_or_9_handler(call_back):
     answer = 'Выбери, в какое время ты хочешь получать <b>расписание на следующий день</b>:'
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT sending_rasp, sending_rasp_5
                         FROM user_data
@@ -1658,7 +1658,7 @@ def back_from_podpis_handler(call_back):
     answer = 'Выбери, на рассылку чего ты хочешь <b>подписаться</b> или <b>отписаться</b>:\n' \
         + const.emoji['check_mark'] + ' – Рассылка включена.\n' \
         + const.emoji['negative_squared_cross_mark'] + ' – Рассылка отключена.'
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT sending_rasp, sending_rasp_5, sending_zam
                         FROM user_data
@@ -2041,7 +2041,7 @@ def handle_text(message):
                                  :-7] + ' | ' + str(exc_info()[1]))
         elif mess_text[:2].lower() == 'pd':
             try:
-                sql_con = connect(const.path + 'Parse_db')
+                sql_con = connect(const.path + 'Parse.db')
                 cursor = sql_con.cursor()
                 cursor.execute('''UPDATE parsing_days
                                      SET pro_parsing_day = ?''', (int(mess_text[2:]),))
@@ -2054,7 +2054,7 @@ def handle_text(message):
                                  :-7] + ' | ' + str(exc_info()[1]))
         elif mess_text.split()[0] in const.existing_groups:
             try:
-                sql_con = connect(const.path + 'Bot_db')
+                sql_con = connect(const.path + 'Bot.db')
                 cursor = sql_con.cursor()
                 cursor.execute('''SELECT id 
                                     FROM user_data

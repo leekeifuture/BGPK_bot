@@ -78,4 +78,4 @@ def create_sql(db_name):
 
 
 if __name__ == '__main__':
-    create_sql('Bot_db')
+    create_sql('Bot.db')

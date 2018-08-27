@@ -44,7 +44,7 @@ def parse(html, parse_day, request_day):
 
     weekday = c.weekday() + 1
 
-    sql_con = connect(const.path + 'Parse_db')
+    sql_con = connect(const.path + 'Parse.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT pro_parsing_date
                         FROM parsing_days''')
@@ -56,7 +56,7 @@ def parse(html, parse_day, request_day):
         sys.exit()
 
     elif weekday == parse_day and c >= d:
-        sql_con = connect(const.path + 'Parse_db')
+        sql_con = connect(const.path + 'Parse.db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE parsing_days
                              SET pro_parsing_date = 1''')
@@ -64,7 +64,7 @@ def parse(html, parse_day, request_day):
         cursor.close()
         sql_con.close()
 
-        sql_con = connect(const.path + 'Parse_db')
+        sql_con = connect(const.path + 'Parse.db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE parsing_days
                              SET pro_parsing_day = ?''', (parse_day,))
@@ -85,7 +85,7 @@ def parse(html, parse_day, request_day):
                              str(sys.exc_info()[1]))
             sys.exit()
 
-        sql_con = connect(const.path + 'Parse_db')
+        sql_con = connect(const.path + 'Parse.db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE zam_from_site
                              SET day_{} = ?'''.format(str(parse_day)),
@@ -101,7 +101,7 @@ def parse(html, parse_day, request_day):
         all_teachers = const.cap_teachers.copy()
         all_groups = const.existing_groups.copy()
 
-        sql_con = connect(const.path + 'Bot_db')
+        sql_con = connect(const.path + 'Bot.db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT id 
                             FROM user_data
@@ -110,7 +110,7 @@ def parse(html, parse_day, request_day):
         cursor.close()
         sql_con.close()
 
-        sql_con = connect(const.path + 'Bot_db')
+        sql_con = connect(const.path + 'Bot.db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT id_banned
                             FROM banned_users''')
@@ -123,7 +123,7 @@ def parse(html, parse_day, request_day):
                 sending_zam_one.remove(ib[0])
 
         for szo in sending_zam_one:
-            sql_con = connect(const.path + 'Bot_db')
+            sql_con = connect(const.path + 'Bot.db')
             cursor = sql_con.cursor()
             cursor.execute('''SELECT group_name 
                                 FROM user_data 
@@ -183,7 +183,7 @@ def parse(html, parse_day, request_day):
                                         all_teachers.remove(sg)
 
         for rs in real_sendig:
-            sql_con = connect(const.path + 'Bot_db')
+            sql_con = connect(const.path + 'Bot.db')
             cursor = sql_con.cursor()
             cursor.execute('''SELECT id 
                                 FROM user_data
@@ -196,7 +196,7 @@ def parse(html, parse_day, request_day):
                 if i not in id_yes_repl_sendig:
                     id_yes_repl_sendig.append(i[0])
 
-        sql_con = connect(const.path + 'Bot_db')
+        sql_con = connect(const.path + 'Bot.db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT id_banned
                             FROM banned_users''')
@@ -211,7 +211,7 @@ def parse(html, parse_day, request_day):
         if id_yes_repl_sendig:
             for id_send_repl in id_yes_repl_sendig:
 
-                sql_con = connect(const.path + 'Bot_db')
+                sql_con = connect(const.path + 'Bot.db')
                 cursor = sql_con.cursor()
                 cursor.execute('''SELECT group_name 
                                     FROM user_data 
@@ -245,7 +245,7 @@ def parse(html, parse_day, request_day):
                 sleep(0.04)
 
         for ag in all_groups:
-            sql_con = connect(const.path + 'Bot_db')
+            sql_con = connect(const.path + 'Bot.db')
             cursor = sql_con.cursor()
             cursor.execute('''SELECT id 
                                 FROM user_data
@@ -259,7 +259,7 @@ def parse(html, parse_day, request_day):
                     id_non_repl_sending.append(i[0])
 
         for at in all_teachers:
-            sql_con = connect(const.path + 'Bot_db')
+            sql_con = connect(const.path + 'Bot.db')
             cursor = sql_con.cursor()
             cursor.execute('''SELECT id 
                                 FROM user_data
@@ -303,7 +303,7 @@ def parse(html, parse_day, request_day):
 
                 sleep(0.04)
 
-        sql_con = connect(const.path + 'Parse_db')
+        sql_con = connect(const.path + 'Parse.db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE parsing_days
                              SET pro_parsing_date = 0''')
@@ -330,7 +330,7 @@ def parse(html, parse_day, request_day):
                                                                      dt.timedelta(days=-6), '%d') or
                                                 dt.datetime.strftime(dt.date.today() + dt.timedelta(days=-13), '%d')))):
 
-        sql_con = connect(const.path + 'Parse_db')
+        sql_con = connect(const.path + 'Parse.db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE parsing_days
                              SET pro_parsing_day = ?''', (parse_day,))
@@ -350,7 +350,7 @@ def parse(html, parse_day, request_day):
 
 
 def main():
-    sql_con = connect(const.path + 'Parse_db')
+    sql_con = connect(const.path + 'Parse.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT pro_parsing_date
                         FROM parsing_days''')
@@ -361,7 +361,7 @@ def main():
     if send_parse:
         sys.exit()
 
-    sql_con = connect(const.path + 'Parse_db')
+    sql_con = connect(const.path + 'Parse.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT pro_parsing_day 
                         FROM parsing_days''')

@@ -48,4 +48,4 @@ def create_sql(db_name):
 
 
 if __name__ == '__main__':
-    create_sql('Parse_db')
+    create_sql('Parse.db')

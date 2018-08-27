@@ -51,7 +51,7 @@ def sql_execute(db_name, request, *args):
 def log_me(message):
     if str(message.chat.id) != my_id:
 
-        sql_con = connect(const.path + 'Bot_db')
+        sql_con = connect(const.path + 'Bot.db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT sending_log
                             FROM offer''')
@@ -82,7 +82,7 @@ def log_me(message):
 def call_back_log_me(call_back):
     if str(call_back.message.chat.id) != my_id:
 
-        sql_con = connect(const.path + 'Bot_db')
+        sql_con = connect(const.path + 'Bot.db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT sending_log
                             FROM offer''')
@@ -114,7 +114,7 @@ def call_back_log_me(call_back):
 def inline_log_me(query):
     if str(query.from_user.id) != my_id:
 
-        sql_con = connect(const.path + 'Bot_db')
+        sql_con = connect(const.path + 'Bot.db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT sending_log
                             FROM offer''')
@@ -157,7 +157,7 @@ def get_html(url, chat_id=my_id, printing=False):
 
 
 def get_student_group(chat_id):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT group_name 
                         FROM user_data 
@@ -324,7 +324,7 @@ def replacements_today(chat_id):
         day_number = 1
     else:
         day_number = week_day
-    sql_con = connect(const.path + 'Parse_db')
+    sql_con = connect(const.path + 'Parse.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT day_{} 
                         FROM zam_from_site'''.format(str(day_number)))
@@ -394,7 +394,7 @@ def replacements_tomorrow(chat_id):
     else:
         day_number = dt.datetime.isoweekday(
             dt.datetime.now() + dt.timedelta(days=1))
-    sql_con = connect(const.path + 'Parse_db')
+    sql_con = connect(const.path + 'Parse.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT day_{} 
                         FROM zam_from_site'''.format(str(day_number)))
@@ -474,7 +474,7 @@ def get_replace_of_day(day, chat_id, is_week=False):
     elif day == 'Суббота':
         day_number = 6
 
-    sql_con = connect(const.path + 'Parse_db')
+    sql_con = connect(const.path + 'Parse.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT day_{} 
                         FROM zam_from_site'''.format(str(day_number)))
@@ -535,7 +535,7 @@ def get_active_replace_days(chat_id):
     alias = get_alias(chat_id)
     group = get_student_group(chat_id).lower()
     for i in range(1, 7):
-        sql_con = connect(const.path + 'Parse_db')
+        sql_con = connect(const.path + 'Parse.db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT day_{} 
                             FROM zam_from_site'''.format(str(i)))
@@ -645,7 +645,7 @@ def rewrite_zam_data(parse_day, html='NULL'):
         elif dt.datetime.isoweekday(dt.datetime.now()) == 7:
             parse_day = dt.datetime.isoweekday(
                 dt.datetime.now() + dt.timedelta(days=1))
-        sql_con = connect(const.path + 'Parse_db')
+        sql_con = connect(const.path + 'Parse.db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE zam_from_site
                              SET day_{} = ?'''.format(str(parse_day)), (str(dataa) + str(all_page),))
@@ -665,7 +665,7 @@ def rewrite_zam_data(parse_day, html='NULL'):
         elif dt.datetime.isoweekday(dt.datetime.now()) == 6:
             parse_day = dt.datetime.isoweekday(
                 dt.datetime.now() + dt.timedelta(days=2))
-        sql_con = connect(const.path + 'Parse_db')
+        sql_con = connect(const.path + 'Parse.db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE zam_from_site
                              SET day_{} = ?'''.format(str(parse_day)), (str(dataa) + str(all_page),))
@@ -683,7 +683,7 @@ def rewrite_zam_data(parse_day, html='NULL'):
             dataa = data.find_all('h1')
             all_page = soup.find_all('table')
 
-            sql_con = connect(const.path + 'Parse_db')
+            sql_con = connect(const.path + 'Parse.db')
             cursor = sql_con.cursor()
             cursor.execute('''UPDATE zam_from_site
                                  SET day_{} = ?'''.format(str(parse_day)), (str(dataa) + str(all_page),))
@@ -698,7 +698,7 @@ def rewrite_zam_data(parse_day, html='NULL'):
         dataa = data.find_all('h1')
         all_page = soup.find_all('table')
 
-        sql_con = connect(const.path + 'Parse_db')
+        sql_con = connect(const.path + 'Parse.db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE zam_from_site
                              SET day_{} = ?'''.format(str(parse_day)), (str(dataa) + str(all_page),))
@@ -774,7 +774,7 @@ def appendd(delta_h, delta_m, time, next_time):
 
 
 def get_different_between(valid_date):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT abridged_calls
                         FROM offer''')
@@ -969,7 +969,7 @@ def blzvs():
 
 
 def delete_user(user_id, only_choice=False):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''DELETE FROM user_choice 
                             WHERE user_id = ?''', (user_id,))
@@ -986,7 +986,7 @@ def delete_user(user_id, only_choice=False):
 
 
 def delete_all_user_info(user_id):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''DELETE FROM user_choice 
                             WHERE user_id = ?''', (user_id,))
@@ -1054,7 +1054,7 @@ def check_teacher(teacher_names, full_teachers_name=False):
         db_teachers = []
 
         for i in range(1, 7):
-            sql_con = connect(const.path + 'Parse_db')
+            sql_con = connect(const.path + 'Parse.db')
             cursor = sql_con.cursor()
             cursor.execute('''SELECT day_{0}
                                 FROM zam_from_site'''.format(str(i)))
@@ -1230,7 +1230,7 @@ def shorting_teachers(teachers):
 
 
 def edit_week(up=True):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     if up:
         cursor.execute('''UPDATE offer
@@ -1245,7 +1245,7 @@ def edit_week(up=True):
 
 
 def edit_sending_log(up=True):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     if up:
         cursor.execute('''UPDATE offer
@@ -1260,7 +1260,7 @@ def edit_sending_log(up=True):
 
 
 def edit_on_or_off_zam(online=True):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     if online:
         cursor.execute('''UPDATE offer
@@ -1275,7 +1275,7 @@ def edit_on_or_off_zam(online=True):
 
 
 def get_sending_log():
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT sending_log 
                         FROM offer''')
@@ -1289,7 +1289,7 @@ def get_sending_log():
 
 
 def get_on_or_off_zam():
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT on_or_off_zam 
                         FROM offer''')
@@ -1303,7 +1303,7 @@ def get_on_or_off_zam():
 
 
 def get_week():
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT week 
                         FROM offer''')
@@ -1322,7 +1322,7 @@ def get_week():
 
 
 def get_alias(chat_id):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT alias
                         FROM user_data
@@ -1964,7 +1964,7 @@ def send_teacher_week_answer(message, teacher, free_week=False,
 
 
 def is_user_in_all_users(user_id):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT count(id) 
                         FROM all_users
@@ -1976,7 +1976,7 @@ def is_user_in_all_users(user_id):
 
 
 def is_user_exist(user_id):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT count(id) 
                         FROM user_data
@@ -1988,7 +1988,7 @@ def is_user_exist(user_id):
 
 
 def is_user_banned(user_id):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT count(id_banned) 
                         FROM banned_users
@@ -2000,7 +2000,7 @@ def is_user_banned(user_id):
 
 
 def is_user_not_banned(user_id):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT count(id_not_banned) 
                         FROM banned_users
@@ -2012,7 +2012,7 @@ def is_user_not_banned(user_id):
 
 
 def get_not_banned_users(user_id):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT id_not_banned
                         FROM banned_users''')
@@ -2023,7 +2023,7 @@ def get_not_banned_users(user_id):
 
 
 def banned_users(user_id):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT id_banned
                         FROM banned_users''')
@@ -2035,7 +2035,7 @@ def banned_users(user_id):
 
 
 def ban_user(user_id):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''DELETE FROM banned_users 
                             WHERE id_not_banned = ?''', (user_id,))
@@ -2048,7 +2048,7 @@ def ban_user(user_id):
 
 
 def unban_user(user_id):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''DELETE FROM banned_users 
                             WHERE id_banned = ?''', (user_id,))
@@ -2061,7 +2061,7 @@ def unban_user(user_id):
 
 
 def is_sending_rasp_on(user_id, rasp5=False):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     if rasp5:
         cursor.execute('''SELECT sending_rasp_5 
@@ -2078,7 +2078,7 @@ def is_sending_rasp_on(user_id, rasp5=False):
 
 
 def is_sending_zam_on(user_id):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT sending_zam 
                         FROM user_data
@@ -2090,7 +2090,7 @@ def is_sending_zam_on(user_id):
 
 
 def set_sending_rasp(user_id, on=True, rasp5=False):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     if rasp5:
         cursor.execute('''UPDATE user_data
@@ -2108,7 +2108,7 @@ def set_sending_rasp(user_id, on=True, rasp5=False):
 
 
 def set_sending_zam(user_id, on=True):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''UPDATE user_data
                          SET sending_zam = ?
@@ -2120,7 +2120,7 @@ def set_sending_zam(user_id, on=True):
 
 
 def get_rate_statistics():
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT sum(rate), count(id) 
                         FROM user_data
@@ -2135,7 +2135,7 @@ def get_rate_statistics():
 
 
 def set_rate(user_id, count_of_stars):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''UPDATE user_data
                          SET rate = ?
@@ -2147,7 +2147,7 @@ def set_rate(user_id, count_of_stars):
 
 
 def get_statistics_for_admin():
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
 
     cursor.execute('''SELECT count(id)
@@ -2160,7 +2160,7 @@ def get_statistics_for_admin():
 
 
 def get_user_rate(user_id):
-    sql_con = connect(const.path + 'Bot_db')
+    sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT rate
                         FROM user_data

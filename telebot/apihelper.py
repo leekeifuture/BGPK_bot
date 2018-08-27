@@ -5,10 +5,11 @@ try:
 except ImportError:
     import json
 
-import config
-import sqlite3
 import requests
+import config as conf
+from sqlite3 import connect
 from datetime import datetime
+from constants import path
 
 try:
     from requests.packages.urllib3 import fields
@@ -75,42 +76,42 @@ def _check_result(method_name, result, chat_id):
 
     if result.status_code == 429:
 
-        sql_con = sqlite3.connect("Bot_db")
+        sql_con = connect(path + 'Bot.db')
         cursor = sql_con.cursor()
-        cursor.execute("""SELECT count(id_not_banned) 
-                          FROM banned_users
-                          WHERE id_not_banned = ?""", (chat_id,))
+        cursor.execute('''SELECT count(id_not_banned) 
+                            FROM banned_users
+                           WHERE id_not_banned = ?''', (chat_id,))
         is_user_not_banned = cursor.fetchone()[0]
         cursor.close()
         sql_con.close()
 
-        if is_user_not_banned and chat_id != int(config.my_id):
-            sql_con = sqlite3.connect("Bot_db")
+        if is_user_not_banned and chat_id != int(conf.my_id):
+            sql_con = connect(path + 'Bot.db')
             cursor = sql_con.cursor()
-            cursor.execute("""DELETE FROM banned_users 
-                              WHERE id_not_banned = ?""", (chat_id,))
+            cursor.execute('''DELETE FROM banned_users 
+                                    WHERE id_not_banned = ?''', (chat_id,))
             sql_con.commit()
-            cursor.execute("""INSERT INTO banned_users (id_banned)
-                              VALUES (?)""", (chat_id,))
+            cursor.execute('''INSERT INTO banned_users (id_banned)
+                                   VALUES (?)''', (chat_id,))
             sql_con.commit()
             cursor.close()
             sql_con.close()
 
     if result.status_code == 403:
 
-            sql_con = sqlite3.connect("Bot_db")
+            sql_con = connect(path + 'Bot.db')
             cursor = sql_con.cursor()
-            cursor.execute("""DELETE FROM user_choice 
-                              WHERE user_id = ?""", (chat_id,))
+            cursor.execute('''DELETE FROM user_choice 
+                                    WHERE user_id = ?''', (chat_id,))
             sql_con.commit()
-            cursor.execute("""DELETE FROM banned_users 
-                              WHERE id_not_banned = ?""", (chat_id,))
+            cursor.execute('''DELETE FROM banned_users 
+                                    WHERE id_not_banned = ?''', (chat_id,))
             sql_con.commit()
-            cursor.execute("""DELETE FROM banned_users 
-                              WHERE id_banned = ?""", (chat_id,))
+            cursor.execute('''DELETE FROM banned_users 
+                                    WHERE id_banned = ?''', (chat_id,))
             sql_con.commit()
-            cursor.execute("""DELETE FROM user_data 
-                              WHERE id = ?""", (chat_id,))
+            cursor.execute('''DELETE FROM user_data 
+                                    WHERE id = ?''', (chat_id,))
             sql_con.commit()
             cursor.close()
             sql_con.close()
@@ -119,8 +120,8 @@ def _check_result(method_name, result, chat_id):
         msg = 'The server returned HTTP {0} {1}. Response body:\n[{2}]' \
             .format(result.status_code, result.reason, result.text.encode('utf8'))
 
-        requests.get(API_URL.format(config.token, 'sendMessage') + '?chat_id={0}&text={1}' \
-            .format(config.my_id, str(datetime.now())[:-7] + ' | ' + str(chat_id) + '\n' + msg))
+        requests.get(API_URL.format(conf.token, 'sendMessage') + '?chat_id={0}&text={1}' \
+            .format(conf.my_id, str(datetime.now())[:-7] + ' | ' + str(chat_id) + '\n' + msg))
         raise ApiException(msg, method_name, result)
 
     try:
@@ -154,8 +155,8 @@ def download_file(token, file_path):
         msg = 'The server returned HTTP {0} {1}. Response body:\n[{2}]' \
             .format(result.status_code, result.reason, result.text)
 
-        requests.get(API_URL.format(config.token, 'sendMessage') + '?chat_id={0}&text={1}' \
-            .format(config.my_id, str(datetime.now())[:-7] + ' | ' + msg))
+        requests.get(API_URL.format(conf.token, 'sendMessage') + '?chat_id={0}&text={1}' \
+            .format(conf.my_id, str(datetime.now())[:-7] + ' | ' + msg))
         raise ApiException(msg, 'Download file', result)
     return result.content
 
