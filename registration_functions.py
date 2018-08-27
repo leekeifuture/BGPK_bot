@@ -13,7 +13,7 @@ from collections import Counter
 
 
 def set_next_step(user_id, next_step):
-    sql_con = sl3.connect('Bot_db')
+    sql_con = sl3.connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
     cursor.execute('''UPDATE user_choice
                          SET step = ? 
@@ -24,7 +24,7 @@ def set_next_step(user_id, next_step):
 
 
 def get_step(user_id):
-    sql_con = sl3.connect('Bot_db')
+    sql_con = sl3.connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT step
                         FROM user_choice
@@ -75,7 +75,7 @@ def check_teacher(teacher_names, full_teachers_name):
         db_teachers = []
 
         for i in range(1, 7):
-            sql_con = sl3.connect('Parse_db')
+            sql_con = sl3.connect(const.path + 'Parse_db')
             cursor = sql_con.cursor()
             cursor.execute('''SELECT day_{0}
                                 FROM zam_from_site'''.format(str(i)))
@@ -208,7 +208,7 @@ def select_status(message, change_group=False):
 
     answer = ''
 
-    sql_con = sl3.connect('Bot_db')
+    sql_con = sl3.connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT types_json
                         FROM user_choice
@@ -217,17 +217,16 @@ def select_status(message, change_group=False):
     cursor.close()
     sql_con.close()
 
-    types = json.loads(data[0])
-    type_names = [type['Type'] for type in types]
-    aliases = [type['Alias'] for type in types]
+    types_of_reg = json.loads(data[0])
+    type_names = [type['Type'] for type in types_of_reg]
+    aliases = [type['Alias'] for type in types_of_reg]
 
     if message.text == type_names[0]:
         answer = ''
 
         answer += 'Укажи свое направление:'
-        division_names = [division['Name'] for division in const.divisions]
         divisions_keyboard = types.ReplyKeyboardMarkup(True, False)
-        for division_name in division_names:
+        for division_name in const.existing_divisions:
             divisions_keyboard.row(division_name)
         if change_group:
             divisions_keyboard.row('« Назад')
@@ -235,7 +234,7 @@ def select_status(message, change_group=False):
             divisions_keyboard.row('Другой способ регистрации')
         data = json.dumps(const.divisions, ensure_ascii=False)
 
-        sql_con = sl3.connect('Bot_db')
+        sql_con = sl3.connect(const.path + 'Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE user_choice
                              SET divisions_json = ?
@@ -266,7 +265,7 @@ def select_status(message, change_group=False):
                                      back_command)
         remove_keyboard = types.ReplyKeyboardRemove()
 
-        sql_con = sl3.connect('Bot_db')
+        sql_con = sl3.connect(const.path + 'Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE user_choice 
                              SET alias = ?
@@ -292,7 +291,7 @@ def select_teacher(message):
     answer = ''
 
     if message.text in const.cap_teachers:
-        sql_con = sl3.connect('Bot_db')
+        sql_con = sl3.connect(const.path + 'Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE user_choice 
                              SET student_group_name = ?
@@ -323,8 +322,8 @@ def select_teacher(message):
                 for teacher in teachers[0]:
                     sp_te = teacher.split()
                     short_teachers.append(sp_te[0] + ' ' +
-                                        sp_te[1][0] + '. ' +
-                                        sp_te[2][0] + '.')
+                                          sp_te[1][0] + '. ' +
+                                          sp_te[2][0] + '.')
 
                 duplicate = [item for item, count in Counter(
                     short_teachers).items() if count > 1]
@@ -372,9 +371,11 @@ def select_teacher(message):
                 text='« Назад', callback_data='back_reg'))
 
             if len(short_teachers) == 1:
-                answer += const.emoji['mag_right'] + ' Найденный преподаватель:'
+                answer += const.emoji['mag_right'] + \
+                    ' Найденный преподаватель:'
             else:
-                answer += const.emoji['mag_right'] + ' Найденные преподаватели:'
+                answer += const.emoji['mag_right'] + \
+                    ' Найденные преподаватели:'
 
             bot.send_message(message.chat.id, answer,
                              reply_markup=educators_keyboard)
@@ -402,7 +403,7 @@ def select_division(message):
 
     answer = ''
 
-    sql_con = sl3.connect('Bot_db')
+    sql_con = sl3.connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT divisions_json 
                         FROM user_choice 
@@ -412,22 +413,20 @@ def select_division(message):
     sql_con.close()
 
     divisions = json.loads(data[0])
-    division_names = [division['Name'] for division in divisions]
     aliases = [division['Alias'] for division in divisions]
-    if message.text in division_names:
+    if message.text in const.existing_divisions:
         answer += 'Выбери курс:'
         study_programs_keyboard = types.ReplyKeyboardMarkup(
             True, False)
-        index = division_names.index(message.text)
+        index = const.existing_divisions.index(message.text)
         alias = aliases[index]
 
-        study_programs = [course['Course'] for course in const.courses]
-        for study_program in study_programs:
+        for study_program in const.existing_courses:
             study_programs_keyboard.row(study_program)
         study_programs_keyboard.row('Другое направление')
 
         data = json.dumps(const.courses, ensure_ascii=False)
-        sql_con = sl3.connect('Bot_db')
+        sql_con = sl3.connect(const.path + 'Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE user_choice 
                              SET div_alias = ?,
@@ -456,7 +455,7 @@ def select_admission_year(message):
 
     answer = ''
 
-    sql_con = sl3.connect('Bot_db')
+    sql_con = sl3.connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT study_programs_json, div_alias
                         FROM user_choice 
@@ -467,13 +466,12 @@ def select_admission_year(message):
 
     courses = json.loads(data[0])
     div_alias = data[1]
-    admission_year_names = [course['Course'] for course in courses]
+
     aliases = [course['Alias'] for course in courses]
-    if message.text in admission_year_names:
+    if message.text in const.existing_courses:
         answer += 'Укажи группу:'
-        student_groups_keyboard = types.ReplyKeyboardMarkup(
-            True, False)
-        index = admission_year_names.index(message.text)
+        student_groups_keyboard = types.ReplyKeyboardMarkup(True, False)
+        index = const.existing_courses.index(message.text)
         course_alias = aliases[index]
 
         alias = div_alias + course_alias
@@ -491,7 +489,7 @@ def select_admission_year(message):
         student_groups_keyboard.row('Другой курс')
         data = json.dumps(const.student_groups, ensure_ascii=False)
 
-        sql_con = sl3.connect('Bot_db')
+        sql_con = sl3.connect(const.path + 'Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE user_choice 
                              SET alias = ?, admission_year_name = ?, 
@@ -506,7 +504,7 @@ def select_admission_year(message):
                          reply_markup=student_groups_keyboard)
         set_next_step(message.chat.id, 'select_student_group')
     elif message.text == 'Другое направление':
-        sql_con = sl3.connect('Bot_db')
+        sql_con = sl3.connect(const.path + 'Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT types_json
                             FROM user_choice 
@@ -530,7 +528,7 @@ def select_student_group(message):
 
     answer = ''
 
-    sql_con = sl3.connect('Bot_db')
+    sql_con = sl3.connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT student_groups_json, alias
                         FROM user_choice 
@@ -552,7 +550,7 @@ def select_student_group(message):
                                     'Почти готово! '
                                     'Запоминаю твой выбор\U00002026')
 
-        sql_con = sl3.connect('Bot_db')
+        sql_con = sl3.connect(const.path + 'Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE user_choice 
                              SET student_group_name = ?
@@ -586,7 +584,7 @@ def select_student_group(message):
                          reply_markup=choice_keyboard)
         set_next_step(message.chat.id, 'confirm_choice')
     elif message.text == 'Другой курс':
-        sql_con = sl3.connect('Bot_db')
+        sql_con = sl3.connect(const.path + 'Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT division_name
                             FROM user_choice
@@ -610,7 +608,7 @@ def confirm_choice_teacher(message):
     answer = ''
 
     if message.text == 'Все верно':
-        sql_con = sl3.connect('Bot_db')
+        sql_con = sl3.connect(const.path + 'Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT alias, student_group_name
                             FROM user_choice 
@@ -688,7 +686,7 @@ def confirm_choice(message):
     answer = ''
 
     if message.text == 'Все верно':
-        sql_con = sl3.connect('Bot_db')
+        sql_con = sl3.connect(const.path + 'Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT alias, student_group_name
                             FROM user_choice 
@@ -747,7 +745,7 @@ def confirm_choice(message):
                          reply_markup=main_keyboard,
                          parse_mode='HTML')
     elif message.text == 'Другая группа':
-        sql_con = sl3.connect('Bot_db')
+        sql_con = sl3.connect(const.path + 'Bot_db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT admission_year_name
                             FROM user_choice 
