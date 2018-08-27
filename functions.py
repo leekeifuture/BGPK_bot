@@ -51,10 +51,10 @@ def sql_execute(db_name, request, *args):
 def log_me(message):
     if str(message.chat.id) != my_id:
 
-        sql_con = connect("Bot_db")
+        sql_con = connect(const.path + 'Bot_db')
         cursor = sql_con.cursor()
-        cursor.execute("""SELECT sending_log
-                            FROM offer""")
+        cursor.execute('''SELECT sending_log
+                            FROM offer''')
         send = cursor.fetchone()[0]
         cursor.close()
         sql_con.close()
@@ -82,10 +82,10 @@ def log_me(message):
 def call_back_log_me(call_back):
     if str(call_back.message.chat.id) != my_id:
 
-        sql_con = connect("Bot_db")
+        sql_con = connect(const.path + 'Bot_db')
         cursor = sql_con.cursor()
-        cursor.execute("""SELECT sending_log
-                            FROM offer""")
+        cursor.execute('''SELECT sending_log
+                            FROM offer''')
         send = cursor.fetchone()[0]
         cursor.close()
         sql_con.close()
@@ -114,10 +114,10 @@ def call_back_log_me(call_back):
 def inline_log_me(query):
     if str(query.from_user.id) != my_id:
 
-        sql_con = connect("Bot_db")
+        sql_con = connect(const.path + 'Bot_db')
         cursor = sql_con.cursor()
-        cursor.execute("""SELECT sending_log
-                            FROM offer""")
+        cursor.execute('''SELECT sending_log
+                            FROM offer''')
         send = cursor.fetchone()[0]
         cursor.close()
         sql_con.close()
@@ -142,28 +142,31 @@ def inline_log_me(query):
                              disable_notification=True)
 
 
-def get_html(url, message=my_id):
+def get_html(url, chat_id=my_id, printing=False):
     try:
         response = urlopen(url)
         return response.read()
     except:
-        bot.send_message(message.chat.id,
+        if printing:
+            print('\n\n' + str(dt.datetime.now())[:-7] + ' | ' +
+                  str(exc_info()[1]) + '\n\n')
+        bot.send_message(chat_id,
                          '<b>Упс, что-то пошло не так\U00002026</b>\n' +
                          str(exc_info()[1]),
                          parse_mode='HTML')
 
 
-def get_student_group(user_id):
-    sql_con = connect("Bot_db")
+def get_student_group(chat_id):
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
-    cursor.execute("""SELECT group_name 
-                      FROM user_data 
-                      WHERE id = ?""", (user_id,))
-    data_group = cursor.fetchone()
+    cursor.execute('''SELECT group_name 
+                        FROM user_data 
+                       WHERE id = ?''', (chat_id,))
+    data = cursor.fetchone()
     cursor.close()
     sql_con.close()
     try:
-        return data_group[0]
+        return data[0]
     except:
         return ''
 
@@ -314,34 +317,34 @@ def get_replacements_ansewer(row, chat_id):
     return answer
 
 
-def replacements_today(chat_id, html='NULL'):
+def replacements_today(chat_id):
     week_day = dt.datetime.isoweekday(dt.datetime.now())
 
     if week_day == 7:
         day_number = 1
     else:
         day_number = week_day
-    sql_con = connect("Parse_db")
+    sql_con = connect(const.path + 'Parse_db')
     cursor = sql_con.cursor()
-    cursor.execute("""SELECT day_{} 
-                      FROM zam_from_site""".format(str(day_number)))
+    cursor.execute('''SELECT day_{} 
+                        FROM zam_from_site'''.format(str(day_number)))
     cfone = cursor.fetchone()[0].split('][')
     cursor.close()
     sql_con.close()
-    soup = BeautifulSoup(cfone[1], "lxml")
-    data = BeautifulSoup(cfone[0], "lxml").find_all('h1')[0].text.strip()
+    soup = BeautifulSoup(cfone[1], 'lxml')
+    data = BeautifulSoup(cfone[0], 'lxml').find_all('h1')[0].text.strip()
 
-    if week_day == 7 and data.replace(' ', '')[-10:][:2] != (dt.datetime.strftime(dt.date.today() + dt.timedelta(days=1), "%d")):
+    if week_day == 7 and data.replace(' ', '')[-10:][:2] != (dt.datetime.strftime(dt.date.today() + dt.timedelta(days=1), '%d')):
         if is_sending_zam_on(chat_id):
-            bot.send_message(chat_id, const.emoji["sleep"] + ' Выходной\n\nЗамены на понедельник (' + (dt.datetime.strftime(dt.date.today() + dt.timedelta(
-                days=1), "%d.%m.%Y")) + ') ещё не вывесили.\nБот пришлёт тебе информацию если что-нибудь будет известно о них.')
+            bot.send_message(chat_id, const.emoji['sleep'] + ' Выходной\n\nЗамены на понедельник (' + (dt.datetime.strftime(dt.date.today() + dt.timedelta(
+                days=1), '%d.%m.%Y')) + ') ещё не вывесили.\nБот пришлёт тебе информацию если что-нибудь будет известно о них.')
         else:
-            bot.send_message(chat_id, const.emoji["sleep"] + ' Выходной\n\nЗамены на понедельник (' + (
-                dt.datetime.strftime(dt.date.today() + dt.timedelta(days=1), "%d.%m.%Y")) + ') ещё не вывесили.')
-    elif week_day != 7 and data.replace(' ', '')[-10:][:2] != (dt.datetime.strftime(dt.date.today(), "%d")):
+            bot.send_message(chat_id, const.emoji['sleep'] + ' Выходной\n\nЗамены на понедельник (' + (
+                dt.datetime.strftime(dt.date.today() + dt.timedelta(days=1), '%d.%m.%Y')) + ') ещё не вывесили.')
+    elif week_day != 7 and data.replace(' ', '')[-10:][:2] != (dt.datetime.strftime(dt.date.today(), '%d')):
         bot.send_message(chat_id, 'Замены на сегодня (' + (
-            dt.datetime.strftime(dt.date.today(), "%d.%m.%Y")) + ') до сих пор не вывесили.')
-    elif data.replace(' ', '')[-10:][:2] == (dt.datetime.strftime(dt.date.today(), "%d")) or data.replace(' ', '')[-10:][:2] == (dt.datetime.strftime(dt.date.today() + dt.timedelta(days=1), "%d")):
+            dt.datetime.strftime(dt.date.today(), '%d.%m.%Y')) + ') до сих пор не вывесили.')
+    elif data.replace(' ', '')[-10:][:2] == (dt.datetime.strftime(dt.date.today(), '%d')) or data.replace(' ', '')[-10:][:2] == (dt.datetime.strftime(dt.date.today() + dt.timedelta(days=1), '%d')):
         answer = ''
         group = get_student_group(chat_id)
         if get_alias(chat_id) == 'PREP':
@@ -351,12 +354,12 @@ def replacements_today(chat_id, html='NULL'):
         else:
             for_any = 'группы'
 
-        week_end = const.emoji["sleep"] + ' Выходной\nЗамены на следующий день:' \
-            '\n\n' + const.emoji["anticlockwise"]
+        week_end = const.emoji['sleep'] + ' Выходной\nЗамены на следующий день:' \
+            '\n\n' + const.emoji['anticlockwise']
         not_repl_on_monday = ' Для ' + for_any + \
             ' <b>{}</b> нет замен на понедельник ('.format(group) + \
             data[-10:] + ').'
-        not_repl_on = const.emoji["anticlockwise"] + ' Для ' + for_any + \
+        not_repl_on = const.emoji['anticlockwise'] + ' Для ' + for_any + \
             ' <b>{}</b> нет замен на сегодня ('.format(group) + \
             data[-10:] + ').'
 
@@ -371,7 +374,7 @@ def replacements_today(chat_id, html='NULL'):
                 if week_day == 7:
                     answer = week_end + ' ' + data.capitalize() + answer
                 else:
-                    answer = const.emoji["anticlockwise"] + \
+                    answer = const.emoji['anticlockwise'] + \
                         ' ' + data.capitalize() + answer
 
                 bot.send_message(chat_id, answer, parse_mode='HTML')
@@ -383,38 +386,39 @@ def replacements_today(chat_id, html='NULL'):
                     bot.send_message(chat_id, not_repl_on, parse_mode='HTML')
 
 
-def replacements_tomorrow(chat_id, html='NULL'):
+def replacements_tomorrow(chat_id):
     week_day = dt.datetime.isoweekday(dt.datetime.now())
 
     if week_day == 6:
         day_number = 1
     else:
-        day_number = dt.datetime.isoweekday(dt.datetime.now() + dt.timedelta(days=1))
-    sql_con = connect("Parse_db")
+        day_number = dt.datetime.isoweekday(
+            dt.datetime.now() + dt.timedelta(days=1))
+    sql_con = connect(const.path + 'Parse_db')
     cursor = sql_con.cursor()
-    cursor.execute("""SELECT day_{} 
-                      FROM zam_from_site""".format(str(day_number)))
+    cursor.execute('''SELECT day_{} 
+                        FROM zam_from_site'''.format(str(day_number)))
     cfone = cursor.fetchone()[0].split('][')
     cursor.close()
     sql_con.close()
-    soup = BeautifulSoup(cfone[1], "lxml")
-    data = BeautifulSoup(cfone[0], "lxml").find_all('h1')[0].text.strip()
+    soup = BeautifulSoup(cfone[1], 'lxml')
+    data = BeautifulSoup(cfone[0], 'lxml').find_all('h1')[0].text.strip()
 
-    if week_day == 6 and data.replace(' ', '')[-10:][:2] != (dt.datetime.strftime(dt.date.today() + dt.timedelta(days=2), "%d")):
+    if week_day == 6 and data.replace(' ', '')[-10:][:2] != (dt.datetime.strftime(dt.date.today() + dt.timedelta(days=2), '%d')):
         if is_sending_zam_on(chat_id):
-            bot.send_message(chat_id, const.emoji["sleep"] + ' Выходной\n\nЗамены на понедельник (' + (dt.datetime.strftime(dt.date.today() + dt.timedelta(
-                days=2), "%d.%m.%Y")) + ') ещё не вывесили.\nБот пришлёт тебе информацию если что-нибудь будет известно о них.')
+            bot.send_message(chat_id, const.emoji['sleep'] + ' Выходной\n\nЗамены на понедельник (' + (dt.datetime.strftime(dt.date.today() + dt.timedelta(
+                days=2), '%d.%m.%Y')) + ') ещё не вывесили.\nБот пришлёт тебе информацию если что-нибудь будет известно о них.')
         else:
-            bot.send_message(chat_id, const.emoji["sleep"] + ' Выходной\n\nЗамены на понедельник (' + (
-                dt.datetime.strftime(dt.date.today() + dt.timedelta(days=2), "%d.%m.%Y")) + ') ещё не вывесили.')
-    elif week_day != 6 and data.replace(' ', '')[-10:][:2] != (dt.datetime.strftime(dt.date.today() + dt.timedelta(days=1), "%d")):
+            bot.send_message(chat_id, const.emoji['sleep'] + ' Выходной\n\nЗамены на понедельник (' + (
+                dt.datetime.strftime(dt.date.today() + dt.timedelta(days=2), '%d.%m.%Y')) + ') ещё не вывесили.')
+    elif week_day != 6 and data.replace(' ', '')[-10:][:2] != (dt.datetime.strftime(dt.date.today() + dt.timedelta(days=1), '%d')):
         if is_sending_zam_on(chat_id):
             bot.send_message(chat_id, 'Замены на завтра (' + (dt.datetime.strftime(dt.date.today() + dt.timedelta(days=1),
-                                                                                "%d.%m.%Y")) + ') ещё не вывесили.\nБот пришлёт тебе информацию если что-нибудь будет известно о них.')
+                                                                                   '%d.%m.%Y')) + ') ещё не вывесили.\nБот пришлёт тебе информацию если что-нибудь будет известно о них.')
         else:
             bot.send_message(chat_id, 'Замены на завтра (' + (dt.datetime.strftime(
-                dt.date.today() + dt.timedelta(days=1), "%d.%m.%Y")) + ') ещё не вывесили.')
-    elif data.replace(' ', '')[-10:][:2] == (dt.datetime.strftime(dt.date.today() + dt.timedelta(days=1), "%d")) or data.replace(' ', '')[-10:][:2] == (dt.datetime.strftime(dt.date.today() + dt.timedelta(days=2), "%d")):
+                dt.date.today() + dt.timedelta(days=1), '%d.%m.%Y')) + ') ещё не вывесили.')
+    elif data.replace(' ', '')[-10:][:2] == (dt.datetime.strftime(dt.date.today() + dt.timedelta(days=1), '%d')) or data.replace(' ', '')[-10:][:2] == (dt.datetime.strftime(dt.date.today() + dt.timedelta(days=2), '%d')):
         answer = ''
         group = get_student_group(chat_id)
         if get_alias(chat_id) == 'PREP':
@@ -424,12 +428,12 @@ def replacements_tomorrow(chat_id, html='NULL'):
         else:
             for_any = 'группы'
 
-        week_end = const.emoji["sleep"] + ' Выходной\nЗамены на следующий день:' \
-            '\n\n' + const.emoji["anticlockwise"]
+        week_end = const.emoji['sleep'] + ' Выходной\nЗамены на следующий день:' \
+            '\n\n' + const.emoji['anticlockwise']
         not_repl_on_monday = ' Для ' + for_any + \
             ' <b>{}</b> нет замен на понедельник ('.format(group) + \
             data[-10:] + ').'
-        not_repl_on = const.emoji["anticlockwise"] + ' Для ' + for_any + \
+        not_repl_on = const.emoji['anticlockwise'] + ' Для ' + for_any + \
             ' <b>{}</b> нет замен на завтра ('.format(group) + \
             data[-10:] + ').'
 
@@ -444,7 +448,7 @@ def replacements_tomorrow(chat_id, html='NULL'):
                 if week_day == 6:
                     answer = week_end + ' ' + data.capitalize() + answer
                 else:
-                    answer = const.emoji["anticlockwise"] + \
+                    answer = const.emoji['anticlockwise'] + \
                         ' ' + data.capitalize() + answer
 
                 bot.send_message(chat_id, answer, parse_mode='HTML')
@@ -457,29 +461,29 @@ def replacements_tomorrow(chat_id, html='NULL'):
 
 
 def get_replace_of_day(day, chat_id, is_week=False):
-    if day == "Понедельник":
+    if day == 'Понедельник':
         day_number = 1
-    elif day == "Вторник":
+    elif day == 'Вторник':
         day_number = 2
-    elif day == "Среда":
+    elif day == 'Среда':
         day_number = 3
-    elif day == "Четверг":
+    elif day == 'Четверг':
         day_number = 4
-    elif day == "Пятница":
+    elif day == 'Пятница':
         day_number = 5
-    elif day == "Суббота":
+    elif day == 'Суббота':
         day_number = 6
 
-    sql_con = connect("Parse_db")
+    sql_con = connect(const.path + 'Parse_db')
     cursor = sql_con.cursor()
-    cursor.execute("""SELECT day_{} 
-                      FROM zam_from_site""".format(str(day_number)))
+    cursor.execute('''SELECT day_{} 
+                        FROM zam_from_site'''.format(str(day_number)))
     cfone = cursor.fetchone()[0].split('][')
     cursor.close()
     sql_con.close()
 
-    soup = BeautifulSoup(cfone[1], "lxml")
-    data = BeautifulSoup(cfone[0], "lxml").find_all('h1')[0].text.strip()
+    soup = BeautifulSoup(cfone[1], 'lxml')
+    data = BeautifulSoup(cfone[0], 'lxml').find_all('h1')[0].text.strip()
 
     answer = ''
 
@@ -496,22 +500,22 @@ def get_replace_of_day(day, chat_id, is_week=False):
         c = dt.datetime(int(a[2]), int(a[1]), int(a[0]))
         d = dt.datetime(int(b[0]), int(b[1]), int(b[2]))
 
-        not_repl_on = const.emoji["anticlockwise"] + ' Нет замен на {} ('.format(
+        not_repl_on = const.emoji['anticlockwise'] + ' Нет замен на {} ('.format(
             day_of_week_parsing_day(day, day_number, data[-10:])) + data[-10:] + ').'
 
         if c < d:
             cd = str(c + dt.timedelta(days=7))[:10].split('-')
             not_noty = cd[2] + '.' + cd[1] + '.' + cd[0]
-            previous_relp = const.emoji["warning_sign"] + ' Это предыдущие замены\U00002026\nЗамены на {} ({}) ещё не вывесили:\n\n'.format(
+            previous_relp = const.emoji['warning_sign'] + ' Это предыдущие замены\U00002026\nЗамены на {} ({}) ещё не вывесили:\n\n'.format(
                 day_of_week_parsing_day(day, day_number), not_noty)
             not_repl_yet_on = 'Замены на {} ({}) ещё не вывесили:\n\n'.format(
                 day_of_week_parsing_day(day, day_number), not_noty)
 
             if answer:
                 if is_week:
-                    return not_repl_yet_on + const.emoji["anticlockwise"] + ' ' + data.capitalize() + answer
+                    return not_repl_yet_on + const.emoji['anticlockwise'] + ' ' + data.capitalize() + answer
                 else:
-                    return previous_relp + const.emoji["anticlockwise"] + ' ' + data.capitalize() + answer
+                    return previous_relp + const.emoji['anticlockwise'] + ' ' + data.capitalize() + answer
             else:
                 if is_week:
                     return not_repl_yet_on + not_repl_on
@@ -519,7 +523,7 @@ def get_replace_of_day(day, chat_id, is_week=False):
                     return previous_relp + not_repl_on
         else:
             if answer:
-                answer = const.emoji["anticlockwise"] + \
+                answer = const.emoji['anticlockwise'] + \
                     ' ' + data.capitalize() + answer
                 return answer
             else:
@@ -531,15 +535,15 @@ def get_active_replace_days(chat_id):
     alias = get_alias(chat_id)
     group = get_student_group(chat_id).lower()
     for i in range(1, 7):
-        sql_con = connect("Parse_db")
+        sql_con = connect(const.path + 'Parse_db')
         cursor = sql_con.cursor()
-        cursor.execute("""SELECT day_{} 
-                          FROM zam_from_site""".format(str(i)))
+        cursor.execute('''SELECT day_{} 
+                            FROM zam_from_site'''.format(str(i)))
         cfone = cursor.fetchone()[0].split('][')
         cursor.close()
         sql_con.close()
-        data = BeautifulSoup(cfone[0], "lxml")
-        soup = BeautifulSoup(cfone[1], "lxml")
+        data = BeautifulSoup(cfone[0], 'lxml')
+        soup = BeautifulSoup(cfone[1], 'lxml')
         all_page = soup.find_all('table')
 
         dataa = data.find_all('h1')
@@ -581,13 +585,14 @@ def get_active_replace_days(chat_id):
 
         data10 = dataaa[-10:][:6] + dataaa[-10:][8:]
 
-        yes = const.emoji["check_mark"] + ' ' + const.num_day[str(i)] + ' (' + data10 + ')'
-        no = const.emoji["negative_squared_cross_mark"] + \
+        yes = const.emoji['check_mark'] + ' ' + \
+            const.num_day[str(i)] + ' (' + data10 + ')'
+        no = const.emoji['negative_squared_cross_mark'] + \
             ' ' + const.num_day[str(i)] + ' (' + data10 + ')'
 
-        yes_no = const.emoji["cross_mark"] + ' (' + const.emoji["check_mark"] + ') ' + const.num_day[
+        yes_no = const.emoji['cross_mark'] + ' (' + const.emoji['check_mark'] + ') ' + const.num_day[
             str(i)] + ' (' + data10 + ')'
-        no_no = const.emoji["cross_mark"] + ' (' + const.emoji["negative_squared_cross_mark"] + ') ' + const.num_day[
+        no_no = const.emoji['cross_mark'] + ' (' + const.emoji['negative_squared_cross_mark'] + ') ' + const.num_day[
             str(i)] + ' (' + data10 + ')'
 
         a = dataaa[-10:].split('.')
@@ -629,7 +634,7 @@ def get_active_replace_days(chat_id):
 def rewrite_zam_data(parse_day, html='NULL'):
 
     if parse_day == 's':
-        soup = BeautifulSoup(html, "lxml")
+        soup = BeautifulSoup(html, 'lxml')
         data = soup.find('div', class_='item-page')
 
         dataa = data.find_all('h1')
@@ -638,61 +643,65 @@ def rewrite_zam_data(parse_day, html='NULL'):
         if dt.datetime.isoweekday(dt.datetime.now()) != 7:
             parse_day = dt.datetime.isoweekday(dt.datetime.now())
         elif dt.datetime.isoweekday(dt.datetime.now()) == 7:
-            parse_day = dt.datetime.isoweekday(dt.datetime.now() + dt.timedelta(days=1))
-        sql_con = connect("Parse_db")
+            parse_day = dt.datetime.isoweekday(
+                dt.datetime.now() + dt.timedelta(days=1))
+        sql_con = connect(const.path + 'Parse_db')
         cursor = sql_con.cursor()
-        cursor.execute("""UPDATE zam_from_site
-                                SET day_{} = ?""".format(str(parse_day)), (str(dataa) + str(all_page),))
+        cursor.execute('''UPDATE zam_from_site
+                             SET day_{} = ?'''.format(str(parse_day)), (str(dataa) + str(all_page),))
         sql_con.commit()
         cursor.close()
         sql_con.close()
     elif parse_day == 'z':
-        soup = BeautifulSoup(html, "lxml")
+        soup = BeautifulSoup(html, 'lxml')
         data = soup.find('div', class_='item-page')
 
         dataa = data.find_all('h1')
         all_page = soup.find_all('table')
 
         if dt.datetime.isoweekday(dt.datetime.now()) != 6:
-            parse_day = dt.datetime.isoweekday(dt.datetime.now() + dt.timedelta(days=1))
+            parse_day = dt.datetime.isoweekday(
+                dt.datetime.now() + dt.timedelta(days=1))
         elif dt.datetime.isoweekday(dt.datetime.now()) == 6:
-            parse_day = dt.datetime.isoweekday(dt.datetime.now() + dt.timedelta(days=2))
-        sql_con = connect("Parse_db")
+            parse_day = dt.datetime.isoweekday(
+                dt.datetime.now() + dt.timedelta(days=2))
+        sql_con = connect(const.path + 'Parse_db')
         cursor = sql_con.cursor()
-        cursor.execute("""UPDATE zam_from_site
-                                SET day_{} = ?""".format(str(parse_day)), (str(dataa) + str(all_page),))
+        cursor.execute('''UPDATE zam_from_site
+                             SET day_{} = ?'''.format(str(parse_day)), (str(dataa) + str(all_page),))
         sql_con.commit()
         cursor.close()
         sql_con.close()
     elif parse_day == 'all':
-        htmls = [const.ponedelnik, const.vtornik, const.sreda, const.chetverg, const.pyatnica, const.subotta]
+        htmls = [const.ponedelnik, const.vtornik, const.sreda,
+                 const.chetverg, const.pyatnica, const.subotta]
 
         for parse_day in range(1, 7):
-            soup = BeautifulSoup(get_html(htmls[parse_day - 1]), "lxml")
+            soup = BeautifulSoup(get_html(htmls[parse_day - 1]), 'lxml')
             data = soup.find('div', class_='item-page')
 
             dataa = data.find_all('h1')
             all_page = soup.find_all('table')
 
-            sql_con = connect("Parse_db")
+            sql_con = connect(const.path + 'Parse_db')
             cursor = sql_con.cursor()
-            cursor.execute("""UPDATE zam_from_site
-                                    SET day_{} = ?""".format(str(parse_day)), (str(dataa) + str(all_page),))
+            cursor.execute('''UPDATE zam_from_site
+                                 SET day_{} = ?'''.format(str(parse_day)), (str(dataa) + str(all_page),))
             sql_con.commit()
             cursor.close()
             sql_con.close()
             parse_day += 1
     else:
-        soup = BeautifulSoup(html, "lxml")
+        soup = BeautifulSoup(html, 'lxml')
         data = soup.find('div', class_='item-page')
 
         dataa = data.find_all('h1')
         all_page = soup.find_all('table')
 
-        sql_con = connect("Parse_db")
+        sql_con = connect(const.path + 'Parse_db')
         cursor = sql_con.cursor()
-        cursor.execute("""UPDATE zam_from_site
-                                SET day_{} = ?""".format(str(parse_day)), (str(dataa) + str(all_page),))
+        cursor.execute('''UPDATE zam_from_site
+                             SET day_{} = ?'''.format(str(parse_day)), (str(dataa) + str(all_page),))
         sql_con.commit()
         cursor.close()
         sql_con.close()
@@ -745,10 +754,11 @@ def get_date(tomorrow=False, tomorrow_tomorrow=False, force_day_of_week=False, w
 
 
 def delta_seconds(hour, minute):
-    year = dt.datetime.strftime(dt.date.today(), "%Y")
-    mounth = int(dt.datetime.strftime(dt.date.today(), "%m"))
-    day = int(dt.datetime.strftime(dt.date.today(), "%d"))
-    then = dt.datetime(int(year), int(mounth), int(day), int(hour), int(minute))
+    year = dt.datetime.strftime(dt.date.today(), '%Y')
+    mounth = int(dt.datetime.strftime(dt.date.today(), '%m'))
+    day = int(dt.datetime.strftime(dt.date.today(), '%d'))
+    then = dt.datetime(int(year), int(mounth),
+                       int(day), int(hour), int(minute))
     now = dt.datetime.now()
     delta = then - now
     return delta.seconds // 60 + 1
@@ -772,16 +782,19 @@ def get_different_between(valid_date):
     cursor.close()
     sql_con.close()
 
+    if abridged_calls == None:
+        abridged_calls = '11.11.1111'
+
     abridged_date = [call.split('.')
                      for call in abridged_calls.split('\n')]
     datetime_date = valid_date.split('.')
     abridged_call = [dt.datetime(int(abr_date[2]),
-                              int(abr_date[1]),
-                              int(abr_date[0]))
+                                 int(abr_date[1]),
+                                 int(abr_date[0]))
                      for abr_date in abridged_date]
     datetime_call = dt.datetime(int(datetime_date[2]),
-                             int(datetime_date[1]),
-                             int(datetime_date[0]))
+                                int(datetime_date[1]),
+                                int(datetime_date[0]))
     return datetime_call, abridged_call
 
 
@@ -791,29 +804,29 @@ def blzv():
     different = get_different_between(valid_date)
 
     if different[0] in different[1]:
-        if dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '08:00:00':
+        if dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '08:00:00':
             return appendd(8, 0, '08:00', '09:00')
-        elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '09:00:00':
+        elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '09:00:00':
             return appendd(9, 0, '09:00', '09:10')
-        elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '09:10:00':
+        elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '09:10:00':
             return appendd(9, 10, '09:10', '10:10')
-        elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '10:10:00':
+        elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '10:10:00':
             return appendd(10, 10, '10:10', '10:20')
-        elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '10:20:00':
+        elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '10:20:00':
             return appendd(10, 20, '10:20', '11:20')
-        elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '11:20:00':
+        elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '11:20:00':
             return appendd(11, 20, '11:20', '11:30')
-        elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '11:30:00':
+        elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '11:30:00':
             return appendd(11, 30, '11:30', '12:30')
-        elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '12:30:00':
+        elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '12:30:00':
             return appendd(12, 30, '12:30', '12:40')
-        elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '12:40:00':
+        elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '12:40:00':
             return appendd(12, 40, '12:40', '13:40')
-        elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '13:40:00':
+        elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '13:40:00':
             return appendd(13, 40, '13:40', '13:50')
-        elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '13:50:00':
+        elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '13:50:00':
             return appendd(13, 50, '13:50', '14:50')
-        elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '14:50:00':
+        elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '14:50:00':
             return appendd(14, 50, '14:50', '08:00')
         else:
             return appendd(8, 0, '08:00', '08:45')
@@ -822,170 +835,170 @@ def blzv():
             if dt.datetime.isoweekday(time_now) == 7:
                 return appendd(8, 0, '08:00', '08:45')
             if dt.datetime.isoweekday(time_now) != 7:
-                if dt.datetime.strftime(time_now, "%H:%M:%S") <= '08:00:00':
+                if dt.datetime.strftime(time_now, '%H:%M:%S') <= '08:00:00':
                     return appendd(8, 0, '08:00', '08:45')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '08:45:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '08:45:00':
                     return appendd(8, 45, '08:45', '08:55')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '08:55:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '08:55:00':
                     return appendd(8, 55, '08:55', '09:40')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '09:40:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '09:40:00':
                     return appendd(9, 40, '09:40', '09:50')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '09:50:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '09:50:00':
                     return appendd(9, 50, '09:50', '10:35')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '10:35:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '10:35:00':
                     return appendd(10, 35, '10:35', '10:45')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '10:45:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '10:45:00':
                     return appendd(10, 45, '10:45', '11:30')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '11:30:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '11:30:00':
                     return appendd(11, 30, '11:30', '11:50')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '11:50:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '11:50:00':
                     return appendd(11, 50, '11:50', '12:35')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '12:35:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '12:35:00':
                     return appendd(12, 35, '12:35', '12:45')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '12:45:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '12:45:00':
                     return appendd(12, 45, '12:45', '13:30')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '13:30:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '13:30:00':
                     return appendd(13, 30, '13:30', '14:25')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '14:25:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '14:25:00':
                     return appendd(14, 25, '14:25', '15:10')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '15:10:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '15:10:00':
                     return appendd(15, 10, '15:10', '15:20')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '15:20:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '15:20:00':
                     return appendd(15, 20, '15:20', '16:05')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '16:05:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '16:05:00':
                     return appendd(16, 5, '16:05', '16:25')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '16:25:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '16:25:00':
                     return appendd(16, 25, '16:25', '17:10')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '17:10:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '17:10:00':
                     return appendd(17, 10, '17:10', '17:20')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '17:20:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '17:20:00':
                     return appendd(17, 20, '17:20', '18:05')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '18:05:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '18:05:00':
                     return appendd(18, 5, '18:05', '18:15')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '18:15:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '18:15:00':
                     return appendd(18, 15, '18:15', '19:00')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '19:00:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '19:00:00':
                     return appendd(19, 0, '19:00', '19:10')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '19:10:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '19:10:00':
                     return appendd(19, 10, '19:10', '19:55')
-                elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '19:55:00':
+                elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '19:55:00':
                     return appendd(19, 55, '19:55', '08:00')
                 else:
                     return appendd(8, 0, '08:00', '08:45')
 
         elif dt.datetime.isoweekday(time_now) == 6:
-            if dt.datetime.strftime(time_now, "%H:%M:%S") <= '08:00:00':
+            if dt.datetime.strftime(time_now, '%H:%M:%S') <= '08:00:00':
                 return appendd(8, 0, '08:00', '08:45')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '08:45:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '08:45:00':
                 return appendd(8, 45, '08:45', '08:55')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '08:55:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '08:55:00':
                 return appendd(8, 55, '08:55', '09:40')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '09:40:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '09:40:00':
                 return appendd(9, 40, '09:40', '09:50')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '09:50:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '09:50:00':
                 return appendd(9, 50, '09:50', '10:35')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '10:35:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '10:35:00':
                 return appendd(10, 35, '10:35', '10:45')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '10:45:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '10:45:00':
                 return appendd(10, 45, '10:45', '11:30')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '11:30:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '11:30:00':
                 return appendd(11, 30, '11:30', '11:50')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '11:40:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '11:40:00':
                 return appendd(11, 40, '11:40', '12:25')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '12:25:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '12:25:00':
                 return appendd(12, 25, '12:25', '12:35')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '12:35:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '12:35:00':
                 return appendd(12, 35, '12:35', '13:20')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '13:20:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '13:20:00':
                 return appendd(13, 20, '13:20', '13:35')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '13:35:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '13:35:00':
                 return appendd(13, 35, '13:35', '14:20')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '14:20:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '14:20:00':
                 return appendd(14, 20, '14:20', '14:30')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '14:30:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '14:30:00':
                 return appendd(14, 30, '14:30', '15:15')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '15:15:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '15:15:00':
                 return appendd(15, 15, '15:15', '15:25')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '15:25:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '15:25:00':
                 return appendd(15, 25, '15:25', '16:10')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '16:10:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '16:10:00':
                 return appendd(16, 10, '16:10', '16:20')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '16:20:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '16:20:00':
                 return appendd(16, 20, '16:20', '17:05')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '17:05:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '17:05:00':
                 return appendd(17, 5, '17:05', '17:15')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '17:15:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '17:15:00':
                 return appendd(17, 15, '17:15', '18:00')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '18:00:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '18:00:00':
                 return appendd(18, 0, '18:00', '18:10')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '18:10:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '18:10:00':
                 return appendd(18, 10, '18:10', '18:55')
-            elif dt.datetime.strftime(time_now, "%H:%M:%S") <= '18:55:00':
+            elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '18:55:00':
                 return appendd(18, 55, '18:55', '08:00')
             else:
                 return appendd(8, 0, '08:00', '08:45')
 
 
 def blzvs():
-    if dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '10:00:00':
+    if dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '10:00:00':
         return appendd(10, 0, '10:00', '11:00')
-    elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '11:00:00':
+    elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '11:00:00':
         return appendd(11, 0, '11:00', '11:10')
-    elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '11:10:00':
+    elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '11:10:00':
         return appendd(11, 10, '11:10', '12:10')
-    elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '12:10:00':
+    elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '12:10:00':
         return appendd(12, 10, '12:10', '12:20')
-    elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '12:20:00':
+    elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '12:20:00':
         return appendd(12, 20, '12:20', '13:20')
-    elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '13:20:00':
+    elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '13:20:00':
         return appendd(13, 20, '13:20', '13:30')
-    elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '13:30:00':
+    elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '13:30:00':
         return appendd(13, 30, '13:30', '14:30')
-    elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '14:30:00':
+    elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '14:30:00':
         return appendd(14, 30, '14:30', '14:40')
-    elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '14:40:00':
+    elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '14:40:00':
         return appendd(14, 40, '14:40', '15:40')
-    elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '15:40:00':
+    elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '15:40:00':
         return appendd(15, 40, '15:40', '15:50')
-    elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '15:50:00':
+    elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '15:50:00':
         return appendd(15, 50, '15:50', '16:50')
-    elif dt.datetime.strftime(dt.datetime.now(), "%H:%M:%S") <= '16:50:00':
+    elif dt.datetime.strftime(dt.datetime.now(), '%H:%M:%S') <= '16:50:00':
         return appendd(16, 50, '16:50', '10:00')
     else:
         return appendd(8, 0, '08:00', '08:45')
 
 
 def delete_user(user_id, only_choice=False):
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
-    cursor.execute("""DELETE FROM user_choice 
-                      WHERE user_id = ?""", (user_id,))
+    cursor.execute('''DELETE FROM user_choice 
+                            WHERE user_id = ?''', (user_id,))
     sql_con.commit()
     if not only_choice:
-        cursor.execute("""DELETE FROM banned_users 
-                          WHERE id_not_banned = ?""", (user_id,))
+        cursor.execute('''DELETE FROM banned_users 
+                                WHERE id_not_banned = ?''', (user_id,))
         sql_con.commit()
-        cursor.execute("""DELETE FROM user_data 
-                          WHERE id = ?""", (user_id,))
+        cursor.execute('''DELETE FROM user_data 
+                                WHERE id = ?''', (user_id,))
         sql_con.commit()
     cursor.close()
     sql_con.close()
 
 
 def delete_all_user_info(user_id):
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
-    cursor.execute("""DELETE FROM user_choice 
-                      WHERE user_id = ?""", (user_id,))
+    cursor.execute('''DELETE FROM user_choice 
+                            WHERE user_id = ?''', (user_id,))
     sql_con.commit()
-    cursor.execute("""DELETE FROM banned_users 
-                      WHERE id_not_banned = ?""", (user_id,))
+    cursor.execute('''DELETE FROM banned_users 
+                            WHERE id_not_banned = ?''', (user_id,))
     sql_con.commit()
-    cursor.execute("""DELETE FROM banned_users 
-                      WHERE id_banned = ?""", (user_id,))
+    cursor.execute('''DELETE FROM banned_users 
+                            WHERE id_banned = ?''', (user_id,))
     sql_con.commit()
-    cursor.execute("""DELETE FROM user_data 
-                      WHERE id = ?""", (user_id,))
+    cursor.execute('''DELETE FROM user_data 
+                            WHERE id = ?''', (user_id,))
     sql_con.commit()
     cursor.close()
     sql_con.close()
@@ -1019,7 +1032,6 @@ def check_teacher(teacher_names, full_teachers_name=False):
 
     not_in_shedule = []
 
-
     if full_teachers_name:
         for name in names:
             if name in teachers:
@@ -1028,7 +1040,7 @@ def check_teacher(teacher_names, full_teachers_name=False):
                     checked_indexes.append(
                         pre_checked_indexes[names.index(name)])
             elif name not in not_in_shedule:
-                    not_in_shedule.append(name)
+                not_in_shedule.append(name)
     else:
         for name in names:
             index = const.cap_teachers.index(name)
@@ -1042,7 +1054,7 @@ def check_teacher(teacher_names, full_teachers_name=False):
         db_teachers = []
 
         for i in range(1, 7):
-            sql_con = connect('Parse_db')
+            sql_con = connect(const.path + 'Parse_db')
             cursor = sql_con.cursor()
             cursor.execute('''SELECT day_{0}
                                 FROM zam_from_site'''.format(str(i)))
@@ -1050,7 +1062,7 @@ def check_teacher(teacher_names, full_teachers_name=False):
             cursor.close()
             sql_con.close()
 
-            soup = BeautifulSoup(data[1], "lxml")
+            soup = BeautifulSoup(data[1], 'lxml')
 
             for tab in soup.find_all('table'):
                 for row in tab.find_all('tr')[1:]:
@@ -1183,8 +1195,8 @@ def shorting_teachers(teachers):
         for teacher in teachers[0]:
             sp_te = teacher.split()
             short_teachers.append(sp_te[0] + ' ' +
-                                sp_te[1][0] + '. ' +
-                                sp_te[2][0] + '.')
+                                  sp_te[1][0] + '. ' +
+                                  sp_te[2][0] + '.')
 
         duplicate = [item for item, count in Counter(
             short_teachers).items() if count > 1]
@@ -1218,55 +1230,55 @@ def shorting_teachers(teachers):
 
 
 def edit_week(up=True):
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
     if up:
-        cursor.execute("""UPDATE offer
-                            SET week = 1""")
+        cursor.execute('''UPDATE offer
+                             SET week = 1''')
         sql_con.commit()
     else:
-        cursor.execute("""UPDATE offer
-                            SET week = 0""")
+        cursor.execute('''UPDATE offer
+                             SET week = 0''')
         sql_con.commit()
     cursor.close()
     sql_con.close()
 
 
 def edit_sending_log(up=True):
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
     if up:
-        cursor.execute("""UPDATE offer
-                            SET sending_log = 1""")
+        cursor.execute('''UPDATE offer
+                             SET sending_log = 1''')
         sql_con.commit()
     else:
-        cursor.execute("""UPDATE offer
-                            SET sending_log = 0""")
+        cursor.execute('''UPDATE offer
+                             SET sending_log = 0''')
         sql_con.commit()
     cursor.close()
     sql_con.close()
 
 
 def edit_on_or_off_zam(online=True):
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
     if online:
-        cursor.execute("""UPDATE offer
-                            SET on_or_off_zam = 1""")
+        cursor.execute('''UPDATE offer
+                             SET on_or_off_zam = 1''')
         sql_con.commit()
     else:
-        cursor.execute("""UPDATE offer
-                            SET on_or_off_zam = 0""")
+        cursor.execute('''UPDATE offer
+                             SET on_or_off_zam = 0''')
         sql_con.commit()
     cursor.close()
     sql_con.close()
 
 
 def get_sending_log():
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
-    cursor.execute("""SELECT sending_log 
-                      FROM offer""")
+    cursor.execute('''SELECT sending_log 
+                        FROM offer''')
     sending_log = cursor.fetchone()
     cursor.close()
     sql_con.close()
@@ -1277,10 +1289,10 @@ def get_sending_log():
 
 
 def get_on_or_off_zam():
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
-    cursor.execute("""SELECT on_or_off_zam 
-                      FROM offer""")
+    cursor.execute('''SELECT on_or_off_zam 
+                        FROM offer''')
     on_or_off_zam = cursor.fetchone()[0]
     cursor.close()
     sql_con.close()
@@ -1291,10 +1303,10 @@ def get_on_or_off_zam():
 
 
 def get_week():
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
-    cursor.execute("""SELECT week 
-                      FROM offer""")
+    cursor.execute('''SELECT week 
+                        FROM offer''')
     week = cursor.fetchone()
     cursor.close()
     sql_con.close()
@@ -1310,7 +1322,7 @@ def get_week():
 
 
 def get_alias(chat_id):
-    sql_con = connect('Bot_db')
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT alias
                         FROM user_data
@@ -1337,7 +1349,7 @@ def get_shedule_answer(day_info, valid_date=False):
 
                 if different[0] in different[1]:
                     time = const.abridged_lesson_time[str(list(const.lesson_time.values())
-                                                    .index(time) + 1)]
+                                                          .index(time) + 1)]
             answer += const.emoji['clock'] + ' ' + time
             lesson_num = ''
 
@@ -1423,12 +1435,13 @@ def create_schedule_answer(user_id, tomorrow=False):
 
     if tomorrow:
         if day_of_week == 7:
-            date = str(dt.datetime.isoweekday(dt.datetime.now() + dt.timedelta(days=1)))
-            answer = const.emoji["calendar"] + " "
+            date = str(dt.datetime.isoweekday(
+                dt.datetime.now() + dt.timedelta(days=1)))
+            answer = const.emoji['calendar'] + ' '
             answer += const.num_day[date] + \
-                ", "
+                ', '
             full_date = get_date(True)
-            answer += full_date[0] + "\n"
+            answer += full_date[0] + '\n'
             td = 1
             if week == 'DOWN':
                 answer += const.up_week
@@ -1437,14 +1450,15 @@ def create_schedule_answer(user_id, tomorrow=False):
                 answer += const.down_week
                 week = 'DOWN'
         elif day_of_week == 6:
-            date = str(dt.datetime.isoweekday(dt.datetime.now() + dt.timedelta(days=2)))
-            answer = const.emoji["sleep"] + " Выходной"
-            answer += "\nРасписание на следующий день:\n\n"
-            answer += const.emoji["calendar"] + " "
+            date = str(dt.datetime.isoweekday(
+                dt.datetime.now() + dt.timedelta(days=2)))
+            answer = const.emoji['sleep'] + ' Выходной'
+            answer += '\nРасписание на следующий день:\n\n'
+            answer += const.emoji['calendar'] + ' '
             answer += const.num_day[date] + \
-                ", "
+                ', '
             full_date = get_date(tomorrow_tomorrow=True)
-            answer += full_date[0] + "\n"
+            answer += full_date[0] + '\n'
             td = 2
             if week == 'DOWN':
                 answer += const.up_week
@@ -1453,12 +1467,13 @@ def create_schedule_answer(user_id, tomorrow=False):
                 answer += const.down_week
                 week = 'DOWN'
         else:
-            date = str(dt.datetime.isoweekday(dt.datetime.now() + dt.timedelta(days=1)))
-            answer = const.emoji["calendar"] + " "
+            date = str(dt.datetime.isoweekday(
+                dt.datetime.now() + dt.timedelta(days=1)))
+            answer = const.emoji['calendar'] + ' '
             answer += const.num_day[date] + \
-                ", "
+                ', '
             full_date = get_date(True)
-            answer += full_date[0] + "\n"
+            answer += full_date[0] + '\n'
             td = 1
             if week == 'UP':
                 answer += const.up_week
@@ -1467,24 +1482,25 @@ def create_schedule_answer(user_id, tomorrow=False):
     else:
         if day_of_week != 7:
             date = str(day_of_week)
-            answer = const.emoji["calendar"] + " "
-            answer += const.num_day[date] + ", "
+            answer = const.emoji['calendar'] + ' '
+            answer += const.num_day[date] + ', '
             full_date = get_date()
-            answer += full_date[0] + "\n"
+            answer += full_date[0] + '\n'
             td = 0
             if week == 'UP':
                 answer += const.up_week
             elif week == 'DOWN':
                 answer += const.down_week
         elif day_of_week == 7:
-            date = str(dt.datetime.isoweekday(dt.datetime.now() + dt.timedelta(days=1)))
-            answer = const.emoji["sleep"] + " Выходной"
-            answer += "\nРасписание на следующий день:\n\n"
-            answer += const.emoji["calendar"] + " "
+            date = str(dt.datetime.isoweekday(
+                dt.datetime.now() + dt.timedelta(days=1)))
+            answer = const.emoji['sleep'] + ' Выходной'
+            answer += '\nРасписание на следующий день:\n\n'
+            answer += const.emoji['calendar'] + ' '
             answer += const.num_day[date] + \
-                ", "
+                ', '
             full_date = get_date(True)
-            answer += full_date[0] + "\n"
+            answer += full_date[0] + '\n'
             td = 1
             if week == 'DOWN':
                 answer += const.up_week
@@ -1510,11 +1526,11 @@ def create_schedule_answer(user_id, tomorrow=False):
                    '</b>" не найдено\U00002026'
 
     day_info = day_info[week][dt.datetime.isoweekday(dt.datetime.now() +
-                                                  dt.timedelta(days=td)) - 1]
+                                                     dt.timedelta(days=td)) - 1]
     if day_info:
         answer += get_shedule_answer(day_info, full_date[1])
     else:
-        return const.emoji["sleep"] + ' Выходной'
+        return const.emoji['sleep'] + ' Выходной'
 
     return answer
 
@@ -1528,14 +1544,15 @@ def create_schedule_week_answer(user_id, td, force_day_of_week=0):
     if day_of_week != 7:
         day_date = day_of_week
     elif day_of_week == 7:
-        day_date = dt.datetime.isoweekday(dt.datetime.now() + dt.timedelta(days=8))
-    answer = const.emoji["calendar"] + " "
+        day_date = dt.datetime.isoweekday(
+            dt.datetime.now() + dt.timedelta(days=8))
+    answer = const.emoji['calendar'] + ' '
     answer += const.num_day[str(td)]
 
     if force_day_of_week == 0:
         if day_of_week != 7:
             full_date = get_date(force_day_of_week=str(-(day_date - td)))
-            answer += ", " + full_date[0] + "\n"
+            answer += ', ' + full_date[0] + '\n'
             if week == 'UP':
                 answer += const.up_week
                 week = 'UP'
@@ -1544,7 +1561,7 @@ def create_schedule_week_answer(user_id, td, force_day_of_week=0):
                 week = 'DOWN'
         elif day_of_week == 7:
             full_date = get_date(week_td=str(-(day_date - td)))
-            answer += ", " + full_date[0] + "\n"
+            answer += ', ' + full_date[0] + '\n'
             if week == 'UP':
                 answer += const.down_week
                 week = 'DOWN'
@@ -1578,7 +1595,7 @@ def create_schedule_week_answer(user_id, td, force_day_of_week=0):
     if day_info:
         answer += get_shedule_answer(day_info, full_date[1])
     else:
-        return const.emoji["sleep"] + ' Выходной'
+        return const.emoji['sleep'] + ' Выходной'
 
     return answer
 
@@ -1596,15 +1613,16 @@ def send_schedule_force_week_answer(message, force_day_of_week=0):
 
     back_from_week.row(
         *[types.InlineKeyboardButton(text=name, callback_data=name) for
-            name in ["« Нaзад"]])
+            name in ['« Нaзад']])
     back_from_schedule.row(
         *[types.InlineKeyboardButton(text=name, callback_data=name) for
-            name in ["« Haзад"]])
+            name in ['« Haзад']])
 
     if day_of_week != 7:
         day_date = day_of_week
     elif day_of_week == 7:
-        day_date = dt.datetime.isoweekday(dt.datetime.now() + dt.timedelta(days=8))
+        day_date = dt.datetime.isoweekday(
+            dt.datetime.now() + dt.timedelta(days=8))
 
     if force_day_of_week == 0:
         if day_of_week != 7:
@@ -1632,7 +1650,7 @@ def send_schedule_force_week_answer(message, force_day_of_week=0):
                 + group + '</b>" не найдено\U00002026',
                 chat_id=message.chat.id,
                 message_id=message.message_id,
-                parse_mode="HTML")
+                parse_mode='HTML')
 
         xday = 1
         for i in range(6):
@@ -1648,12 +1666,12 @@ def send_schedule_force_week_answer(message, force_day_of_week=0):
                 group + '</b>" не найдено\U00002026',
                 chat_id=message.chat.id,
                 message_id=message.message_id,
-                parse_mode="HTML")
+                parse_mode='HTML')
 
     for day in range(6):
         if td < 8:
             full_date = [False, False]
-            answer = const.emoji["calendar"] + " "
+            answer = const.emoji['calendar'] + ' '
             answer += const.num_day[str(td)]
 
             answer += const.notify
@@ -1662,14 +1680,14 @@ def send_schedule_force_week_answer(message, force_day_of_week=0):
                 if day_of_week != 7:
                     full_date = get_date(
                         force_day_of_week=str(-(day_date - td)))
-                    answer += ", " + full_date[0] + "\n"
+                    answer += ', ' + full_date[0] + '\n'
                     if week == 'UP':
                         answer += const.up_week
                     elif week == 'DOWN':
                         answer += const.down_week
                 elif day_of_week == 7:
                     full_date = get_date(week_td=str(-(day_date - td)))
-                    answer += ", " + full_date[0] + "\n"
+                    answer += ', ' + full_date[0] + '\n'
                     if week == 'UP':
                         answer += const.down_week
                     elif week == 'DOWN':
@@ -1693,42 +1711,42 @@ def send_schedule_force_week_answer(message, force_day_of_week=0):
                             bot.edit_message_text(answer,
                                                   message.chat.id,
                                                   message.message_id,
-                                                  parse_mode="HTML",
+                                                  parse_mode='HTML',
                                                   reply_markup=back_from_week)
                         else:
                             if td - 1 == valid_days[0]:
                                 bot.edit_message_text(answer,
                                                       message.chat.id,
                                                       message.message_id,
-                                                      parse_mode="HTML")
+                                                      parse_mode='HTML')
                             elif td - 1 == valid_days[-1]:
                                 bot.send_message(message.chat.id, answer,
-                                                 parse_mode="HTML",
+                                                 parse_mode='HTML',
                                                  reply_markup=back_from_schedule)
                             else:
                                 bot.send_message(message.chat.id, answer,
-                                                 parse_mode="HTML",
+                                                 parse_mode='HTML',
                                                  disable_notification=True)
                     else:
                         if td == 2:
                             bot.edit_message_text(answer,
                                                   message.chat.id,
                                                   message.message_id,
-                                                  parse_mode="HTML")
+                                                  parse_mode='HTML')
                         elif td == 7:
                             bot.send_message(message.chat.id, answer,
-                                             parse_mode="HTML",
+                                             parse_mode='HTML',
                                              reply_markup=back_from_schedule)
                         else:
                             bot.send_message(message.chat.id, answer,
-                                             parse_mode="HTML",
+                                             parse_mode='HTML',
                                              disable_notification=True)
                 elif len_valid_days == 0:
-                    bot.edit_message_text(const.emoji["sleep"] +
+                    bot.edit_message_text(const.emoji['sleep'] +
                                           ' Выходная неделя',
                                           message.chat.id,
                                           message.message_id,
-                                          parse_mode="HTML",
+                                          parse_mode='HTML',
                                           reply_markup=back_from_week)
 
 
@@ -1741,7 +1759,8 @@ def send_teacher_week_answer(message, teacher, free_week=False,
     if day_of_week != 7:
         day_date = day_of_week
     elif day_of_week == 7:
-        day_date = dt.datetime.isoweekday(dt.datetime.now() + dt.timedelta(days=8))
+        day_date = dt.datetime.isoweekday(
+            dt.datetime.now() + dt.timedelta(days=8))
 
     if day_of_week != 7:
         if week == 'UP':
@@ -1762,7 +1781,7 @@ def send_teacher_week_answer(message, teacher, free_week=False,
             + teacher + '</b>" не найдено\U00002026',
             chat_id=message.chat.id,
             message_id=message.message_id,
-            parse_mode="HTML")
+            parse_mode='HTML')
 
     week_day_info = day_info[shedule_week]
 
@@ -1793,7 +1812,6 @@ def send_teacher_week_answer(message, teacher, free_week=False,
     else:
         last_valid_day = False
 
-
     first_of_days = []
     first_of_dates = []
     for day in range(6):
@@ -1801,7 +1819,7 @@ def send_teacher_week_answer(message, teacher, free_week=False,
             valid_days = []
             is_next_week = ''
             full_date = [False, False]
-            answer = const.emoji["calendar"] + " "
+            answer = const.emoji['calendar'] + ' '
             answer += const.num_day[str(td)]
 
             answer += const.notify
@@ -1814,7 +1832,7 @@ def send_teacher_week_answer(message, teacher, free_week=False,
 
             if day_of_week == 7 and hold_week:
                 full_date = get_date(week_td=str(-(day_date - td)))
-                answer += ", " + full_date[0] + "\n"
+                answer += ', ' + full_date[0] + '\n'
 
                 if week == 'UP':
                     answer += const.up_week
@@ -1825,56 +1843,57 @@ def send_teacher_week_answer(message, teacher, free_week=False,
                 week_day_info = day_info[shedule_week]
             elif day_of_week == 7:
                 full_date = get_date(week_td=str(-(day_date - td)))
-                answer += ", " + full_date[0] + "\n"
+                answer += ', ' + full_date[0] + '\n'
 
                 if week == 'UP':
                     answer += const.down_week
                 elif week == 'DOWN':
                     answer += const.up_week
             elif (day_of_week != 7 and not free_week and next_week_empty and
-                 (last_valid_day and day_of_week >= last_valid_day + 1)):
+                  (last_valid_day and day_of_week >= last_valid_day + 1)):
                 full_date = get_date(
                     force_day_of_week=str(-(day_date - td)))
-                answer += ", " + full_date[0] + "\n"
+                answer += ', ' + full_date[0] + '\n'
 
                 if week == 'UP':
                     answer += const.up_week
                 elif week == 'DOWN':
                     answer += const.down_week
             elif ((last_valid_day and day_of_week >= last_valid_day + 1) or
-                   free_week):
-                full_date = get_date(week_td=
-                    str(-(dt.datetime.isoweekday(dt.datetime.now() + 
-                        dt.timedelta(days=8 + last_weekend)) - 
-                        (td + last_weekend))))
-                answer += ", " + full_date[0] + "\n"
+                  free_week):
+                full_date = get_date(week_td=str(-(dt.datetime.isoweekday(dt.datetime.now() +
+                                                                          dt.timedelta(days=8 + last_weekend)) -
+                                                   (td + last_weekend))))
+                answer += ', ' + full_date[0] + '\n'
 
                 if week == 'UP':
                     answer += (const.down_week.replace('\n', '') +
-                        ' (<b>следующая</b>)' + '\n\n')
+                               ' (<b>следующая</b>)' + '\n\n')
                     shedule_week = 'DOWN'
                     end_of_warn = ' (нижнюю неделю):\n\n'
                 elif week == 'DOWN':
                     answer += (const.up_week.replace('\n', '') +
-                        ' (<b>следующая</b>)' + '\n\n')
+                               ' (<b>следующая</b>)' + '\n\n')
                     shedule_week = 'UP'
                     end_of_warn = ' (верхнюю неделю):\n\n'
 
                 if free_week:
                     is_next_week = (
-                        const.emoji["warning_sign"] + ' В связи с тем что <b>эта '
+                        const.emoji['warning_sign'] +
+                        ' В связи с тем что <b>эта '
                         'неделя выходная</b>, будет показано <b>расписание '
                         'на следующую</b>' + end_of_warn)
                 else:
                     is_next_week = (
-                        const.emoji["warning_sign"] + ' В связи с тем что <b>на этой '
+                        const.emoji['warning_sign'] +
+                        ' В связи с тем что <b>на этой '
                         'неделе больше нету пар</b>, будет показано <b>расписание '
                         'на следующую</b>' + end_of_warn)
                 week_day_info = day_info[shedule_week]
             elif day_of_week != 7:
                 full_date = get_date(
                     force_day_of_week=str(-(day_date - td)))
-                answer += ", " + full_date[0] + "\n"
+                answer += ', ' + full_date[0] + '\n'
 
                 if week == 'UP':
                     answer += const.up_week
@@ -1897,10 +1916,10 @@ def send_teacher_week_answer(message, teacher, free_week=False,
 
                     if const.emoji['arrow_up'] in answer:
                         range_of_days = (answer.split(',')[1]
-                            .split(const.emoji['arrow_up'])[0].replace('\n', ''))
+                                         .split(const.emoji['arrow_up'])[0].replace('\n', ''))
                     elif const.emoji['arrow_down'] in answer:
                         range_of_days = (answer.split(',')[1]
-                            .split(const.emoji['arrow_down'])[0].replace('\n', ''))
+                                         .split(const.emoji['arrow_down'])[0].replace('\n', ''))
 
                     head_answer = (
                         const.emoji['bust_in_silhouette'] +
@@ -1914,26 +1933,26 @@ def send_teacher_week_answer(message, teacher, free_week=False,
                         first_date = bot.edit_message_text(head_answer,
                                                            message.chat.id,
                                                            message.message_id,
-                                                           parse_mode="HTML")
+                                                           parse_mode='HTML')
                         first_of_days.append(first_date)
                         first_of_dates.append(range_of_days)
                     elif (td - 1 == valid_days[-1] and
-                         (is_next_week or len_valid_days != 1)):
-                            head_answer = (head_answer + '\n\n' +
-                                is_next_week + const.emoji["calendar"] + 
-                                first_of_dates[0] + ' ' + year +
-                                ' –' + range_of_days + ' ' + year)
-                            bot.edit_message_text(head_answer,
-                                                  message.chat.id,
-                                                  first_of_days[0].message_id,
-                                                  parse_mode="HTML")
+                          (is_next_week or len_valid_days != 1)):
+                        head_answer = (head_answer + '\n\n' +
+                                       is_next_week + const.emoji['calendar'] +
+                                       first_of_dates[0] + ' ' + year +
+                                       ' –' + range_of_days + ' ' + year)
+                        bot.edit_message_text(head_answer,
+                                              message.chat.id,
+                                              first_of_days[0].message_id,
+                                              parse_mode='HTML')
 
                     if td - 1 == valid_days[0] or td - 1 == valid_days[-1]:
                         bot.send_message(message.chat.id, answer,
-                                         parse_mode="HTML")
+                                         parse_mode='HTML')
                     else:
                         bot.send_message(message.chat.id, answer,
-                                         parse_mode="HTML",
+                                         parse_mode='HTML',
                                          disable_notification=True)
                 elif len_valid_days == 0:
                     if day_of_week == 7 and not hold_week:
@@ -1945,11 +1964,11 @@ def send_teacher_week_answer(message, teacher, free_week=False,
 
 
 def is_user_in_all_users(user_id):
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
-    cursor.execute("""SELECT count(id) 
-                      FROM all_users
-                      WHERE id = ?""", (user_id,))
+    cursor.execute('''SELECT count(id) 
+                        FROM all_users
+                       WHERE id = ?''', (user_id,))
     data = cursor.fetchone()
     cursor.close()
     sql_con.close()
@@ -1957,11 +1976,11 @@ def is_user_in_all_users(user_id):
 
 
 def is_user_exist(user_id):
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
-    cursor.execute("""SELECT count(id) 
-                      FROM user_data
-                      WHERE id = ?""", (user_id,))
+    cursor.execute('''SELECT count(id) 
+                        FROM user_data
+                       WHERE id = ?''', (user_id,))
     data = cursor.fetchone()
     cursor.close()
     sql_con.close()
@@ -1969,11 +1988,11 @@ def is_user_exist(user_id):
 
 
 def is_user_banned(user_id):
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
-    cursor.execute("""SELECT count(id_banned) 
-                      FROM banned_users
-                      WHERE id_banned = ?""", (user_id,))
+    cursor.execute('''SELECT count(id_banned) 
+                        FROM banned_users
+                       WHERE id_banned = ?''', (user_id,))
     data = cursor.fetchone()
     cursor.close()
     sql_con.close()
@@ -1981,11 +2000,11 @@ def is_user_banned(user_id):
 
 
 def is_user_not_banned(user_id):
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
-    cursor.execute("""SELECT count(id_not_banned) 
-                      FROM banned_users
-                      WHERE id_not_banned = ?""", (user_id,))
+    cursor.execute('''SELECT count(id_not_banned) 
+                        FROM banned_users
+                       WHERE id_not_banned = ?''', (user_id,))
     data = cursor.fetchone()
     cursor.close()
     sql_con.close()
@@ -2004,10 +2023,10 @@ def get_not_banned_users(user_id):
 
 
 def banned_users(user_id):
-    sql_con = connect('Bot_db')
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT id_banned
-                      FROM banned_users''')
+                        FROM banned_users''')
     data = cursor.fetchall()
     sql_con.commit()
     cursor.close()
@@ -2016,42 +2035,42 @@ def banned_users(user_id):
 
 
 def ban_user(user_id):
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
-    cursor.execute("""DELETE FROM banned_users 
-                      WHERE id_not_banned = ?""", (user_id,))
+    cursor.execute('''DELETE FROM banned_users 
+                            WHERE id_not_banned = ?''', (user_id,))
     sql_con.commit()
-    cursor.execute("""INSERT INTO banned_users (id_banned)
-                      VALUES (?)""", (user_id,))
+    cursor.execute('''INSERT INTO banned_users (id_banned)
+                           VALUES (?)''', (user_id,))
     sql_con.commit()
     cursor.close()
     sql_con.close()
 
 
 def unban_user(user_id):
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
-    cursor.execute("""DELETE FROM banned_users 
-                      WHERE id_banned = ?""", (user_id,))
+    cursor.execute('''DELETE FROM banned_users 
+                            WHERE id_banned = ?''', (user_id,))
     sql_con.commit()
-    cursor.execute("""INSERT INTO banned_users (id_not_banned)
-                      VALUES (?)""", (user_id,))
+    cursor.execute('''INSERT INTO banned_users (id_not_banned)
+                           VALUES (?)''', (user_id,))
     sql_con.commit()
     cursor.close()
     sql_con.close()
 
 
 def is_sending_rasp_on(user_id, rasp5=False):
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
     if rasp5:
-        cursor.execute("""SELECT sending_rasp_5 
-                          FROM user_data
-                          WHERE id = ?""", (user_id,))
+        cursor.execute('''SELECT sending_rasp_5 
+                            FROM user_data
+                           WHERE id = ?''', (user_id,))
     else:
-        cursor.execute("""SELECT sending_rasp 
-                          FROM user_data
-                          WHERE id = ?""", (user_id,))
+        cursor.execute('''SELECT sending_rasp 
+                            FROM user_data
+                           WHERE id = ?''', (user_id,))
     data = cursor.fetchone()
     cursor.close()
     sql_con.close()
@@ -2059,11 +2078,11 @@ def is_sending_rasp_on(user_id, rasp5=False):
 
 
 def is_sending_zam_on(user_id):
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
-    cursor.execute("""SELECT sending_zam 
-                      FROM user_data
-                      WHERE id = ?""", (user_id,))
+    cursor.execute('''SELECT sending_zam 
+                        FROM user_data
+                       WHERE id = ?''', (user_id,))
     data = cursor.fetchone()
     cursor.close()
     sql_con.close()
@@ -2071,17 +2090,17 @@ def is_sending_zam_on(user_id):
 
 
 def set_sending_rasp(user_id, on=True, rasp5=False):
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
     if rasp5:
-        cursor.execute("""UPDATE user_data
-                          SET sending_rasp_5 = ?
-                          WHERE id = ?""",
+        cursor.execute('''UPDATE user_data
+                             SET sending_rasp_5 = ?
+                           WHERE id = ?''',
                        (int(on), user_id,))
     else:
-        cursor.execute("""UPDATE user_data
-                          SET sending_rasp = ?
-                          WHERE id = ?""",
+        cursor.execute('''UPDATE user_data
+                             SET sending_rasp = ?
+                           WHERE id = ?''',
                        (int(on), user_id,))
     sql_con.commit()
     cursor.close()
@@ -2089,11 +2108,11 @@ def set_sending_rasp(user_id, on=True, rasp5=False):
 
 
 def set_sending_zam(user_id, on=True):
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
-    cursor.execute("""UPDATE user_data
-                      SET sending_zam = ?
-                      WHERE id = ?""",
+    cursor.execute('''UPDATE user_data
+                         SET sending_zam = ?
+                       WHERE id = ?''',
                    (int(on), user_id,))
     sql_con.commit()
     cursor.close()
@@ -2101,11 +2120,11 @@ def set_sending_zam(user_id, on=True):
 
 
 def get_rate_statistics():
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
-    cursor.execute("""SELECT sum(rate), count(id) 
-                      FROM user_data
-                      WHERE rate != 0""")
+    cursor.execute('''SELECT sum(rate), count(id) 
+                        FROM user_data
+                       WHERE rate != 0''')
     data = cursor.fetchone()
     cursor.close()
     sql_con.close()
@@ -2116,11 +2135,11 @@ def get_rate_statistics():
 
 
 def set_rate(user_id, count_of_stars):
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
-    cursor.execute("""UPDATE user_data
-                      SET rate = ?
-                      WHERE id = ?""",
+    cursor.execute('''UPDATE user_data
+                         SET rate = ?
+                       WHERE id = ?''',
                    (int(count_of_stars), user_id))
     sql_con.commit()
     cursor.close()
@@ -2128,11 +2147,11 @@ def set_rate(user_id, count_of_stars):
 
 
 def get_statistics_for_admin():
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
 
-    cursor.execute("""SELECT count(id)
-                      FROM user_data""")
+    cursor.execute('''SELECT count(id)
+                        FROM user_data''')
     data = cursor.fetchone()[0]
 
     cursor.close()
@@ -2141,11 +2160,11 @@ def get_statistics_for_admin():
 
 
 def get_user_rate(user_id):
-    sql_con = connect("Bot_db")
+    sql_con = connect(const.path + 'Bot_db')
     cursor = sql_con.cursor()
-    cursor.execute("""SELECT rate
-                      FROM user_data
-                      WHERE id = ?""", (user_id,))
+    cursor.execute('''SELECT rate
+                        FROM user_data
+                       WHERE id = ?''', (user_id,))
     rate = cursor.fetchone()[0]
     cursor.close()
     sql_con.close()
