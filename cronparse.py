@@ -85,7 +85,6 @@ def parse(html, parse_day, request_day):
                              str(sys.exc_info()[1]))
             sys.exit()
 
-
         sql_con = connect(const.path + 'Parse_db')
         cursor = sql_con.cursor()
         cursor.execute('''UPDATE zam_from_site
@@ -351,7 +350,6 @@ def parse(html, parse_day, request_day):
 
 
 def main():
-
     sql_con = connect(const.path + 'Parse_db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT pro_parsing_date

@@ -638,7 +638,7 @@ def write_replacement_handler(message):
 
     if 'группу' in message.reply_to_message.text:
         if (message.text.lower().replace(' ', '') in
-           [group.lower() for group in const.existing_groups]):
+                [group.lower() for group in const.existing_groups]):
             print(message.text)
         else:
             answer = 'Ничего не найдено'
@@ -657,8 +657,8 @@ def write_replacement_handler(message):
                      reply_markup=replacements_keyboard)
 
 
-@bot.message_handler(func=lambda mess: mess.text == const.emoji['bust_in_silhouette'] or 
-                                       mess.text == 'Препoдаватель',
+@bot.message_handler(func=lambda mess: mess.text == const.emoji['bust_in_silhouette'] or
+                     mess.text == 'Препoдаватель',
                      content_types=['text'])
 def teacher_schedule_handler(message):
     bot.send_chat_action(message.chat.id, 'typing')
