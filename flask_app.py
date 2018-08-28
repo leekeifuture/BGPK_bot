@@ -596,7 +596,8 @@ def bliz_zvonok_handler(message):
     func.log_me(message)
 
 
-@bot.message_handler(func=lambda mess: mess.text == const.emoji['magnifying_glass'],
+@bot.message_handler(func=lambda mess: mess.text == const.emoji['magnifying_glass'] or
+                     mess.text == '« Нaзад',
                      content_types=['text'])
 def search_replacements_handler(message):
     bot.send_chat_action(message.chat.id, 'typing')
@@ -611,21 +612,33 @@ def search_replacements_handler(message):
 
 @bot.message_handler(func=lambda mess: mess.text == 'Группа' or
                      mess.text == 'Курс' or
-                     mess.text == 'Направление',
+                     mess.text == 'Направление' or
+                     mess.text == 'Препoдаватель',
                      content_types=['text'])
 def select_type_of_search_handler(message):
     bot.send_chat_action(message.chat.id, 'typing')
-    answer = ('Укажи ' + message.text.lower().replace('па', 'пу')
-              .replace('ль', 'ля') + ' для поиска:')
-    markup = tb.types.ReplyKeyboardMarkup(True)
-    if message.text == 'Группа':
-        markup = tb.types.ForceReply()
-        answer += '\nДля отмены используй /home'
+    answer = ('Укажи ' + message.text.lower().replace('па', 'пу') +
+              ' для поиска:')
+    reply_markup = tb.types.ReplyKeyboardMarkup(True)
+    force_markup = tb.types.ForceReply()
+
+    if message.text == 'Препoдаватель':
+        answer = 'Введи Фамилию препoдавателя для пoиска: <i>(и И. О.)</i>'
+        markup = force_markup
+    elif message.text == 'Группа':
+        markup = force_markup
     elif message.text == 'Курс':
-        [markup.row(course) for course in const.existing_courses]
+        [reply_markup.row(course) for course in const.existing_courses]
+        reply_markup.row('« Нaзад')
+        markup = reply_markup
     elif message.text == 'Направление':
-        [markup.row(division) for division in const.existing_divisions]
-    bot.send_message(message.chat.id, answer, reply_markup=markup)
+        [reply_markup.row(division) for division in const.existing_divisions]
+        reply_markup.row('« Нaзад')
+        markup = reply_markup
+
+    answer += '\nДля отмены используй /home'
+    bot.send_message(message.chat.id, answer, reply_markup=markup,
+                     parse_mode='HTML')
 
 
 @bot.message_handler(func=lambda mess: mess.reply_to_message is not None and
@@ -633,43 +646,62 @@ def select_type_of_search_handler(message):
                      bot_username and
                      ' для поиска:' in mess.reply_to_message.text,
                      content_types=['text'])
-def write_replacement_handler(message):
+def write_replacement_group_handler(message):
     bot.send_chat_action(message.chat.id, 'typing')
     answer = 'Меню замен'
 
     if 'группу' in message.reply_to_message.text:
-        if (message.text.lower().replace(' ', '') in
-                [group.lower() for group in const.existing_groups]):
-            print(message.text)
+        lower_groups = [group.lower() for group in const.existing_groups]
+        if message.text.lower().replace(' ', '') in lower_groups:
+            index = lower_groups.index(message.text.lower().replace(' ', ''))
+            answers = func.get_data_from_replacements(
+                group=const.existing_groups[index])
+            if answers != None:
+                for answer in answers:
+                    if answer != answers[-1]:
+                        bot.send_message(message.chat.id, answer,
+                                         parse_mode='HTML')
+            else:
+                answer = const.emoji['clock'] + ' Замены ещё не вывесили.'
         else:
             answer = 'Ничего не найдено'
-    elif 'курс' in message.reply_to_message.text:
-        if message.text in const.existing_courses:
-            print(message.text)
-        else:
-            answer = 'Ничего не найдено'
-    elif 'направление' in message.reply_to_message.text:
-        if message.text in const.existing_divisions:
-            print(message.text)
-        else:
-            answer = 'Ничего не найдено'
-
     bot.send_message(message.chat.id, answer,
                      reply_markup=replacements_keyboard)
 
 
-@bot.message_handler(func=lambda mess: mess.text == const.emoji['bust_in_silhouette'] or
-                     mess.text == 'Препoдаватель',
+@bot.message_handler(func=lambda mess: mess.text in const.existing_courses or
+                     mess.text in const.existing_divisions,
+                     content_types=['text'])
+def write_replacement_handler(message):
+    bot.send_chat_action(message.chat.id, 'typing')
+
+    valid_groups = []
+    if message.text in const.existing_courses:
+        for alias in const.student_groups:
+            str_alias = list(alias.keys())[0]
+            if message.text[0] in str_alias:
+                for name in alias[str_alias]:
+                    valid_groups.append(name['StudentGroupName'])
+    elif message.text in const.existing_divisions:
+        for division in const.divisions:
+            if division['Name'] == message.text:
+                valid_alias = division['Alias']
+        for alias in const.student_groups:
+            str_alias = list(alias.keys())[0]
+            if valid_alias in str_alias:
+                for name in alias[str_alias]:
+                    valid_groups.append(name['StudentGroupName'])
+
+    bot.send_message(message.chat.id, 'answer')
+
+
+@bot.message_handler(func=lambda mess: mess.text == const.emoji['bust_in_silhouette'],
                      content_types=['text'])
 def teacher_schedule_handler(message):
     bot.send_chat_action(message.chat.id, 'typing')
     if message.text == const.emoji['bust_in_silhouette']:
         answer = (
             'Введи Фамилию преподавателя: <i>(и И. О.)</i>\n'
-            'Для отмены используй /home')
-    elif message.text == 'Препoдаватель':
-        answer = (
-            'Введи Фамилию препoдавателя для пoиска: <i>(и И. О.)</i>\n'
             'Для отмены используй /home')
     markup = tb.types.ForceReply()
     bot.send_message(message.chat.id, answer, parse_mode='HTML',
@@ -692,8 +724,10 @@ def write_teacher_name_handler(message):
     educators = []
     teachers = func.search_teacher(message.text, from_menu=True)
     short_teachers = func.shorting_teachers(teachers)
-
     teachers_keyboard = tb.types.InlineKeyboardMarkup(row_width=2)
+
+    if 'препoдавателя' in message.reply_to_message.text:
+        schedule_keyboard = replacements_keyboard
 
     if teachers[0] and len(teachers[0]) <= 20:
         for teacher in short_teachers:
@@ -716,7 +750,6 @@ def write_teacher_name_handler(message):
                 answer += (const.emoji['mag_right'] +
                            ' Найденные преподаватели:')
         elif 'препoдавателя' in message.reply_to_message.text:
-            schedule_keyboard = replacements_keyboard
             if len(short_teachers) == 1:
                 answer += (const.emoji['mag_right'] +
                            ' Нaйденный преподаватель:')
@@ -1157,12 +1190,26 @@ def show_briefly_info(call_back):
     call_back.data.split('|')[0] in const.sht_teachers or
     call_back.data.split('|')[0] in const.cap_teachers))
 def select_teacher_id_handler(call_back):
+    index = int(call_back.data.split('|')[1])
     if 'Найденны' in call_back.message.text:
-        index = int(call_back.data.split('|')[1])
         teacher = const.teacher_name[index]
         func.send_teacher_week_answer(call_back.message, teacher)
     elif 'Нaйденны' in call_back.message.text:
-        print(func.get_data_from_replacements())
+        answers = func.get_data_from_replacements(
+            teacher=const.cap_teachers[index])
+        if answers != None:
+            for answer in answers:
+                if answer == answers[0]:
+                    bot.edit_message_text(answer, call_back.message.chat.id,
+                                          call_back.message.message_id,
+                                          parse_mode='HTML')
+                else:
+                    bot.send_message(call_back.message.chat.id, answer,
+                                     parse_mode='HTML')
+        else:
+            answer = const.emoji['clock'] + ' Замены ещё не вывесили.'
+            bot.edit_message_text(answer, call_back.message.chat.id,
+                                  call_back.message.message_id)
     func.call_back_log_me(call_back)
 
 
@@ -1294,23 +1341,17 @@ def select_week_day_replace_handler(call_back):
         answer = ''
 
         if 'Понедельник' in call_back.data:
-            answer += func.get_replace_of_day('Понедельник',
-                                              call_back.message.chat.id)
+            answer += func.get_replace_of_day(1, call_back.message.chat.id)
         elif 'Вторник' in call_back.data:
-            answer += func.get_replace_of_day('Вторник',
-                                              call_back.message.chat.id)
+            answer += func.get_replace_of_day(2, call_back.message.chat.id)
         elif 'Среда' in call_back.data:
-            answer += func.get_replace_of_day('Среда',
-                                              call_back.message.chat.id)
+            answer += func.get_replace_of_day(3, call_back.message.chat.id)
         elif 'Четверг' in call_back.data:
-            answer += func.get_replace_of_day('Четверг',
-                                              call_back.message.chat.id)
+            answer += func.get_replace_of_day(4, call_back.message.chat.id)
         elif 'Пятница' in call_back.data:
-            answer += func.get_replace_of_day('Пятница',
-                                              call_back.message.chat.id)
+            answer += func.get_replace_of_day(4, call_back.message.chat.id)
         elif 'Суббота' in call_back.data:
-            answer += func.get_replace_of_day('Суббота',
-                                              call_back.message.chat.id)
+            answer += func.get_replace_of_day(6, call_back.message.chat.id)
 
         bot.edit_message_text(text=answer,
                               chat_id=call_back.message.chat.id,

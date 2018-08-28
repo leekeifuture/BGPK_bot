@@ -187,21 +187,22 @@ def day_of_week_parsing_day(request_day, parse_day, week=False):
             return 'завтра'
         elif parse_day == dt.datetime.isoweekday(dt.datetime.now()):
             return 'сегодня'
-    if 'понедельник' in request_day.lower():
+    if 'понедельник' in str(request_day).lower() or request_day == 1:
         return 'понедельник'
-    elif 'вторник' in request_day.lower():
+    elif 'вторник' in str(request_day).lower() or request_day == 2:
         return 'вторник'
-    elif 'среда' in request_day.lower():
+    elif 'среда' in str(request_day).lower() or request_day == 3:
         return 'среду'
-    elif 'четверг' in request_day.lower():
+    elif 'четверг' in str(request_day).lower() or request_day == 4:
         return 'четверг'
-    elif 'пятница' in request_day.lower():
+    elif 'пятница' in str(request_day).lower() or request_day == 5:
         return 'пятницу'
-    elif 'суббота' in request_day.lower():
+    elif 'суббота' in str(request_day).lower() or request_day == 6:
         return 'субботу'
 
 
-def get_replacements_ansewer(row, chat_id):
+def get_replacements_ansewer(row, chat_id=False, force_teacher=False,
+                             force_group=False):
     answer = ''
 
     tmp = row.find_all('td')
@@ -212,7 +213,16 @@ def get_replacements_ansewer(row, chat_id):
     teacher = tmp[4].text.strip().replace('\n', '')
     aud = tmp[5].text.strip().replace('\n', '')
     site_group = grp.lower().replace(' ', '')
-    group = get_student_group(chat_id).lower()
+
+    if chat_id:
+        alias = get_alias(chat_id)
+        group = get_student_group(chat_id).lower()
+    elif force_teacher:
+        alias = 'PREP'
+        group = force_teacher.lower()
+    elif force_group:
+        alias = 'GROUP'
+        group = force_group.lower()
 
     if zan == '3':
         ending = '-ей'
@@ -232,7 +242,7 @@ def get_replacements_ansewer(row, chat_id):
         else:
             aud = ' в ' + aud + ' аудитории.'
 
-    if get_alias(chat_id) == 'PREP':
+    if alias == 'PREP':
         if '/' in teacher.replace(' ', ''):
             site_teacher = teacher.split('/')
         else:
@@ -336,13 +346,13 @@ def replacements_today(chat_id):
 
     if week_day == 7 and data.replace(' ', '')[-10:][:2] != (dt.datetime.strftime(dt.date.today() + dt.timedelta(days=1), '%d')):
         if is_sending_zam_on(chat_id):
-            bot.send_message(chat_id, const.emoji['sleep'] + ' Выходной\n\nЗамены на понедельник (' + (dt.datetime.strftime(dt.date.today() + dt.timedelta(
+            bot.send_message(chat_id, const.emoji['sleep'] + ' Выходной\n\n' + const.emoji['clock'] + ' Замены на понедельник (' + (dt.datetime.strftime(dt.date.today() + dt.timedelta(
                 days=1), '%d.%m.%Y')) + ') ещё не вывесили.\nБот пришлёт тебе информацию если что-нибудь будет известно о них.')
         else:
-            bot.send_message(chat_id, const.emoji['sleep'] + ' Выходной\n\nЗамены на понедельник (' + (
+            bot.send_message(chat_id, const.emoji['sleep'] + ' Выходной\n\n' + const.emoji['clock'] + ' Замены на понедельник (' + (
                 dt.datetime.strftime(dt.date.today() + dt.timedelta(days=1), '%d.%m.%Y')) + ') ещё не вывесили.')
     elif week_day != 7 and data.replace(' ', '')[-10:][:2] != (dt.datetime.strftime(dt.date.today(), '%d')):
-        bot.send_message(chat_id, 'Замены на сегодня (' + (
+        bot.send_message(chat_id, const.emoji['warning_sign'] + ' Замены на сегодня (' + (
             dt.datetime.strftime(dt.date.today(), '%d.%m.%Y')) + ') до сих пор не вывесили.')
     elif data.replace(' ', '')[-10:][:2] == (dt.datetime.strftime(dt.date.today(), '%d')) or data.replace(' ', '')[-10:][:2] == (dt.datetime.strftime(dt.date.today() + dt.timedelta(days=1), '%d')):
         answer = ''
@@ -406,17 +416,17 @@ def replacements_tomorrow(chat_id):
 
     if week_day == 6 and data.replace(' ', '')[-10:][:2] != (dt.datetime.strftime(dt.date.today() + dt.timedelta(days=2), '%d')):
         if is_sending_zam_on(chat_id):
-            bot.send_message(chat_id, const.emoji['sleep'] + ' Выходной\n\nЗамены на понедельник (' + (dt.datetime.strftime(dt.date.today() + dt.timedelta(
+            bot.send_message(chat_id, const.emoji['sleep'] + ' Выходной\n\n' + const.emoji['clock'] + ' Замены на понедельник (' + (dt.datetime.strftime(dt.date.today() + dt.timedelta(
                 days=2), '%d.%m.%Y')) + ') ещё не вывесили.\nБот пришлёт тебе информацию если что-нибудь будет известно о них.')
         else:
-            bot.send_message(chat_id, const.emoji['sleep'] + ' Выходной\n\nЗамены на понедельник (' + (
+            bot.send_message(chat_id, const.emoji['sleep'] + ' Выходной\n\n' + const.emoji['clock'] + ' Замены на понедельник (' + (
                 dt.datetime.strftime(dt.date.today() + dt.timedelta(days=2), '%d.%m.%Y')) + ') ещё не вывесили.')
     elif week_day != 6 and data.replace(' ', '')[-10:][:2] != (dt.datetime.strftime(dt.date.today() + dt.timedelta(days=1), '%d')):
         if is_sending_zam_on(chat_id):
-            bot.send_message(chat_id, 'Замены на завтра (' + (dt.datetime.strftime(dt.date.today() + dt.timedelta(days=1),
-                                                                                   '%d.%m.%Y')) + ') ещё не вывесили.\nБот пришлёт тебе информацию если что-нибудь будет известно о них.')
+            bot.send_message(chat_id, const.emoji['clock'] + ' Замены на завтра (' + (dt.datetime.strftime(dt.date.today() + dt.timedelta(days=1),
+                                                                                                           '%d.%m.%Y')) + ') ещё не вывесили.\nБот пришлёт тебе информацию если что-нибудь будет известно о них.')
         else:
-            bot.send_message(chat_id, 'Замены на завтра (' + (dt.datetime.strftime(
+            bot.send_message(chat_id, const.emoji['clock'] + ' Замены на завтра (' + (dt.datetime.strftime(
                 dt.date.today() + dt.timedelta(days=1), '%d.%m.%Y')) + ') ещё не вывесили.')
     elif data.replace(' ', '')[-10:][:2] == (dt.datetime.strftime(dt.date.today() + dt.timedelta(days=1), '%d')) or data.replace(' ', '')[-10:][:2] == (dt.datetime.strftime(dt.date.today() + dt.timedelta(days=2), '%d')):
         answer = ''
@@ -460,18 +470,19 @@ def replacements_tomorrow(chat_id):
                     bot.send_message(chat_id, not_repl_on, parse_mode='HTML')
 
 
-def get_replace_of_day(day, chat_id, is_week=False):
-    if day == 'Понедельник':
+def get_replace_of_day(day, chat_id=False, is_week=False, force_teacher=False,
+                       force_group=False):
+    if day == 'Понедельник' or day == 1:
         day_number = 1
-    elif day == 'Вторник':
+    elif day == 'Вторник' or day == 2:
         day_number = 2
-    elif day == 'Среда':
+    elif day == 'Среда' or day == 3:
         day_number = 3
-    elif day == 'Четверг':
+    elif day == 'Четверг' or day == 4:
         day_number = 4
-    elif day == 'Пятница':
+    elif day == 'Пятница' or day == 5:
         day_number = 5
-    elif day == 'Суббота':
+    elif day == 'Суббота' or day == 6:
         day_number = 6
 
     sql_con = connect(const.path + 'Parse.db')
@@ -492,7 +503,14 @@ def get_replace_of_day(day, chat_id, is_week=False):
             if 'strong' in str(row):
                 continue
 
-            answer += get_replacements_ansewer(row, chat_id)
+            if chat_id:
+                answer += get_replacements_ansewer(row, chat_id)
+            elif force_teacher:
+                answer += get_replacements_ansewer(row,
+                                                   force_teacher=force_teacher)
+            elif force_group:
+                answer += get_replacements_ansewer(row,
+                                                   force_group=force_group)
 
         a = data[-10:].split('.')
         b = str(dt.datetime.today())[:-16].split('-')
@@ -506,10 +524,12 @@ def get_replace_of_day(day, chat_id, is_week=False):
         if c < d:
             cd = str(c + dt.timedelta(days=7))[:10].split('-')
             not_noty = cd[2] + '.' + cd[1] + '.' + cd[0]
+            day_of_parsing_week = day_of_week_parsing_day(day, day_number)
+
             previous_relp = const.emoji['warning_sign'] + ' Это предыдущие замены\U00002026\nЗамены на {} ({}) ещё не вывесили:\n\n'.format(
-                day_of_week_parsing_day(day, day_number), not_noty)
-            not_repl_yet_on = 'Замены на {} ({}) ещё не вывесили:\n\n'.format(
-                day_of_week_parsing_day(day, day_number), not_noty)
+                day_of_parsing_week, not_noty)
+            not_repl_yet_on = const.emoji['clock'] + ' Замены на {} ({}) ещё не вывесили:\n\n'.format(
+                day_of_parsing_week, not_noty)
 
             if answer:
                 if is_week:
@@ -530,10 +550,19 @@ def get_replace_of_day(day, chat_id, is_week=False):
                 return not_repl_on
 
 
-def get_active_replace_days(chat_id):
+def get_active_replace_days(chat_id=False, force_teacher=False,
+                            force_group=False):
     active_days = []
-    alias = get_alias(chat_id)
-    group = get_student_group(chat_id).lower()
+    if chat_id:
+        alias = get_alias(chat_id)
+        group = get_student_group(chat_id).lower()
+    elif force_teacher:
+        alias = 'PREP'
+        group = force_teacher.lower()
+    elif force_group:
+        alias = 'GROUP'
+        group = force_group.lower()
+
     for i in range(1, 7):
         sql_con = connect(const.path + 'Parse.db')
         cursor = sql_con.cursor()
@@ -1004,10 +1033,24 @@ def delete_all_user_info(user_id):
     sql_con.close()
 
 
-def get_data_from_replacements(chat_id, teacher=False, group=False,
+def get_data_from_replacements(teacher=False, group=False,
                                course=False, division=False):
-    active_days = get_active_replace_days(chat_id)
-    print(active_days)
+    repls = []
+    if teacher:
+        active_days = get_active_replace_days(force_teacher=teacher)
+        for day in active_days:
+            if const.emoji['cross_mark'] not in day:
+                repls.append(get_replace_of_day(active_days.index(day) + 1,
+                                                force_teacher=teacher))
+    elif group:
+        active_days = get_active_replace_days(force_group=group)
+        for day in active_days:
+            if const.emoji['cross_mark'] not in day:
+                repls.append(get_replace_of_day(active_days.index(day) + 1,
+                                                force_group=group))
+
+    if repls:
+        return repls
 
 
 def regex_matches(query):
