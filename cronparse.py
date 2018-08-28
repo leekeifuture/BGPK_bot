@@ -328,7 +328,8 @@ def parse(html, parse_day, request_day):
            (dt.datetime.isoweekday(dt.datetime.now()) != 6 and
               dataaa.replace(' ', '')[-10:][:2] == (dt.datetime.strftime(dt.date.today() +
                                                                          dt.timedelta(days=-6), '%d') or
-                                                    dt.datetime.strftime(dt.date.today() + dt.timedelta(days=-13), '%d'))))):
+                                                    dt.datetime.strftime(dt.date.today() + dt.timedelta(days=-13), '%d')))
+           )):
 
         sql_con = connect(const.path + 'Parse.db')
         cursor = sql_con.cursor()
