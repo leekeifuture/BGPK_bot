@@ -60,8 +60,8 @@ def log_me(message):
         sql_con.close()
         if send:
             if message.chat.username != None:
-                message.chat.username = 'https://t.me/' + \
-                    str(message.chat.username)
+                message.chat.username = ('https://t.me/' +
+                                         str(message.chat.username))
             else:
                 message.chat.username = '#'
             bot.send_message(my_id,
@@ -91,8 +91,8 @@ def call_back_log_me(call_back):
         sql_con.close()
         if send:
             if call_back.message.chat.username != None:
-                call_back.message.chat.username = 'https://t.me/' + \
-                    str(call_back.message.chat.username)
+                call_back.message.chat.username = ('https://t.me/' +
+                                                   str(call_back.message.chat.username))
             else:
                 call_back.message.chat.username = '#'
             bot.send_message(my_id,
@@ -123,8 +123,8 @@ def inline_log_me(query):
         sql_con.close()
         if send:
             if query.from_user.username != None:
-                query.from_user.username = 'https://t.me/' + \
-                    str(query.from_user.username)
+                query.from_user.username = ('https://t.me/' +
+                                            str(query.from_user.username))
             else:
                 query.from_user.username = '#'
             bot.send_message(my_id,
@@ -263,19 +263,19 @@ def get_replacements_ansewer(row, chat_id):
         else:
             surname = group.split()[0].replace(' ', '').replace('.', '')
 
-        del_repl = '\nОтменяется ' + zan + ' пара — <b>' + \
-            zam + '</b> (<i>' + teacher + '</i>) у группы <b>' + \
-            grp + '</b>.'
-        aud_repl = '\nЗаменяется аудитория <b>' + zam + \
-            '</b> на <b>' + bud + '</b>, ' + zan + \
-            ending + ' парой у группы <b>' + grp + '</b>.'
-        add_repl = '\nДобавляется ' + zan + ' пара — <b>' + \
-            bud + '</b> (<i>' + teacher + '</i>)' + aud[:-1] + \
-            ' у группы <b>' + grp + '</b>.'
-        rep_repl = '\nЗаменяется ' + zan + ' пара (<b>' + \
-            zam + '</b>) на <b>' + bud + '</b> (<i>' + \
-            teacher + '</i>)' + aud[:-1] + ' у группы <b>' + \
-            grp + '</b>.'
+        del_repl = ('\nОтменяется ' + zan + ' пара — <b>' +
+                    zam + '</b> (<i>' + teacher + '</i>) у группы <b>' +
+                    grp + '</b>.')
+        aud_repl = ('\nЗаменяется аудитория <b>' + zam +
+                    '</b> на <b>' + bud + '</b>, ' + zan +
+                    ending + ' парой у группы <b>' + grp + '</b>.')
+        add_repl = ('\nДобавляется ' + zan + ' пара — <b>' +
+                    bud + '</b> (<i>' + teacher + '</i>)' + aud[:-1] +
+                    ' у группы <b>' + grp + '</b>.')
+        rep_repl = ('\nЗаменяется ' + zan + ' пара (<b>' +
+                    zam + '</b>) на <b>' + bud + '</b> (<i>' +
+                    teacher + '</i>)' + aud[:-1] + ' у группы <b>' +
+                    grp + '</b>.')
 
         if surname in surnames and (bud == '-' or bud == ''):
             if del_repl not in answer:
@@ -290,16 +290,16 @@ def get_replacements_ansewer(row, chat_id):
             if rep_repl not in answer:
                 answer += '\n' + rep_repl
     else:
-        del_repl = '\nОтменяется ' + zan + ' пара — <b>' + \
-            zam + '</b> (<i>' + teacher + '</i>).'
-        aud_repl = '\nЗаменяется аудитория <b>' + zam + \
-            '</b> на <b>' + bud + '</b>, ' + zan + \
-            ending + ' парой.'
-        add_repl = '\nДобавляется ' + zan + ' пара — <b>' + \
-            bud + '</b> (<i>' + teacher + '</i>)' + aud
-        rep_repl = '\nЗаменяется ' + zan + ' пара (<b>' + \
-            zam + '</b>) на <b>' + bud + '</b> (<i>' + \
-            teacher + '</i>)' + aud
+        del_repl = ('\nОтменяется ' + zan + ' пара — <b>' +
+                    zam + '</b> (<i>' + teacher + '</i>).')
+        aud_repl = ('\nЗаменяется аудитория <b>' + zam +
+                    '</b> на <b>' + bud + '</b>, ' + zan +
+                    ending + ' парой.')
+        add_repl = ('\nДобавляется ' + zan + ' пара — <b>' +
+                    bud + '</b> (<i>' + teacher + '</i>)' + aud)
+        rep_repl = ('\nЗаменяется ' + zan + ' пара (<b>' +
+                    zam + '</b>) на <b>' + bud + '</b> (<i>' +
+                    teacher + '</i>)' + aud)
 
     if group in site_group and (bud == '-' or bud == ''):
         if del_repl not in answer:
@@ -354,14 +354,14 @@ def replacements_today(chat_id):
         else:
             for_any = 'группы'
 
-        week_end = const.emoji['sleep'] + ' Выходной\nЗамены на следующий день:' \
-            '\n\n' + const.emoji['anticlockwise']
-        not_repl_on_monday = ' Для ' + for_any + \
-            ' <b>{}</b> нет замен на понедельник ('.format(group) + \
-            data[-10:] + ').'
-        not_repl_on = const.emoji['anticlockwise'] + ' Для ' + for_any + \
-            ' <b>{}</b> нет замен на сегодня ('.format(group) + \
-            data[-10:] + ').'
+        week_end = (const.emoji['sleep'] + ' Выходной\nЗамены на следующий день:'
+                    '\n\n' + const.emoji['anticlockwise'])
+        not_repl_on_monday = (' Для ' + for_any +
+                              ' <b>{}</b> нет замен на понедельник ('.format(group) +
+                              data[-10:] + ').')
+        not_repl_on = (const.emoji['anticlockwise'] + ' Для ' + for_any +
+                       ' <b>{}</b> нет замен на сегодня ('.format(group) +
+                       data[-10:] + ').')
 
         for tab in soup.find_all('table'):
             for row in tab.find_all('tr')[1:]:
@@ -374,8 +374,8 @@ def replacements_today(chat_id):
                 if week_day == 7:
                     answer = week_end + ' ' + data.capitalize() + answer
                 else:
-                    answer = const.emoji['anticlockwise'] + \
-                        ' ' + data.capitalize() + answer
+                    answer = (const.emoji['anticlockwise'] +
+                              ' ' + data.capitalize() + answer)
 
                 bot.send_message(chat_id, answer, parse_mode='HTML')
             else:
@@ -428,14 +428,14 @@ def replacements_tomorrow(chat_id):
         else:
             for_any = 'группы'
 
-        week_end = const.emoji['sleep'] + ' Выходной\nЗамены на следующий день:' \
-            '\n\n' + const.emoji['anticlockwise']
-        not_repl_on_monday = ' Для ' + for_any + \
-            ' <b>{}</b> нет замен на понедельник ('.format(group) + \
-            data[-10:] + ').'
-        not_repl_on = const.emoji['anticlockwise'] + ' Для ' + for_any + \
-            ' <b>{}</b> нет замен на завтра ('.format(group) + \
-            data[-10:] + ').'
+        week_end = const.emoji['sleep'] + (' Выходной\nЗамены на следующий день:'
+                                           '\n\n' + const.emoji['anticlockwise'])
+        not_repl_on_monday = (' Для ' + for_any +
+                              ' <b>{}</b> нет замен на понедельник ('.format(group) +
+                              data[-10:] + ').')
+        not_repl_on = (const.emoji['anticlockwise'] + ' Для ' + for_any +
+                       ' <b>{}</b> нет замен на завтра ('.format(group) +
+                       data[-10:] + ').')
 
         for tab in soup.find_all('table'):
             for row in tab.find_all('tr')[1:]:
@@ -448,8 +448,8 @@ def replacements_tomorrow(chat_id):
                 if week_day == 6:
                     answer = week_end + ' ' + data.capitalize() + answer
                 else:
-                    answer = const.emoji['anticlockwise'] + \
-                        ' ' + data.capitalize() + answer
+                    answer = (const.emoji['anticlockwise'] +
+                              ' ' + data.capitalize() + answer)
 
                 bot.send_message(chat_id, answer, parse_mode='HTML')
             else:
@@ -523,8 +523,8 @@ def get_replace_of_day(day, chat_id, is_week=False):
                     return previous_relp + not_repl_on
         else:
             if answer:
-                answer = const.emoji['anticlockwise'] + \
-                    ' ' + data.capitalize() + answer
+                answer = (const.emoji['anticlockwise'] +
+                          ' ' + data.capitalize() + answer)
                 return answer
             else:
                 return not_repl_on
@@ -585,10 +585,10 @@ def get_active_replace_days(chat_id):
 
         data10 = dataaa[-10:][:6] + dataaa[-10:][8:]
 
-        yes = const.emoji['check_mark'] + ' ' + \
-            const.num_day[str(i)] + ' (' + data10 + ')'
-        no = const.emoji['negative_squared_cross_mark'] + \
-            ' ' + const.num_day[str(i)] + ' (' + data10 + ')'
+        yes = (const.emoji['check_mark'] + ' ' +
+               const.num_day[str(i)] + ' (' + data10 + ')')
+        no = (const.emoji['negative_squared_cross_mark'] +
+              ' ' + const.num_day[str(i)] + ' (' + data10 + ')')
 
         yes_no = const.emoji['cross_mark'] + ' (' + const.emoji['check_mark'] + ') ' + const.num_day[
             str(i)] + ' (' + data10 + ')'
@@ -1220,15 +1220,15 @@ def shorting_teachers(teachers):
                 for ind in result:
                     if short_teachers[index] == short_teachers[ind]:
                         sp_te = teachers[0][ind].split()
-                        short_teachers[ind] = \
-                            sp_te[0] + ' ' + \
-                            sp_te[1][:2] + '. ' + \
-                            sp_te[2][:2] + '.'
+                        short_teachers[ind] = (
+                            sp_te[0] + ' ' +
+                            sp_te[1][:2] + '. ' +
+                            sp_te[2][:2] + '.')
                 sp_te = teachers[0][index].split()
-                short_teachers[index] = \
-                    sp_te[0] + ' ' + \
-                    sp_te[1][:2] + '. ' + \
-                    sp_te[2][:2] + '.'
+                short_teachers[index] = (
+                    sp_te[0] + ' ' +
+                    sp_te[1][:2] + '. ' +
+                    sp_te[2][:2] + '.')
     else:
         short_teachers = teachers[0]
 
@@ -1444,8 +1444,7 @@ def create_schedule_answer(user_id, tomorrow=False):
             date = str(dt.datetime.isoweekday(
                 dt.datetime.now() + dt.timedelta(days=1)))
             answer = const.emoji['calendar'] + ' '
-            answer += const.num_day[date] + \
-                ', '
+            answer += const.num_day[date] + ', '
             full_date = get_date(True)
             answer += full_date[0] + '\n'
             td = 1
@@ -1461,8 +1460,7 @@ def create_schedule_answer(user_id, tomorrow=False):
             answer = const.emoji['sleep'] + ' Выходной'
             answer += '\nРасписание на следующий день:\n\n'
             answer += const.emoji['calendar'] + ' '
-            answer += const.num_day[date] + \
-                ', '
+            answer += const.num_day[date] + ', '
             full_date = get_date(tomorrow_tomorrow=True)
             answer += full_date[0] + '\n'
             td = 2
@@ -1476,8 +1474,7 @@ def create_schedule_answer(user_id, tomorrow=False):
             date = str(dt.datetime.isoweekday(
                 dt.datetime.now() + dt.timedelta(days=1)))
             answer = const.emoji['calendar'] + ' '
-            answer += const.num_day[date] + \
-                ', '
+            answer += const.num_day[date] + ', '
             full_date = get_date(True)
             answer += full_date[0] + '\n'
             td = 1
@@ -1503,8 +1500,7 @@ def create_schedule_answer(user_id, tomorrow=False):
             answer = const.emoji['sleep'] + ' Выходной'
             answer += '\nРасписание на следующий день:\n\n'
             answer += const.emoji['calendar'] + ' '
-            answer += const.num_day[date] + \
-                ', '
+            answer += const.num_day[date] + ', '
             full_date = get_date(True)
             answer += full_date[0] + '\n'
             td = 1
@@ -1522,14 +1518,14 @@ def create_schedule_answer(user_id, tomorrow=False):
             day_info = const.teachers_shedule[
                 const.teacher_name[const.cap_teachers.index(group)]]
         except:
-            return 'Расписание для преподавателя "<b>' + group + \
-                   '</b>" не найдено\U00002026'
+            return ('Расписание для преподавателя "<b>' + group +
+                    '</b>" не найдено\U00002026')
     else:
         try:
             day_info = const.shedule[group]
         except:
-            return 'Расписание для группы "<b>' + group + \
-                   '</b>" не найдено\U00002026'
+            return ('Расписание для группы "<b>' + group +
+                    '</b>" не найдено\U00002026')
 
     day_info = day_info[week][dt.datetime.isoweekday(dt.datetime.now() +
                                                      dt.timedelta(days=td)) - 1]
@@ -1588,14 +1584,14 @@ def create_schedule_week_answer(user_id, td, force_day_of_week=0):
             day_info = const.teachers_shedule[
                 const.teacher_name[const.cap_teachers.index(group)]]
         except:
-            return 'Расписание для преподавателя "<b>' + group + \
-                   '</b>" не найдено\U00002026'
+            return ('Расписание для преподавателя "<b>' + group +
+                    '</b>" не найдено\U00002026')
     else:
         try:
             day_info = const.shedule[group]
         except:
-            return 'Расписание для группы "<b>' + group + \
-                   '</b>" не найдено\U00002026'
+            return ('Расписание для группы "<b>' + group +
+                    '</b>" не найдено\U00002026')
 
     day_info = day_info[week][td - 1]
     if day_info:

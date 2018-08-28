@@ -62,10 +62,10 @@ replacements_keyboard.row(const.emoji['back'], const.emoji['magnifying_glass'])
 def banned_user_handler(message):
     bot.send_chat_action(message.chat.id, 'typing')
     remove_keyboard = tb.types.ReplyKeyboardRemove()
-    answer = const.emoji['no_entry'] + ' Вы заблокированы по причине ' \
-        'неоднократного спама! Если считаете что не виновны и хотите вновь ' \
-        'начать пользоваться сервисом — сообщите об этом ' \
-        '<a href="https://t.me/lee_kei">разработчику</a>.'
+    answer = const.emoji['no_entry'] + (' Вы заблокированы по причине '
+                                        'неоднократного спама! Если считаете что не виновны и хотите вновь '
+                                        'начать пользоваться сервисом — сообщите об этом '
+                                        '<a href="https://t.me/lee_kei">разработчику</a>.')
     bot.send_message(message.chat.id, answer, True,
                      reply_markup=remove_keyboard,
                      parse_mode='HTML')
@@ -121,9 +121,9 @@ def start_handler(message, back=False):
                      content_types=['text'])
 def problem_text_handler(message):
     bot.send_chat_action(message.chat.id, 'typing')
-    answer = 'Если ты нашёл баг, возникла проблема или появилась идея, то ты ' \
-        'всегда можешь связаться с <a href="https://t.me/lee_kei">разработчиком</a>.\n' \
-        '/help - краткая информация о возможностях бота.'
+    answer = ('Если ты нашёл баг, возникла проблема или появилась идея, то ты '
+              'всегда можешь связаться с <a href="https://t.me/lee_kei">разработчиком</a>.\n'
+              '/help - краткая информация о возможностях бота.')
     bot.send_message(message.chat.id, answer, True,
                      parse_mode='HTML')
     func.log_me(message)
@@ -259,8 +259,8 @@ def not_exist_user_handler(message):
     sql_con.close()
 
     remove_keyboard = tb.types.ReplyKeyboardRemove()
-    answer = 'Чтобы начать пользоваться сервисом, необходимо ' \
-             'зарегистрироваться.\nВоспользуйся коммандой /start'
+    answer = ('Чтобы начать пользоваться сервисом, необходимо '
+              'зарегистрироваться.\nВоспользуйся коммандой /start')
     bot.send_message(message.chat.id,
                      answer,
                      reply_markup=remove_keyboard)
@@ -290,8 +290,8 @@ def change_group_handler(message):
         message.text = const.types[1]['Type']
         answer = 'Смена преподавателя\nДля отмены используй /home'
     else:
-        answer = 'Смена группы <b>{}</b>\nДля отмены используй /home' \
-                 .format(func.get_student_group(message.chat.id))
+        answer = ('Смена группы <b>{}</b>\nДля отмены используй /home'
+                  .format(func.get_student_group(message.chat.id)))
         message.text = const.types[0]['Type']
     bot.send_message(message.chat.id, answer,
                      parse_mode='HTML')
@@ -439,10 +439,11 @@ def calendar_replace_handler(message):
     else:
         for_any = 'группы'
 
-    answer = 'Выбери день:\n' + const.emoji['check_mark'] + ' – Есть замены для ' + for_any + ' <b>{}</b>.\n'.format(group) \
-        + const.emoji['negative_squared_cross_mark'] + ' – Нет замен для ' + for_any + ' <b>{}</b>.\n'.format(group) \
-        + const.emoji['cross_mark'] + \
-        ' – Замены на ближайший день недели ещё не вывесили (будут показаны предыдущие замены).'
+    answer = ('Выбери день:\n' + const.emoji['check_mark'] + ' – Есть замены для ' + for_any + ' <b>{}</b>.\n'.format(group)
+              + const.emoji['negative_squared_cross_mark'] +
+              ' – Нет замен для ' + for_any + ' <b>{}</b>.\n'.format(group)
+              + const.emoji['cross_mark'] +
+              ' – Замены на ближайший день недели ещё не вывесили (будут показаны предыдущие замены).')
     week_day_calendar = tb.types.InlineKeyboardMarkup()
     active_days = func.get_active_replace_days(message.chat.id)
     y = []
@@ -483,9 +484,9 @@ def calendar_replace_handler(message):
 @bot.message_handler(func=lambda mess: mess.text == const.emoji['alarm_clock'])
 def sending_handler(message):
     bot.send_chat_action(message.chat.id, 'typing')
-    answer = 'Выбери, на рассылку чего ты хочешь <b>подписаться</b> или <b>отписаться</b>:\n' \
-        + const.emoji['check_mark'] + ' – Рассылка включена.\n' \
-        + const.emoji['negative_squared_cross_mark'] + ' – Рассылка отключена.'
+    answer = ('Выбери, на рассылку чего ты хочешь <b>подписаться</b> или <b>отписаться</b>:\n'
+              + const.emoji['check_mark'] + ' – Рассылка включена.\n'
+              + const.emoji['negative_squared_cross_mark'] + ' – Рассылка отключена.')
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT sending_rasp, sending_rasp_5, sending_zam
@@ -498,8 +499,8 @@ def sending_handler(message):
     if data[0] or data[1]:
         schedule = 'Расписания (' + const.emoji['check_mark'] + ')'
     else:
-        schedule = 'Расписания (' + \
-            const.emoji['negative_squared_cross_mark'] + ')'
+        schedule = ('Расписания (' +
+                    const.emoji['negative_squared_cross_mark'] + ')')
     if data[2]:
         replace = 'Замен (' + const.emoji['check_mark'] + ')'
     else:
@@ -585,12 +586,12 @@ def bliz_zvonok_handler(message):
         run = const.emoji['runner']
     elif blzv0 <= 5:
         run = const.emoji['orange_diamond']
-    answer = '{} <i>Через</i> {} {}\n' \
-        'Ближайший звонок в <b>{}</b> ({})'.format(run,
-                                                   blzv0,
-                                                   minorh,
-                                                   func.blzv()[1],
-                                                   func.blzv()[2])
+    answer = ('{} <i>Через</i> {} {}\n'
+              'Ближайший звонок в <b>{}</b> ({})'.format(run,
+                                                         blzv0,
+                                                         minorh,
+                                                         func.blzv()[1],
+                                                         func.blzv()[2]))
     bot.send_message(message.chat.id, answer, True, parse_mode='HTML')
     func.log_me(message)
 
@@ -709,27 +710,27 @@ def write_teacher_name_handler(message):
 
         if 'Введи Фамилию преподавателя:' in message.reply_to_message.text:
             if len(short_teachers) == 1:
-                answer += const.emoji['mag_right'] + \
-                    ' Найденный преподаватель:'
+                answer += (const.emoji['mag_right'] +
+                           ' Найденный преподаватель:')
             else:
-                answer += const.emoji['mag_right'] + \
-                    ' Найденные преподаватели:'
+                answer += (const.emoji['mag_right'] +
+                           ' Найденные преподаватели:')
         elif 'препoдавателя' in message.reply_to_message.text:
             schedule_keyboard = replacements_keyboard
             if len(short_teachers) == 1:
-                answer += const.emoji['mag_right'] + \
-                    ' Нaйденный преподаватель:'
+                answer += (const.emoji['mag_right'] +
+                           ' Нaйденный преподаватель:')
             else:
-                answer += const.emoji['mag_right'] + \
-                    ' Нaйденные преподаватели:'
+                answer += (const.emoji['mag_right'] +
+                           ' Нaйденные преподаватели:')
 
         bot.send_message(message.chat.id, 'Готово!',
                          reply_markup=schedule_keyboard)
         bot.send_message(message.chat.id, answer,
                          reply_markup=teachers_keyboard)
     elif len(teachers[0]) > 20:
-        answer += 'Слишком много преподавателей\n' \
-                  'Пожалуйста, <b>уточни</b>'
+        answer += ('Слишком много преподавателей\n'
+                   'Пожалуйста, <b>уточни</b>')
         bot.send_message(message.chat.id, answer, parse_mode='HTML',
                          reply_markup=schedule_keyboard)
     else:
@@ -760,6 +761,7 @@ def manage_handler(message):
     answer = 'Управление'
     manage_keyboard = tb.types.ReplyKeyboardMarkup(True)
     manage_keyboard.row('Сокращение звонков', 'Рассылка')
+    manage_keyboard.row('« Назад')
     bot.send_message(message.chat.id, answer, reply_markup=manage_keyboard)
     func.log_me(message)
 
@@ -838,8 +840,8 @@ def send_newsletter_to_all_handler(message):
             bot.send_message(user[0], message.text, True,
                              parse_mode='HTML')
         except Exception as err:
-            answer = const.emoji['cross_mark'] + \
-                ' ' + str(user[0]) + '\n' + str(err)
+            answer = (const.emoji['cross_mark'] +
+                      ' ' + str(user[0]) + '\n' + str(err))
             bot.send_message(message.chat.id, answer)
             continue
         sleep(0.04)
@@ -979,9 +981,9 @@ def query_text_handler(query):
 @bot.callback_query_handler(func=lambda call_back: func.is_user_banned(
     call_back.message.chat.id))
 def banned_user_inline_handler(call_back):
-    answer = const.emoji['no_entry'] + ' Вы заблокированы по причине неоднократного спама! ' \
-        'Если считаете что не виновны и хотите вновь начать ' \
-        'пользоваться сервисом — сообщите об этом <a href="https://t.me/lee_kei">разработчику</a>.'
+    answer = const.emoji['no_entry'] + (' Вы заблокированы по причине неоднократного спама! '
+                                        'Если считаете что не виновны и хотите вновь начать '
+                                        'пользоваться сервисом — сообщите об этом <a href="https://t.me/lee_kei">разработчику</a>.')
     bot.edit_message_text(answer, call_back.message.chat.id,
                           call_back.message.message_id,
                           parse_mode='HTML',
@@ -1108,8 +1110,8 @@ def confirm_choice_inline_handler(call_back):
 @bot.callback_query_handler(func=lambda call_back: not func.is_user_exist(
     call_back.message.chat.id))
 def not_exist_inline_user_handler(call_back):
-    answer = 'Чтобы начать пользоваться сервисом, необходимо ' \
-        'зарегистрироваться.\nВоспользуйся коммандой /start'
+    answer = ('Чтобы начать пользоваться сервисом, необходимо '
+              'зарегистрироваться.\nВоспользуйся коммандой /start')
     bot.edit_message_text(text=answer,
                           chat_id=call_back.message.chat.id,
                           message_id=call_back.message.message_id)
@@ -1257,8 +1259,8 @@ def select_week_day_replace_handler(call_back):
                 first_date = n_d1[2] + '.' + n_d1[1] + '.' + n_d1[0]
                 second_date = n_d2[2] + '.' + n_d2[1] + '.' + n_d2[0]
 
-                answer = const.emoji['anticlockwise'] + ' Нет замен с <b>' + first_date + \
-                    '</b> по <b>' + second_date + '</b>.'
+                answer = (const.emoji['anticlockwise'] + ' Нет замен с <b>' + first_date +
+                          '</b> по <b>' + second_date + '</b>.')
             except:
                 bot.edit_message_text(text='<b>Упс, что-то пошло не так\U00002026</b>\n' + str(exc_info()[1]),
                                       chat_id=call_back.message.chat.id,
@@ -1321,8 +1323,8 @@ def select_week_day_replace_handler(call_back):
 @bot.callback_query_handler(func=lambda call_back:
                             'Расписание на неделю' in call_back.message.text)
 def all_week_schedule_handler(call_back):
-    if call_back.data == 'Текущее (' + const.emoji['arrow_up'] + ')' or \
-       call_back.data == 'Текущее (' + const.emoji['arrow_down'] + ')':
+    if call_back.data == ('Текущее (' + const.emoji['arrow_up'] + ')' or
+                          call_back.data == 'Текущее (' + const.emoji['arrow_down'] + ')'):
         func.send_schedule_force_week_answer(call_back.message, 0)
     elif call_back.data == const.emoji['arrow_up'] + ' Верхнее':
         func.send_schedule_force_week_answer(call_back.message, 2)
@@ -1390,10 +1392,11 @@ def back_from_calendar_replace_handler(call_back):
     else:
         for_any = 'группы'
 
-    answer = 'Выбери день:\n' + const.emoji['check_mark'] + ' – Есть замены для ' + for_any + ' <b>{}</b>.\n'.format(group) \
-        + const.emoji['negative_squared_cross_mark'] + ' – Нет замен для ' + for_any + ' <b>{}</b>.\n'.format(group) \
-        + const.emoji['cross_mark'] + \
-        ' – Замены на ближайший день недели ещё не вывесили. Будут показаны предыдущие замены.'
+    answer = ('Выбери день:\n' + const.emoji['check_mark'] + ' – Есть замены для ' + for_any + ' <b>{}</b>.\n'.format(group)
+              + const.emoji['negative_squared_cross_mark'] +
+              ' – Нет замен для ' + for_any + ' <b>{}</b>.\n'.format(group)
+              + const.emoji['cross_mark'] +
+              ' – Замены на ближайший день недели ещё не вывесили. Будут показаны предыдущие замены.')
     week_day_calendar = tb.types.InlineKeyboardMarkup()
     active_days = func.get_active_replace_days(call_back.message.chat.id)
     y = []
@@ -1451,10 +1454,11 @@ def back_from_week_replace_handler(call_back):
     else:
         for_any = 'группы'
 
-    answer = 'Выбери день:\n' + const.emoji['check_mark'] + ' – Есть замены для ' + for_any + ' <b>{}</b>.\n'.format(group) \
-        + const.emoji['negative_squared_cross_mark'] + ' – Нет замен для ' + for_any + ' <b>{}</b>.\n'.format(group) \
-        + const.emoji['cross_mark'] + \
-        ' – Замены на ближайший день недели ещё не вывесили. Будут показаны предыдущие замены.'
+    answer = ('Выбери день:\n' + const.emoji['check_mark'] + ' – Есть замены для ' + for_any + ' <b>{}</b>.\n'.format(group)
+              + const.emoji['negative_squared_cross_mark'] +
+              ' – Нет замен для ' + for_any + ' <b>{}</b>.\n'.format(group)
+              + const.emoji['cross_mark'] +
+              ' – Замены на ближайший день недели ещё не вывесили. Будут показаны предыдущие замены.')
     week_day_calendar = tb.types.InlineKeyboardMarkup()
     active_days = func.get_active_replace_days(call_back.message.chat.id)
     y = []
@@ -1574,9 +1578,9 @@ def podpis_rasp_5_or_9_handler(call_back):
 @bot.callback_query_handler(func=lambda call_back:
                             const.emoji['five_oclock'] + ' 17:00' in call_back.data)
 def podpis_rasp_5_handler(call_back):
-    answer = 'Здесь ты можешь <b>подписаться</b> на рассылку расписания на ' + \
-        'следующий день или <b>отписаться</b> от неё.\n' + \
-        'Рассылка производится в 17:00'
+    answer = ('Здесь ты можешь <b>подписаться</b> на рассылку расписания на ' +
+              'следующий день или <b>отписаться</b> от неё.\n' +
+              'Рассылка производится в 17:00')
     sending_keyboard_rasp = tb.types.InlineKeyboardMarkup(True)
     if func.is_sending_rasp_on(call_back.message.chat.id, True):
         sending_keyboard_rasp.row(
@@ -1602,9 +1606,9 @@ def podpis_rasp_5_handler(call_back):
 @bot.callback_query_handler(func=lambda call_back:
                             const.emoji['nine_oclock'] + ' 21:00' in call_back.data)
 def podpis_rasp_9_handler(call_back):
-    answer = 'Здесь ты можешь <b>подписаться</b> на рассылку расписания на ' + \
-        'следующий день или <b>отписаться</b> от неё.\n' + \
-        'Рассылка производится в 21:00'
+    answer = ('Здесь ты можешь <b>подписаться</b> на рассылку расписания на ' +
+              'следующий день или <b>отписаться</b> от неё.\n' +
+              'Рассылка производится в 21:00')
     sending_keyboard_rasp = tb.types.InlineKeyboardMarkup(True)
     if func.is_sending_rasp_on(call_back.message.chat.id):
         sending_keyboard_rasp.row(
@@ -1630,9 +1634,9 @@ def podpis_rasp_9_handler(call_back):
 @bot.callback_query_handler(func=lambda call_back:
                             'Замен' in call_back.data)
 def podpis_zam_handler(call_back):
-    answer = 'Здесь ты можешь <b>подписаться</b> на рассылку замен на ' + \
-        'следующий день или <b>отписаться</b> от неё.\n' + \
-        'Рассылка производится после публикования замен на сайте колледжа.'
+    answer = ('Здесь ты можешь <b>подписаться</b> на рассылку замен на ' +
+              'следующий день или <b>отписаться</b> от неё.\n' +
+              'Рассылка производится после публикования замен на сайте колледжа.')
     sending_keyboard_zam = tb.types.InlineKeyboardMarkup(True)
     if func.is_sending_zam_on(call_back.message.chat.id):
         sending_keyboard_zam.row(
@@ -1658,9 +1662,9 @@ def podpis_zam_handler(call_back):
 @bot.callback_query_handler(func=lambda call_back:
                             call_back.data == '« Назад')
 def back_from_podpis_handler(call_back):
-    answer = 'Выбери, на рассылку чего ты хочешь <b>подписаться</b> или <b>отписаться</b>:\n' \
-        + const.emoji['check_mark'] + ' – Рассылка включена.\n' \
-        + const.emoji['negative_squared_cross_mark'] + ' – Рассылка отключена.'
+    answer = ('Выбери, на рассылку чего ты хочешь <b>подписаться</b> или <b>отписаться</b>:\n'
+              + const.emoji['check_mark'] + ' – Рассылка включена.\n'
+              + const.emoji['negative_squared_cross_mark'] + ' – Рассылка отключена.')
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT sending_rasp, sending_rasp_5, sending_zam
@@ -1673,8 +1677,8 @@ def back_from_podpis_handler(call_back):
     if data[0] or data[1]:
         schedule = 'Расписания (' + const.emoji['check_mark'] + ')'
     else:
-        schedule = 'Расписания (' + \
-            const.emoji['negative_squared_cross_mark'] + ')'
+        schedule = ('Расписания (' +
+                    const.emoji['negative_squared_cross_mark'] + ')')
     if data[2]:
         replace = 'Замен (' + const.emoji['check_mark'] + ')'
     else:
@@ -1700,8 +1704,8 @@ def sending_on_rasp_5_handler(call_back):
     back_from_podpis_handler.row(
         *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
             name in ['« Назад']])
-    answer = '{0} Рассылка <b>активирована</b>\nЖди рассылку в 17:00' \
-        ''.format(const.emoji['mailbox_on'])
+    answer = ('{0} Рассылка <b>активирована</b>\nЖди рассылку в 17:00'
+              ''.format(const.emoji['mailbox_on']))
     bot.edit_message_text(text=answer,
                           chat_id=call_back.message.chat.id,
                           message_id=call_back.message.message_id,
@@ -1735,8 +1739,8 @@ def sending_on_rasp_9_handler(call_back):
     back_from_podpis_handler.row(
         *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
             name in ['« Назад']])
-    answer = '{0} Рассылка <b>активирована</b>\nЖди рассылку в 21:00' \
-        ''.format(const.emoji['mailbox_on'])
+    answer = ('{0} Рассылка <b>активирована</b>\nЖди рассылку в 21:00'
+              ''.format(const.emoji['mailbox_on']))
     bot.edit_message_text(text=answer,
                           chat_id=call_back.message.chat.id,
                           message_id=call_back.message.message_id,
@@ -1770,8 +1774,8 @@ def sending_on_zam_handler(call_back):
     back_from_podpis_handler.row(
         *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
             name in ['« Назад']])
-    answer = '{0} Рассылка <b>активирована</b>\nЖди рассылку после опубликования замен.' \
-        ''.format(const.emoji['mailbox_on'])
+    answer = ('{0} Рассылка <b>активирована</b>\nЖди рассылку после опубликования замен.'
+              ''.format(const.emoji['mailbox_on']))
     bot.edit_message_text(text=answer,
                           chat_id=call_back.message.chat.id,
                           message_id=call_back.message.message_id,
@@ -1829,8 +1833,8 @@ def statistics_handler(call_back):
 def feedback_handler(call_back):
     force_reply = tb.types.ForceReply()
     feedback_answer = 'Обратная связь\nДля отмены используй /home'
-    answer = 'Напиши мне что-нибудь\nРазработчик обязательно ответит на ' \
-             'твоё сообщение:'
+    answer = ('Напиши мне что-нибудь\nРазработчик обязательно ответит на '
+              'твоё сообщение:')
 
     bot.edit_message_text(feedback_answer, call_back.message.chat.id,
                           message_id=call_back.message.message_id)
@@ -1852,18 +1856,18 @@ def set_rate_handler(call_back):
         answer += '{0} Стабильная четверочка. Спасибо!'.format(const.emoji[
                                                                'halo'])
     elif rate == '3':
-        answer += '{0} Удовлетворительно? Ничего\U00002026 тоже оценка. ' \
-            'Буду стараться лучше.'.format(const.emoji['cold_sweat'])
+        answer += ('{0} Удовлетворительно? Ничего\U00002026 тоже оценка. '
+                   'Буду стараться лучше.'.format(const.emoji['cold_sweat']))
     elif rate == '2':
-        answer += '{0} Двойка? Быть может, я могу что-то исправить? ' \
-            'Сделать лучше?\n\nОпиши проблему ' \
-            '<a href="https://t.me/lee_kei">разработчику</a>, ' \
-            'и вместе мы ее решим!'.format(const.emoji['disappointed'])
+        answer += ('{0} Двойка? Быть может, я могу что-то исправить? '
+                   'Сделать лучше?\n\nОпиши проблему '
+                   '<a href="https://t.me/lee_kei">разработчику</a>, '
+                   'и вместе мы ее решим!'.format(const.emoji['disappointed']))
     elif rate == '1':
-        answer += '{0} Единица? Быть может, я могу что-то исправить? ' \
-            'Сделать лучше?\n\nОпиши проблему ' \
-            '<a href="https://t.me/lee_kei">разработчику</a>, ' \
-            'и вместе мы ее решим!'.format(const.emoji['disappointed'])
+        answer += ('{0} Единица? Быть может, я могу что-то исправить? '
+                   'Сделать лучше?\n\nОпиши проблему '
+                   '<a href="https://t.me/lee_kei">разработчику</a>, '
+                   'и вместе мы ее решим!'.format(const.emoji['disappointed']))
     user_rate = func.get_user_rate(call_back.message.chat.id)
     rate_keyboard = tb.types.InlineKeyboardMarkup(row_width=5)
     rate_keyboard.add(*[tb.types.InlineKeyboardButton(

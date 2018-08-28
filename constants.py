@@ -267,15 +267,15 @@ if duplicate:
         for ind in result:
             if teacher_name[index] == teacher_name[ind]:
                 sp_te = cap_teachers[ind].split()
-                teacher_name[ind] = \
-                    sp_te[0] + ' ' + \
-                    sp_te[1][:2] + '. ' + \
-                    sp_te[2][:2] + '.'
+                teacher_name[ind] = (
+                    sp_te[0] + ' ' +
+                    sp_te[1][:2] + '. ' +
+                    sp_te[2][:2] + '.')
         sp_te = cap_teachers[index].split()
-        teacher_name[index] = \
-            sp_te[0] + ' ' + \
-            sp_te[1][:2] + '. ' + \
-            sp_te[2][:2] + '.'
+        teacher_name[index] = (
+            sp_te[0] + ' ' +
+            sp_te[1][:2] + '. ' +
+            sp_te[2][:2] + '.')
 
 existing_groups = []
 for student_group in student_groups:
@@ -1594,10 +1594,10 @@ for group in shedule:
                                 existing_teachers.append(dived_teacher.strip())
 
                             if teacher == dived_teacher:
-                                teachers_shedule[teacher][week] \
-                                                [shedule[group][week]
-                                                 .index(day)] \
-                                    .append(day_shedule)
+                                (teachers_shedule[teacher][week]
+                                 [shedule[group][week]
+                                  .index(day)]
+                                    .append(day_shedule))
 
                     if (name_of_teacher.strip() not in existing_teachers and
                             '/' not in name_of_teacher):
@@ -1605,10 +1605,10 @@ for group in shedule:
 
                     if (teacher == name_of_teacher and
                             '/' not in name_of_teacher):
-                        teachers_shedule[teacher][week] \
-                                        [shedule[group][week]
-                                         .index(day)] \
-                            .append(day_shedule)
+                        (teachers_shedule[teacher][week]
+                         [shedule[group][week]
+                          .index(day)]
+                            .append(day_shedule))
 
 remove_teachers = []
 

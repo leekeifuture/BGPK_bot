@@ -140,10 +140,10 @@ def parse(html, parse_day, request_day):
                     if 'strong' in str(row):
                         continue
                     tmp = row.find_all('td')
-                    group = tmp[0].text.strip().replace('\n', '') \
-                        .replace(' ', '').lower()
-                    teacher = tmp[4].text.strip().replace('\n', '') \
-                        .replace(' ', '').replace('.', '').lower()
+                    group = (tmp[0].text.strip().replace('\n', '')
+                             .replace(' ', '').lower())
+                    teacher = (tmp[4].text.strip().replace('\n', '')
+                               .replace(' ', '').replace('.', '').lower())
 
                     if group or teacher:
                         if any(map(str.isdigit, sg)):
@@ -160,8 +160,8 @@ def parse(html, parse_day, request_day):
                             elif short_name == 'панасюксветланасвятославовна':
                                 db_surname = 'панасюксвсв'
                             else:
-                                db_surname = sg.split()[0].replace(' ', '') \
-                                    .lower()
+                                db_surname = (sg.split()[0].replace(' ', '')
+                                              .lower())
 
                             if '/' in teacher:
                                 site_teacher = teacher.split('/')
@@ -320,15 +320,15 @@ def parse(html, parse_day, request_day):
 
         sys.exit()
 
-    elif dt.datetime.strftime(dt.datetime.now(), '%H:%M') == '23:50' and \
-        ((dt.datetime.isoweekday(dt.datetime.now()) == 6 and
-          dataaa.replace(' ', '')[-10:][:2] == (dt.datetime.strftime(dt.date.today() +
-                                                                     dt.timedelta(days=-5), '%d') or
-                                                dt.datetime.strftime(dt.date.today() + dt.timedelta(days=-12), '%d'))) or
-         (dt.datetime.isoweekday(dt.datetime.now()) != 6 and
-          dataaa.replace(' ', '')[-10:][:2] == (dt.datetime.strftime(dt.date.today() +
-                                                                     dt.timedelta(days=-6), '%d') or
-                                                dt.datetime.strftime(dt.date.today() + dt.timedelta(days=-13), '%d')))):
+    elif (dt.datetime.strftime(dt.datetime.now(), '%H:%M') == '23:50' and
+          ((dt.datetime.isoweekday(dt.datetime.now()) == 6 and
+            dataaa.replace(' ', '')[-10:][:2] == (dt.datetime.strftime(dt.date.today() +
+                                                                       dt.timedelta(days=-5), '%d') or
+                                                  dt.datetime.strftime(dt.date.today() + dt.timedelta(days=-12), '%d'))) or
+           (dt.datetime.isoweekday(dt.datetime.now()) != 6 and
+              dataaa.replace(' ', '')[-10:][:2] == (dt.datetime.strftime(dt.date.today() +
+                                                                         dt.timedelta(days=-6), '%d') or
+                                                    dt.datetime.strftime(dt.date.today() + dt.timedelta(days=-13), '%d'))))):
 
         sql_con = connect(const.path + 'Parse.db')
         cursor = sql_con.cursor()

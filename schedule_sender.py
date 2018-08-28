@@ -58,9 +58,9 @@ def main(date):
 
             answer = 'Расписание на завтра:\n\n'
             answer += const.emoji['calendar'] + ' '
-            answer += const.num_day[str(dt.datetime.isoweekday(dt.datetime.now() +
-                                                               dt.timedelta(days=1)))] + \
-                ', '
+            answer += (const.num_day[str(dt.datetime.isoweekday(dt.datetime.now() +
+                                                                dt.timedelta(days=1)))] +
+                       ', ')
             full_date = func.get_date(True)
             answer += full_date[0] + '\n'
             td = 1

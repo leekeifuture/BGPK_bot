@@ -14,8 +14,8 @@ print('\n' + str(bot.get_me()))
 
 def log_me(message):
     if message.chat.username != None:
-        message.chat.username = 'https://t.me/' + \
-            str(message.chat.username)
+        (message.chat.username='https://t.me/' +
+            str(message.chat.username))
     else:
         message.chat.username = '#'
     print(('\n{4} | {0} {1} ({2}):\n{3}'
@@ -28,8 +28,8 @@ def log_me(message):
 
 def call_back_log_me(call_back):
     if call_back.message.chat.username != None:
-        call_back.message.chat.username = 'https://t.me/' + \
-            str(call_back.message.chat.username)
+        (call_back.message.chat.username='https://t.me/' +
+            str(call_back.message.chat.username))
     else:
         call_back.message.chat.username = '#'
     print(('\n{4} | {0} {1} ({2}):\n{3}'
@@ -42,8 +42,8 @@ def call_back_log_me(call_back):
 
 def inline_log_me(query):
     if query.from_user.username != None:
-        query.from_user.username = 'https://t.me/' + \
-            str(query.from_user.username)
+        (query.from_user.username='https://t.me/' +
+            str(query.from_user.username))
     else:
         query.from_user.username = '#'
     print(('\n{4} | {0} {1} ({2}):\n{3}'

@@ -252,17 +252,17 @@ def select_status(message, change_group=False):
         else:
             back_command = '\n\nДля отмены используй /home'
 
-        answer += 'Введи <i>Фамилию</i> преподавателя (и <i>И. О.</i>)\n' \
-            'Это можно сделать <b>двумя</b> способами:\n' \
-            '{0} <b>Прислать ФИО преподавателя (бот поддерживает 3 вида):</b>\n' \
-            '      1) <i>Фамилия</i>\n' \
-            '      2) <i>Фамилия И. О.</i>\n' \
-            '      3) <i>Фамилия Имя Отчество</i>\n' \
-            '{1} <b>Воспользоваться динамичным поиском:</b>\n' \
-            '      Для этого введи "<code>@BGPK_bot </code>" и следуй дальнейшим ' \
-            'инструкциям.{2}'.format(const.emoji['bullet'],
-                                     const.emoji['bullet'],
-                                     back_command)
+        answer += ('Введи <i>Фамилию</i> преподавателя (и <i>И. О.</i>)\n'
+                   'Это можно сделать <b>двумя</b> способами:\n'
+                   '{0} <b>Прислать ФИО преподавателя (бот поддерживает 3 вида):</b>\n'
+                   '      1) <i>Фамилия</i>\n'
+                   '      2) <i>Фамилия И. О.</i>\n'
+                   '      3) <i>Фамилия Имя Отчество</i>\n'
+                   '{1} <b>Воспользоваться динамичным поиском:</b>\n'
+                   '      Для этого введи "<code>@BGPK_bot </code>" и следуй дальнейшим '
+                   'инструкциям.{2}'.format(const.emoji['bullet'],
+                                            const.emoji['bullet'],
+                                            back_command))
         remove_keyboard = types.ReplyKeyboardRemove()
 
         sql_con = sl3.connect(const.path + 'Bot.db')
@@ -341,15 +341,15 @@ def select_teacher(message):
                         for ind in result:
                             if short_teachers[index] == short_teachers[ind]:
                                 sp_te = teachers[0][ind].split()
-                                short_teachers[ind] = \
-                                    sp_te[0] + ' ' + \
-                                    sp_te[1][:2] + '. ' + \
-                                    sp_te[2][:2] + '.'
+                                short_teachers[ind] = (
+                                    sp_te[0] + ' ' +
+                                    sp_te[1][:2] + '. ' +
+                                    sp_te[2][:2] + '.')
                         sp_te = teachers[0][index].split()
-                        short_teachers[index] = \
-                            sp_te[0] + ' ' + \
-                            sp_te[1][:2] + '. ' + \
-                            sp_te[2][:2] + '.'
+                        short_teachers[index] = (
+                            sp_te[0] + ' ' +
+                            sp_te[1][:2] + '. ' +
+                            sp_te[2][:2] + '.')
             else:
                 short_teachers = teachers[0]
 
@@ -371,28 +371,28 @@ def select_teacher(message):
                 text='« Назад', callback_data='back_reg'))
 
             if len(short_teachers) == 1:
-                answer += const.emoji['mag_right'] + \
-                    ' Найденный преподаватель:'
+                answer += (const.emoji['mag_right'] +
+                           ' Найденный преподаватель:')
             else:
-                answer += const.emoji['mag_right'] + \
-                    ' Найденные преподаватели:'
+                answer += (const.emoji['mag_right'] +
+                           ' Найденные преподаватели:')
 
             bot.send_message(message.chat.id, answer,
                              reply_markup=educators_keyboard)
         elif len(teachers[0]) > 10:
-            answer += 'Слишком много преподавателей\n' \
-                      'Пожалуйста, <b>уточни</b>'
+            answer += ('Слишком много преподавателей\n'
+                       'Пожалуйста, <b>уточни</b>')
 
             bot.send_message(message.chat.id, answer,
                              parse_mode='HTML')
         else:
-            if 'Никого не найдено' not in message.text and \
-               'Введи ФИО преподавателя' not in message.text and \
-               'Слишком много преподавателей' not in message.text:
-                answer += 'Преподаватель "<b>' + message.text + '</b>" ' \
-                          'не найден.\nЕсли по какой-то причине отсусвует ' \
-                          'какой либо преподаватель, просьба сразу сообщить ' \
-                          '<a href="https://t.me/lee_kei">разработчику</a>.'
+            if ('Никого не найдено' not in message.text and
+                    'Введи ФИО преподавателя' not in message.text and
+                    'Слишком много преподавателей' not in message.text):
+                answer += ('Преподаватель "<b>' + message.text + '</b>" '
+                           'не найден.\nЕсли по какой-то причине отсусвует '
+                           'какой либо преподаватель, просьба сразу сообщить '
+                           '<a href="https://t.me/lee_kei">разработчику</a>.')
 
                 bot.send_message(message.chat.id, answer, True,
                                  parse_mode='HTML')
@@ -653,16 +653,16 @@ def confirm_choice_teacher(message):
             cursor.close()
             sql_con.close()
 
-        answer = 'Главное меню\n\n' \
-                 '{0} – информация о боте\n' \
-                 '{1} – оценить бота\n' \
-                 '{2} – настройки\n' \
-                 '{3} – параметры уведомлений\n' \
-                 '{4} – расписание звонков'.format(const.emoji['info'],
-                                                   const.emoji['star'],
-                                                   const.emoji['settings'],
-                                                   const.emoji['alarm_clock'],
-                                                   const.emoji['bell'])
+        answer = ('Главное меню\n\n'
+                  '{0} – информация о боте\n'
+                  '{1} – оценить бота\n'
+                  '{2} – настройки\n'
+                  '{3} – параметры уведомлений\n'
+                  '{4} – расписание звонков'.format(const.emoji['info'],
+                                                    const.emoji['star'],
+                                                    const.emoji['settings'],
+                                                    const.emoji['alarm_clock'],
+                                                    const.emoji['bell']))
         bot.send_message(message.chat.id, answer,
                          reply_markup=main_keyboard,
                          parse_mode='HTML')
@@ -674,8 +674,8 @@ def confirm_choice_teacher(message):
         start_handler(message)
         return
     else:
-        answer += 'Пожалуйста, проверь правильно ли ты всё указал и ' \
-            'подтверди свой выбор:'
+        answer += ('Пожалуйста, проверь правильно ли ты всё указал и '
+                   'подтверди свой выбор:')
         bot.send_message(message.chat.id, answer)
         set_next_step(message.chat.id, 'confirm_choice_teacher')
 
@@ -731,16 +731,16 @@ def confirm_choice(message):
             cursor.close()
             sql_con.close()
 
-        answer = 'Главное меню\n\n' \
-                 '{0} – информация о боте\n' \
-                 '{1} – оценить бота\n' \
-                 '{2} – настройки\n' \
-                 '{3} – параметры уведомлений\n' \
-                 '{4} – расписание звонков'.format(const.emoji['info'],
-                                                   const.emoji['star'],
-                                                   const.emoji['settings'],
-                                                   const.emoji['alarm_clock'],
-                                                   const.emoji['bell'])
+        answer = ('Главное меню\n\n'
+                  '{0} – информация о боте\n'
+                  '{1} – оценить бота\n'
+                  '{2} – настройки\n'
+                  '{3} – параметры уведомлений\n'
+                  '{4} – расписание звонков'.format(const.emoji['info'],
+                                                    const.emoji['star'],
+                                                    const.emoji['settings'],
+                                                    const.emoji['alarm_clock'],
+                                                    const.emoji['bell']))
         bot.send_message(message.chat.id, answer,
                          reply_markup=main_keyboard,
                          parse_mode='HTML')
@@ -767,7 +767,7 @@ def confirm_choice(message):
         start_handler(message)
         return
     else:
-        answer += 'Пожалуйста, проверь правильно ли ты всё указал и ' \
-            'подтверди свой выбор:'
+        answer += ('Пожалуйста, проверь правильно ли ты всё указал и '
+                   'подтверди свой выбор:')
         bot.send_message(message.chat.id, answer)
         set_next_step(message.chat.id, 'confirm_choice')
