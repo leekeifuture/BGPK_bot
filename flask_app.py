@@ -674,6 +674,8 @@ def write_replacement_group_handler(message):
                      content_types=['text'])
 def write_replacement_handler(message):
     bot.send_chat_action(message.chat.id, 'typing')
+    loading_answer = 'Загрузка\U00002026'
+    loading_message = bot.send_message(message.chat.id, loading_answer)
 
     valid_groups = []
     if message.text in const.existing_courses:
@@ -692,7 +694,64 @@ def write_replacement_handler(message):
                 for name in alias[str_alias]:
                     valid_groups.append(name['StudentGroupName'])
 
-    bot.send_message(message.chat.id, 'answer')
+    dates = []
+    all_repls = []
+    count_of_days = []
+    for group in valid_groups:
+        repls = func.get_data_from_replacements(group=group)
+        if repls == None:
+            repls = const.emoji['clock'] + ' Замены ещё не вывесили.'
+            bot.edit_message_text('Готово!', message.chat.id,
+                                  loading_message.message_id)
+            bot.send_message(message.chat.id, repls,
+                             reply_markup=replacements_keyboard)
+            return
+        else:
+            if not count_of_days:
+                count_of_days.append(len(repls))
+
+            for repl in repls:
+                all_repls.append('%s$|$%s' % (group, repl))
+
+    for i in range(count_of_days[0]):
+        curent_repl = all_repls[i].split('$|$')[1]
+        if 'Нет замен' in curent_repl:
+            dates.append(curent_repl.replace('(', '').replace(')', '')
+                .split()[-1][:-1])
+        else:
+            dates.append(curent_repl.split('\n')[0].split()[-1])
+
+    circle = 1
+    for date in dates:
+        answer = ''
+        dt = date.split('.')
+        answer += '%s Замена на %s %s' % (
+            const.emoji['anticlockwise'],
+            func.day_of_week_parsing_day(datetime.isoweekday(datetime(
+                int(dt[2]), int(dt[1]), int(dt[0])))),
+            date)
+
+        without_repl = []
+        for repl in all_repls:
+            grp_and_repl = repl.split('$|$')
+            if date in grp_and_repl[1]:
+                if 'Нет замен' in grp_and_repl[1]:
+                    without_repl.append(grp_and_repl[0])
+                else:
+                    answer += '\n\n<b>[%s] ——————————</b>\n%s' % (
+                        grp_and_repl[0],
+                        '\n\n'.join(grp_and_repl[1].split('\n\n')[1:]))
+
+        if circle == 1:
+            bot.edit_message_text('Готово!', message.chat.id,
+                                  loading_message.message_id,
+                                  parse_mode='HTML')
+
+        bot.send_message(message.chat.id, answer,
+                         parse_mode='HTML',
+                         reply_markup=replacements_keyboard)
+
+        circle += 1
 
 
 @bot.message_handler(func=lambda mess: mess.text == const.emoji['bust_in_silhouette'],
@@ -727,7 +786,9 @@ def write_teacher_name_handler(message):
     teachers_keyboard = tb.types.InlineKeyboardMarkup(row_width=2)
 
     if 'препoдавателя' in message.reply_to_message.text:
-        schedule_keyboard = replacements_keyboard
+        sched_keyboard = replacements_keyboard
+    else:
+        sched_keyboard = schedule_keyboard
 
     if teachers[0] and len(teachers[0]) <= 20:
         for teacher in short_teachers:
@@ -758,18 +819,18 @@ def write_teacher_name_handler(message):
                            ' Нaйденные преподаватели:')
 
         bot.send_message(message.chat.id, 'Готово!',
-                         reply_markup=schedule_keyboard)
+                         reply_markup=sched_keyboard)
         bot.send_message(message.chat.id, answer,
                          reply_markup=teachers_keyboard)
     elif len(teachers[0]) > 20:
         answer += ('Слишком много преподавателей\n'
                    'Пожалуйста, <b>уточни</b>')
         bot.send_message(message.chat.id, answer, parse_mode='HTML',
-                         reply_markup=schedule_keyboard)
+                         reply_markup=sched_keyboard)
     else:
         answer = 'Никого не найдено'
         bot.send_message(message.chat.id, answer,
-                         reply_markup=schedule_keyboard)
+                         reply_markup=sched_keyboard)
         func.log_me(message)
 
     @bot.message_handler(func=lambda mess: mess.reply_to_message is not None and
