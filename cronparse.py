@@ -159,6 +159,8 @@ def parse(html, parse_day, request_day):
                                 db_surname = 'панасюксс'
                             elif short_name == 'панасюксветланасвятославовна':
                                 db_surname = 'панасюксвсв'
+                            elif short_name == 'панасюквикторвладимирович':
+                                db_surname = 'панасюквв'
                             else:
                                 db_surname = (sg.split()[0].replace(' ', '')
                                               .lower())
@@ -173,6 +175,8 @@ def parse(html, parse_day, request_day):
                                     site_surname = teacher
                                 elif teacher == 'панасюксвсв':
                                     site_surname = teacher
+                                elif short_name == 'панасюквв':
+                                    site_surname = short_name
                                 else:
                                     site_surname = teacher.split()[0]
 
