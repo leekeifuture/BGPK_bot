@@ -116,6 +116,8 @@ def check_teacher(teacher_names, full_teachers_name):
                     surname = short_name
                 elif short_name == 'панасюксвсв':
                     surname = short_name
+                elif short_name == 'панасюквв':
+                    surname = short_name
                 else:
                     surname = i.split()[0].replace(
                         ' ', '').replace('.', '').lower()
@@ -130,6 +132,8 @@ def check_teacher(teacher_names, full_teachers_name):
                     surname = 'панасюксс'
                 elif short_name == 'панасюксветланасвятославовна':
                     surname = 'панасюксвсв'
+                elif short_name == 'панасюквикторвладимирович':
+                    surname = 'панасюквв'
                 else:
                     surname = i.split()[0].replace(
                         ' ', '').replace('.', '').lower()

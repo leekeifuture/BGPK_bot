@@ -171,7 +171,7 @@ def get_student_group(chat_id):
         return ''
 
 
-def day_of_week_parsing_day(request_day, parse_day, week=False):
+def day_of_week_parsing_day(request_day, parse_day=False, week=False):
     if week:
         if parse_day == dt.datetime.isoweekday(dt.datetime.now() + dt.timedelta(days=+1)):
             parse_date = str(dt.datetime.today() +
@@ -258,6 +258,8 @@ def get_replacements_ansewer(row, chat_id=False, force_teacher=False,
                     surname = short_name
                 elif short_name == 'панасюксвсв':
                     surname = short_name
+                elif short_name == 'панасюквв':
+                    surname = short_name
                 else:
                     surname = i.split()[0].replace(
                         ' ', '').replace('.', '').lower()
@@ -270,6 +272,8 @@ def get_replacements_ansewer(row, chat_id=False, force_teacher=False,
             surname = 'панасюксс'
         elif short_name == 'панасюксветланасвятославовна':
             surname = 'панасюксвсв'
+        elif short_name == 'панасюквикторвладимирович':
+            surname = 'панасюквв'
         else:
             surname = group.split()[0].replace(' ', '').replace('.', '')
 
@@ -603,6 +607,8 @@ def get_active_replace_days(chat_id=False, force_teacher=False,
                                 surname = short_name
                             elif short_name == 'панасюксвсв':
                                 surname = short_name
+                            elif short_name == 'панасюквв':
+                                surname = short_name
                             else:
                                 surname = teacher.split()[0].replace(
                                     ' ', '').replace('.', '').lower()
@@ -637,6 +643,8 @@ def get_active_replace_days(chat_id=False, force_teacher=False,
                 surname = 'панасюксс'
             elif short_name == 'панасюксветланасвятославовна':
                 surname = 'панасюксвсв'
+            elif short_name == 'панасюквикторвладимирович':
+                surname = 'панасюквв'
             else:
                 surname = group.split()[0].replace(' ', '').replace('.', '')
 
@@ -1033,8 +1041,7 @@ def delete_all_user_info(user_id):
     sql_con.close()
 
 
-def get_data_from_replacements(teacher=False, group=False,
-                               course=False, division=False):
+def get_data_from_replacements(teacher=False, group=False):
     repls = []
     if teacher:
         active_days = get_active_replace_days(force_teacher=teacher)
@@ -1144,6 +1151,8 @@ def check_teacher(teacher_names, full_teachers_name=False):
                     surname = short_name
                 elif short_name == 'панасюксвсв':
                     surname = short_name
+                elif short_name == 'панасюквв':
+                    surname = short_name
                 else:
                     surname = i.split()[0].replace(
                         ' ', '').replace('.', '').lower()
@@ -1158,6 +1167,8 @@ def check_teacher(teacher_names, full_teachers_name=False):
                     surname = 'панасюксс'
                 elif short_name == 'панасюксветланасвятославовна':
                     surname = 'панасюксвсв'
+                elif short_name == 'панасюквикторвладимирович':
+                    surname = 'панасюквв'
                 else:
                     surname = i.split()[0].replace(
                         ' ', '').replace('.', '').lower()
@@ -1479,6 +1490,7 @@ def get_shedule_answer(day_info, valid_date=False):
 def create_schedule_answer(user_id, tomorrow=False):
     full_date = [False, False]
     week = get_week()
+    alias = get_alias(user_id)
     group = get_student_group(user_id)
     day_of_week = dt.datetime.isoweekday(dt.datetime.now())
 
@@ -1556,7 +1568,7 @@ def create_schedule_answer(user_id, tomorrow=False):
 
     answer += const.notify
 
-    if get_alias(user_id) == 'PREP':
+    if alias == 'PREP':
         try:
             day_info = const.teachers_shedule[
                 const.teacher_name[const.cap_teachers.index(group)]]
@@ -1572,10 +1584,13 @@ def create_schedule_answer(user_id, tomorrow=False):
 
     day_info = day_info[week][dt.datetime.isoweekday(dt.datetime.now() +
                                                      dt.timedelta(days=td)) - 1]
-    if day_info:
+    if day_info or alias != 'PREP':
         answer += get_shedule_answer(day_info, full_date[1])
     else:
         return const.emoji['sleep'] + ' Выходной'
+
+    if not day_info and alias != 'PREP':
+        answer += '<i>%s</i>' % const.not_events
 
     return answer
 
@@ -1583,6 +1598,7 @@ def create_schedule_answer(user_id, tomorrow=False):
 def create_schedule_week_answer(user_id, td, force_day_of_week=0):
     full_date = [False, False]
     week = get_week()
+    alias = get_alias(user_id)
     group = get_student_group(user_id)
     day_of_week = dt.datetime.isoweekday(dt.datetime.now())
 
@@ -1622,7 +1638,7 @@ def create_schedule_week_answer(user_id, td, force_day_of_week=0):
 
     answer += const.notify
 
-    if get_alias(user_id) == 'PREP':
+    if alias == 'PREP':
         try:
             day_info = const.teachers_shedule[
                 const.teacher_name[const.cap_teachers.index(group)]]
@@ -1637,10 +1653,13 @@ def create_schedule_week_answer(user_id, td, force_day_of_week=0):
                     '</b>" не найдено\U00002026')
 
     day_info = day_info[week][td - 1]
-    if day_info:
+    if day_info or alias != 'PREP':
         answer += get_shedule_answer(day_info, full_date[1])
     else:
         return const.emoji['sleep'] + ' Выходной'
+
+    if not day_info and alias != 'PREP':
+        answer += '<i>%s</i>' % const.not_events
 
     return answer
 
@@ -1748,8 +1767,11 @@ def send_schedule_force_week_answer(message, force_day_of_week=0):
 
                 len_valid_days = len(valid_days)
 
-                if week_info:
+                if week_info or alias != 'PREP':
                     answer += get_shedule_answer(week_info, full_date[1])
+
+                    if not week_info and alias != 'PREP':
+                        answer += '<i>%s</i>' % const.not_events
 
                     if alias == 'PREP':
                         if len_valid_days == 1:
