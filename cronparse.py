@@ -180,7 +180,7 @@ def parse(html, parse_day, request_day):
                                         site_surname = short_name
                                     else:
                                         site_surname = (teacher.split()[0]
-                                            .replace('ё', 'е'))
+                                                        .replace('ё', 'е'))
 
                                     if db_surname == site_surname:
                                         if sg not in real_sendig:

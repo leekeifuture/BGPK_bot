@@ -261,8 +261,9 @@ def get_replacements_ansewer(row, chat_id=False, force_teacher=False,
                 elif short_name == 'панасюквв':
                     surname = short_name
                 else:
-                    surname = i.split()[0].replace(
-                        ' ', '').replace('.', '').lower()
+                    surname = (i.split()[0].replace(' ', '')
+                               .replace('.', '').lower()
+                               .replace('ё', 'е'))
 
                 surnames.append(surname)
 
@@ -610,8 +611,9 @@ def get_active_replace_days(chat_id=False, force_teacher=False,
                             elif short_name == 'панасюквв':
                                 surname = short_name
                             else:
-                                surname = teacher.split()[0].replace(
-                                    ' ', '').replace('.', '').lower()
+                                surname = (teacher.split()[0].replace(' ', '')
+                                           .replace('.', '')
+                                           .lower().replace('ё', 'е'))
 
                             groups.append(surname)
                 else:
@@ -1154,8 +1156,9 @@ def check_teacher(teacher_names, full_teachers_name=False):
                 elif short_name == 'панасюквв':
                     surname = short_name
                 else:
-                    surname = i.split()[0].replace(
-                        ' ', '').replace('.', '').lower()
+                    surname = (i.split()[0].replace(' ', '')
+                               .replace('.', '')
+                               .lower().replace('ё', 'е'))
 
                 surnames.append(surname)
 
@@ -1738,7 +1741,6 @@ def send_schedule_force_week_answer(message, force_day_of_week=0):
             answer = const.emoji['calendar'] + ' '
             answer += const.num_day[str(td)]
 
-
             if force_day_of_week == 0:
                 if day_of_week != 7:
                     full_date = get_date(
@@ -1889,7 +1891,6 @@ def send_teacher_week_answer(message, teacher, free_week=False,
             full_date = [False, False]
             answer = const.emoji['calendar'] + ' '
             answer += const.num_day[str(td)]
-
 
             xday = 1
             for i in week_day_info:

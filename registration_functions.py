@@ -119,8 +119,9 @@ def check_teacher(teacher_names, full_teachers_name):
                 elif short_name == 'панасюквв':
                     surname = short_name
                 else:
-                    surname = i.split()[0].replace(
-                        ' ', '').replace('.', '').lower()
+                    surname = (i.split()[0].replace(' ', '')
+                               .replace('.', '')
+                               .lower().replace('ё', 'е'))
 
                 surnames.append(surname)
 
