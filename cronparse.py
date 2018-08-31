@@ -179,7 +179,8 @@ def parse(html, parse_day, request_day):
                                     elif short_name == 'панасюквв':
                                         site_surname = short_name
                                     else:
-                                        site_surname = teacher.split()[0]
+                                        site_surname = (teacher.split()[0]
+                                            .replace('ё', 'е'))
 
                                     if db_surname == site_surname:
                                         if sg not in real_sendig:
