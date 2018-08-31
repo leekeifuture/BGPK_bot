@@ -171,20 +171,21 @@ def parse(html, parse_day, request_day):
                                 site_teacher = [teacher]
 
                             for teacher in site_teacher:
-                                if teacher == 'панасюксс':
-                                    site_surname = teacher
-                                elif teacher == 'панасюксвсв':
-                                    site_surname = teacher
-                                elif short_name == 'панасюквв':
-                                    site_surname = short_name
-                                else:
-                                    site_surname = teacher.split()[0]
+                                if teacher:
+                                    if teacher == 'панасюксс':
+                                        site_surname = teacher
+                                    elif teacher == 'панасюксвсв':
+                                        site_surname = teacher
+                                    elif short_name == 'панасюквв':
+                                        site_surname = short_name
+                                    else:
+                                        site_surname = teacher.split()[0]
 
-                                if db_surname == site_surname:
-                                    if sg not in real_sendig:
-                                        real_sendig.append(sg)
-                                    if sg in all_teachers:
-                                        all_teachers.remove(sg)
+                                    if db_surname == site_surname:
+                                        if sg not in real_sendig:
+                                            real_sendig.append(sg)
+                                        if sg in all_teachers:
+                                            all_teachers.remove(sg)
 
         for rs in real_sendig:
             sql_con = connect(const.path + 'Bot.db')
@@ -293,10 +294,9 @@ def parse(html, parse_day, request_day):
                 try:
                     bot.send_message(inzs, const.emoji['anticlockwise'] +
                                      ' Для ' + for_any +
-                                     ' <b>{}</b> нет замен на {} ('
+                                     ' <b>{0}</b> нет замен на {1} ('
                                      .format(group,
-                                             func.day_of_week_parsing_day(request_day,
-                                                                          parse_day)) +
+                                             func.day_of_week_parsing_day(parse_day)) +
                                      dataaa[-10:] + ').', parse_mode='HTML')
                     not_have_repl.append(inzs)
                 except Exception as err:
