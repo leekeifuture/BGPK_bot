@@ -2000,6 +2000,8 @@ def send_teacher_week_answer(message, teacher, free_week=False,
                     year = full_date[1].split('.')[-1]
 
                     if td - 1 == valid_days[0]:
+                        if is_next_week:
+                            head_answer += '\n\n' + is_next_week
                         first_date = bot.edit_message_text(head_answer,
                                                            message.chat.id,
                                                            message.message_id,
@@ -2008,10 +2010,10 @@ def send_teacher_week_answer(message, teacher, free_week=False,
                         first_of_dates.append(range_of_days)
                     elif (td - 1 == valid_days[-1] and
                           (is_next_week or len_valid_days != 1)):
-                        head_answer = (head_answer + '\n\n' +
-                                       is_next_week + const.emoji['calendar'] +
-                                       first_of_dates[0] + ' ' + year +
-                                       ' –' + range_of_days + ' ' + year)
+                        head_answer += ('\n\n' + is_next_week +
+                                        const.emoji['calendar'] +
+                                        first_of_dates[0] + ' ' + year +
+                                        ' –' + range_of_days + ' ' + year)
                         bot.edit_message_text(head_answer,
                                               message.chat.id,
                                               first_of_days[0].message_id,
