@@ -1335,15 +1335,9 @@ shedule = {
           [('', lesson_time['1'], 'Инженерная графика', teacher_name[22] + '/' + teacher_name[23], '',), # tue 2
            ('', lesson_time['2'], 'Техническая механика', teacher_name[51], '',),
            ('', lesson_time['3'], 'Геодезия ', teacher_name[5], '',)],
-          [('', lesson_time['1'], '', teacher_name[], '',), # wed 3
-           ('', lesson_time['2'], '', teacher_name[], '',),
-           ('', lesson_time['3'], '', teacher_name[], '',)],
-          [('', lesson_time['1'], '', teacher_name[], '',), # thu 4
-           ('', lesson_time['2'], '', teacher_name[], '',),
-           ('', lesson_time['3'], '', teacher_name[], '',)],
-          [('', lesson_time['1'], '', teacher_name[], '',), # fri 5
-           ('', lesson_time['2'], '', teacher_name[], '',),
-           ('', lesson_time['3'], '', teacher_name[], '',)],
+          [],
+          [],
+          [],
           [('', lesson_time['1'], 'ГПЗ', teacher_name[48], '',), # sat 6
            ('', lesson_time['2'], 'Информацион.технологии', teacher_name[48] + '/' + teacher_name[15], '',),
            ('', lesson_time['3s'], 'Геодезия ', teacher_name[5], '')]
@@ -1356,15 +1350,9 @@ shedule = {
            ('', lesson_time['2'], 'Техническая механика', teacher_name[51], '',),
            ('', lesson_time['3'], 'Геодезия ', teacher_name[5], '',),
            ('', lesson_time['4'], 'Физкультура и здоровье', teacher_name[31], '',)],
-          [('', lesson_time['1'], '', teacher_name[], '',), # wed 3
-           ('', lesson_time['2'], '', teacher_name[], '',),
-           ('', lesson_time['3'], '', teacher_name[], '',)],
-          [('', lesson_time['1'], '', teacher_name[], '',), # thu 4
-           ('', lesson_time['2'], '', teacher_name[], '',),
-           ('', lesson_time['3'], '', teacher_name[], '',)],
-          [('', lesson_time['1'], '', teacher_name[], '',), # fri 5
-           ('', lesson_time['2'], '', teacher_name[], '',),
-           ('', lesson_time['3'], '', teacher_name[], '',)],
+          [],
+          [],
+          [],
           [('', lesson_time['1'], 'ГПЗ', teacher_name[48], '',), # sat 6
            ('', lesson_time['2'], 'Информацион.технологии', teacher_name[48] + '/' + teacher_name[15], '',),
            ('', lesson_time['3s'], 'Геодезия ', teacher_name[5], '')]
@@ -1436,15 +1424,9 @@ shedule = {
           [('', lesson_time['4'], 'СТК', teacher_name[19], '',), # tue 2
            ('', lesson_time['5'], 'ТСП/КП СТК', teacher_name[42] + '/' + teacher_name[19] + '/' + teacher_name[54], '',),
            ('', lesson_time['6'], 'ТСП', teacher_name[42], '',)],
-          [('', lesson_time['4'], '', teacher_name[], '',), # wed 3
-           ('', lesson_time['5'], '', teacher_name[], '',),
-           ('', lesson_time['6'], '', teacher_name[], '',)],
-          [('', lesson_time['4'], '', teacher_name[], '',), # thu 4
-           ('', lesson_time['5'], '', teacher_name[], '',),
-           ('', lesson_time['6'], '', teacher_name[], '',)],
-          [('', lesson_time['4'], '', teacher_name[], '',), # fri 5
-           ('', lesson_time['5'], '', teacher_name[], '',),
-           ('', lesson_time['6'], '', teacher_name[], '',)],
+          [],
+          [],
+          [],
           [('', lesson_time['4s'], 'ОСГН', teacher_name[63], ''), # sat 6
            ('', lesson_time['5s'], 'Физкультура и здоровье', teacher_name[59], ''),
            ('', lesson_time['6s'], 'Охрана труда', teacher_name[79], '')]
@@ -1456,15 +1438,9 @@ shedule = {
           [('', lesson_time['4'], 'СТК', teacher_name[19], '',), # tue 2
            ('', lesson_time['5'], 'ТСП/КП СТК', teacher_name[42] + '/' + teacher_name[19] + '/' + teacher_name[54], '',),
            ('', lesson_time['6'], 'Охрана труда', teacher_name[79], '',)],
-          [('', lesson_time['4'], '', teacher_name[], '',), # wed 3
-           ('', lesson_time['5'], '', teacher_name[], '',),
-           ('', lesson_time['6'], '', teacher_name[], '',)],
-          [('', lesson_time['4'], '', teacher_name[], '',), # thu 4
-           ('', lesson_time['5'], '', teacher_name[], '',),
-           ('', lesson_time['6'], '', teacher_name[], '',)],
-          [('', lesson_time['4'], '', teacher_name[], '',), # fri 5
-           ('', lesson_time['5'], '', teacher_name[], '',),
-           ('', lesson_time['6'], '', teacher_name[], '',)],
+          [],
+          [],
+          [],
           [('', lesson_time['4s'], 'ОСГН', teacher_name[63], ''), # sat 6
            ('', lesson_time['5s'], 'ТСП', teacher_name[42], ''),
            ('', lesson_time['6s'], 'Охрана труда', teacher_name[79], '')]
@@ -1509,15 +1485,9 @@ shedule = {
           [('', lesson_time['4'], 'КП ГПЗ/КП СТК', teacher_name[48] + '/' + teacher_name[51], '',), # tue 2
            ('', lesson_time['5'], 'ТСП', teacher_name[67], '',),
            ('', lesson_time['6'], 'Охрана труда', teacher_name[14], '',)],
-          [('', lesson_time['4'], '', teacher_name[], '',), # wed 3
-           ('', lesson_time['5'], '', teacher_name[], '',),
-           ('', lesson_time['6'], '', teacher_name[], '',)],
-          [('', lesson_time['4'], '', teacher_name[], '',), # thu 4
-           ('', lesson_time['5'], '', teacher_name[], '',),
-           ('', lesson_time['6'], '', teacher_name[], '',)],
-          [('', lesson_time['4'], '', teacher_name[], '',), # fri 5
-           ('', lesson_time['5'], '', teacher_name[], '',),
-           ('', lesson_time['6'], '', teacher_name[], '',)],
+          [],
+          [],
+          [],
           [('', lesson_time['3s'], 'ОСГН', teacher_name[63], '',),
            ('', lesson_time['4s'], 'ГПЗ/СТК', teacher_name[15] + '/' + teacher_name[19], ''), # sat 6
            ('', lesson_time['5s'], 'ТСП/СТК', teacher_name[67] + '/' + teacher_name[51], ''),
@@ -1530,15 +1500,9 @@ shedule = {
           [('', lesson_time['4'], 'КП ГПЗ/КП СТК', teacher_name[48] + '/' + teacher_name[51], '',), # tue 2
            ('', lesson_time['5'], 'ОСГН', teacher_name[63], '',),
            ('', lesson_time['6'], 'Охрана труда', teacher_name[14], '',)],
-          [('', lesson_time['4'], '', teacher_name[], '',), # wed 3
-           ('', lesson_time['5'], '', teacher_name[], '',),
-           ('', lesson_time['6'], '', teacher_name[], '',)],
-          [('', lesson_time['4'], '', teacher_name[], '',), # thu 4
-           ('', lesson_time['5'], '', teacher_name[], '',),
-           ('', lesson_time['6'], '', teacher_name[], '',)],
-          [('', lesson_time['4'], '', teacher_name[], '',), # fri 5
-           ('', lesson_time['5'], '', teacher_name[], '',),
-           ('', lesson_time['6'], '', teacher_name[], '',)],
+          [],
+          [],
+          [],
           [('', lesson_time['3s'], 'ОСГН', teacher_name[63], '',),
            ('', lesson_time['4s'], 'ГПЗ/СТК', teacher_name[15] + '/' + teacher_name[19], ''), # sat 6
            ('', lesson_time['5s'], 'ТСП/СТК', teacher_name[67] + '/' + teacher_name[51], ''),
@@ -1643,15 +1607,9 @@ shedule = {
           [('', lesson_time['4'], 'КП ОСП/Технология РСР', teacher_name[5] + '/' + teacher_name[67], '',), # tue 2
            ('', lesson_time['5'], 'Основы менеджмента', teacher_name[56], '',),
            ('', lesson_time['6'], 'ТЭЗиС', teacher_name[61], '',)],
-          [('', lesson_time['4'], '', teacher_name[], '',), # wed 3
-           ('', lesson_time['5'], '', teacher_name[], '',),
-           ('', lesson_time['6'], '', teacher_name[], '',)],
-          [('', lesson_time['4'], '', teacher_name[], '',), # thu 4
-           ('', lesson_time['5'], '', teacher_name[], '',),
-           ('', lesson_time['6'], '', teacher_name[], '',)],
-          [('', lesson_time['4'], '', teacher_name[], '',), # fri 5
-           ('', lesson_time['5'], '', teacher_name[], '',),
-           ('', lesson_time['6'], '', teacher_name[], '',)],
+          [],
+          [],
+          [],
           [('', lesson_time['4s'], 'Технология РСР', teacher_name[67], ''), # sat 6
            ('', lesson_time['5s'], 'Охр.окр.среды и энергосб', teacher_name[38], '')]
         ],
@@ -1662,15 +1620,9 @@ shedule = {
           [('', lesson_time['4'], 'КП ОСП/Технология РСР', teacher_name[5] + '/' + teacher_name[67], '',), # tue 2
            ('', lesson_time['5'], 'Основы менеджмента', teacher_name[56], '',),
            ('', lesson_time['6'], 'ТЭЗиС', teacher_name[61], '',)],
-          [('', lesson_time['4'], '', teacher_name[], '',), # wed 3
-           ('', lesson_time['5'], '', teacher_name[], '',),
-           ('', lesson_time['6'], '', teacher_name[], '',)],
-          [('', lesson_time['4'], '', teacher_name[], '',), # thu 4
-           ('', lesson_time['5'], '', teacher_name[], '',),
-           ('', lesson_time['6'], '', teacher_name[], '',)],
-          [('', lesson_time['4'], '', teacher_name[], '',), # fri 5
-           ('', lesson_time['5'], '', teacher_name[], '',),
-           ('', lesson_time['6'], '', teacher_name[], '',)],
+          [],
+          [],
+          [],
           [('', lesson_time['4s'], 'Технология РСР', teacher_name[67], ''), # sat 6
            ('', lesson_time['5s'], 'Охр.окр.среды и энергосб', teacher_name[38], ''),
            ('', lesson_time['6s'], 'Физкультура и здоровье', teacher_name[94], '',)]
