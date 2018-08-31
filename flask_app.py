@@ -758,7 +758,6 @@ def write_replacement_handler(message):
                 else:
                     answer += '<b>%s</b>, ' % group
 
-
         if circle == 1:
             bot.edit_message_text('Готово!', message.chat.id,
                                   loading_message.message_id,
