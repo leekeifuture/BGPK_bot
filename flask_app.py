@@ -608,6 +608,7 @@ def search_replacements_handler(message):
     search_replacements_keyboard.row('« Назaд')
     bot.send_message(message.chat.id, answer,
                      reply_markup=search_replacements_keyboard)
+    func.log_me(message)
 
 
 @bot.message_handler(func=lambda mess: mess.text == 'Группа' or
@@ -639,6 +640,7 @@ def select_type_of_search_handler(message):
     answer += '\nДля отмены используй /home'
     bot.send_message(message.chat.id, answer, reply_markup=markup,
                      parse_mode='HTML')
+    func.log_me(message)
 
 
 @bot.message_handler(func=lambda mess: mess.reply_to_message is not None and
@@ -667,6 +669,7 @@ def write_replacement_group_handler(message):
             answer = 'Ничего не найдено'
     bot.send_message(message.chat.id, answer,
                      reply_markup=replacements_keyboard)
+    func.log_me(message)
 
 
 @bot.message_handler(func=lambda mess: mess.text in const.existing_courses or
@@ -721,6 +724,7 @@ def write_replacement_handler(message):
         else:
             dates.append(curent_repl.split('\n')[0].split()[-1])
 
+    dates.sort()
     circle = 1
     for date in dates:
         answer = ''
@@ -738,9 +742,22 @@ def write_replacement_handler(message):
                 if 'Нет замен' in grp_and_repl[1]:
                     without_repl.append(grp_and_repl[0])
                 else:
-                    answer += '\n\n<b>[%s] ——————————</b>\n%s' % (
+                    answer += '\n\n<b>—————— [%s] ——————</b>\n%s' % (
                         grp_and_repl[0],
                         '\n\n'.join(grp_and_repl[1].split('\n\n')[1:]))
+
+        if without_repl:
+            if '—' in answer:
+                prefix = '%s ' % const.emoji['anticlockwise']
+            else:
+                prefix = ''
+            answer += '\n\n%sНет замен для:\n' % prefix
+            for group in without_repl:
+                if group == without_repl[-1]:
+                    answer += '<b>%s</b>.' % group
+                else:
+                    answer += '<b>%s</b>, ' % group
+
 
         if circle == 1:
             bot.edit_message_text('Готово!', message.chat.id,
@@ -752,6 +769,7 @@ def write_replacement_handler(message):
                          reply_markup=replacements_keyboard)
 
         circle += 1
+    func.log_me(message)
 
 
 @bot.message_handler(func=lambda mess: mess.text == const.emoji['bust_in_silhouette'],
@@ -765,6 +783,7 @@ def teacher_schedule_handler(message):
     markup = tb.types.ForceReply()
     bot.send_message(message.chat.id, answer, parse_mode='HTML',
                      reply_markup=markup)
+    func.log_me(message)
 
 
 @bot.message_handler(func=lambda mess: mess.reply_to_message is not None and
