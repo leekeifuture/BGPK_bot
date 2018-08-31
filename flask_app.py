@@ -267,7 +267,7 @@ def not_exist_user_handler(message):
     func.log_me(message)
 
 
-@bot.message_handler(func=lambda mess: mess.text == 'Сменить группу ({})'
+@bot.message_handler(func=lambda mess: mess.text == 'Сменить группу ({0})'
                      .format(func.get_student_group(mess.chat.id)) or
                      mess.text == 'Перезайти',
                      content_types=['text'])
@@ -290,13 +290,14 @@ def change_group_handler(message):
         message.text = const.types[1]['Type']
         answer = 'Смена преподавателя\nДля отмены используй /home'
     else:
-        answer = ('Смена группы <b>{}</b>\nДля отмены используй /home'
+        answer = ('Смена группы <b>{0}</b>\nДля отмены используй /home'
                   .format(func.get_student_group(message.chat.id)))
         message.text = const.types[0]['Type']
     bot.send_message(message.chat.id, answer,
                      parse_mode='HTML')
 
     reg_func.select_status(message, True)
+    func.log_me(message)
 
 
 @bot.message_handler(commands=['help'])
@@ -350,7 +351,7 @@ def settings_handler(message):
     if alias == 'PREP':
         re_entrance = 'Перезайти'
     else:
-        re_entrance = 'Сменить группу ({})'.format(
+        re_entrance = 'Сменить группу ({0})'.format(
             func.get_student_group(message.chat.id))
 
     settings_keyboard.row(re_entrance, 'Завершить')
@@ -439,9 +440,9 @@ def calendar_replace_handler(message):
     else:
         for_any = 'группы'
 
-    answer = ('Выбери день:\n' + const.emoji['check_mark'] + ' – Есть замены для ' + for_any + ' <b>{}</b>.\n'.format(group)
+    answer = ('Выбери день:\n' + const.emoji['check_mark'] + ' – Есть замены для ' + for_any + ' <b>{0}</b>.\n'.format(group)
               + const.emoji['negative_squared_cross_mark'] +
-              ' – Нет замен для ' + for_any + ' <b>{}</b>.\n'.format(group)
+              ' – Нет замен для ' + for_any + ' <b>{0}</b>.\n'.format(group)
               + const.emoji['cross_mark'] +
               ' – Замены на ближайший день недели ещё не вывесили (будут показаны предыдущие замены).')
     week_day_calendar = tb.types.InlineKeyboardMarkup()
@@ -581,13 +582,13 @@ def bliz_zvonok_handler(message):
     run = const.emoji['blue_diamond']
     if blzv0 >= 60:
         blzv0 = func.blzv()[0] // 60
-        minorh = 'ч {} мин'.format(func.blzv()[0] % 60)
+        minorh = 'ч {0} мин'.format(func.blzv()[0] % 60)
     elif blzv0 <= 2:
         run = const.emoji['runner']
     elif blzv0 <= 5:
         run = const.emoji['orange_diamond']
-    answer = ('{} <i>Через</i> {} {}\n'
-              'Ближайший звонок в <b>{}</b> ({})'.format(run,
+    answer = ('{0} <i>Через</i> {1} {2}\n'
+              'Ближайший звонок в <b>{3}</b> ({4})'.format(run,
                                                          blzv0,
                                                          minorh,
                                                          func.blzv()[1],
@@ -1511,9 +1512,9 @@ def back_from_calendar_replace_handler(call_back):
     else:
         for_any = 'группы'
 
-    answer = ('Выбери день:\n' + const.emoji['check_mark'] + ' – Есть замены для ' + for_any + ' <b>{}</b>.\n'.format(group)
+    answer = ('Выбери день:\n' + const.emoji['check_mark'] + ' – Есть замены для ' + for_any + ' <b>{0}</b>.\n'.format(group)
               + const.emoji['negative_squared_cross_mark'] +
-              ' – Нет замен для ' + for_any + ' <b>{}</b>.\n'.format(group)
+              ' – Нет замен для ' + for_any + ' <b>{0}</b>.\n'.format(group)
               + const.emoji['cross_mark'] +
               ' – Замены на ближайший день недели ещё не вывесили. Будут показаны предыдущие замены.')
     week_day_calendar = tb.types.InlineKeyboardMarkup()
@@ -1573,9 +1574,9 @@ def back_from_week_replace_handler(call_back):
     else:
         for_any = 'группы'
 
-    answer = ('Выбери день:\n' + const.emoji['check_mark'] + ' – Есть замены для ' + for_any + ' <b>{}</b>.\n'.format(group)
+    answer = ('Выбери день:\n' + const.emoji['check_mark'] + ' – Есть замены для ' + for_any + ' <b>{0}</b>.\n'.format(group)
               + const.emoji['negative_squared_cross_mark'] +
-              ' – Нет замен для ' + for_any + ' <b>{}</b>.\n'.format(group)
+              ' – Нет замен для ' + for_any + ' <b>{0}</b>.\n'.format(group)
               + const.emoji['cross_mark'] +
               ' – Замены на ближайший день недели ещё не вывесили. Будут показаны предыдущие замены.')
     week_day_calendar = tb.types.InlineKeyboardMarkup()
