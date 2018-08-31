@@ -24,11 +24,11 @@ def main(date):
     if date == '21':
         cursor.execute('''SELECT id 
                             FROM user_data
-                            WHERE sending_rasp = 1''')
+                           WHERE sending_rasp = 1''')
     elif date == '17':
         cursor.execute('''SELECT id 
                             FROM user_data
-                            WHERE sending_rasp_5 = 1''')
+                           WHERE sending_rasp_5 = 1''')
     sending_rasp_one = cursor.fetchall()
     cursor.close()
     sql_con.close()
