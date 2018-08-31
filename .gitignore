@@ -1,8 +1,6 @@
 ﻿__pycache__
 telebot/__pycache__
 venv
-Bot.db
-Parse.db
-test.py
-test_teachers.py
+*.db
+test*.py
 *.pem
