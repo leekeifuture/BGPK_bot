@@ -3,11 +3,16 @@
 
 
 from constants import path
-from functions import sql_execute
+from sqlite3 import connect
 
 
 def main():
-    sql_execute(path + 'Bot.db', 'DELETE FROM user_choice')
+    sql_con = connect(path + 'Bot.db')
+    cursor = sql_con.cursor()
+    cursor.execute('''DELETE FROM user_choice''')
+    sql_con.commit()
+    cursor.close()
+    sql_con.close()
 
 
 if __name__ == '__main__':
