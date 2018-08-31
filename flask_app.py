@@ -717,7 +717,7 @@ def write_replacement_handler(message):
         curent_repl = all_repls[i].split('$|$')[1]
         if 'Нет замен' in curent_repl:
             dates.append(curent_repl.replace('(', '').replace(')', '')
-                .split()[-1][:-1])
+                         .split()[-1][:-1])
         else:
             dates.append(curent_repl.split('\n')[0].split()[-1])
 
@@ -932,15 +932,14 @@ def send_newsletter_to_all_handler(message):
     for user in func.get_not_banned_users(message.chat.id):
         try:
             bot.send_message(user[0], message.text, True,
-                             parse_mode='HTML')
+                             parse_mode='HTML', reply_markup=main_keyboard)
         except Exception as err:
             answer = (const.emoji['cross_mark'] +
                       ' ' + str(user[0]) + '\n' + str(err))
             bot.send_message(message.chat.id, answer)
             continue
         sleep(0.04)
-    bot.send_message(message.chat.id, const.emoji['check_mark'],
-                     reply_markup=main_keyboard)
+    bot.send_message(message.chat.id, const.emoji['check_mark'])
     func.log_me(message)
 
 
@@ -1902,8 +1901,6 @@ def sending_off_zam_handler(call_back):
                           reply_markup=back_from_podpis_handler)
     func.call_back_log_me(call_back)
 
-# Статистика оценок
-
 
 @bot.callback_query_handler(func=lambda call_back:
                             call_back.data == 'Статистика')
@@ -2204,8 +2201,9 @@ if __name__ == '__main__':
     bot.send_message(conf.my_id,
                      str(datetime.now())[:-7] + ' | ' + str(bot.get_me()))
 
+    bot.remove_webhook()
+
     if const.syst == 'Linux':
-        bot.remove_webhook()
 
         bot.set_webhook(url=conf.WEBHOOK_URL_BASE + conf.WEBHOOK_URL_PATH,
                         certificate=open(conf.WEBHOOK_SSL_CERT, 'r'))
