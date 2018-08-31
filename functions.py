@@ -532,7 +532,7 @@ def get_replace_of_day(day, chat_id=False, is_week=False, force_teacher=False,
 
             previous_relp = const.emoji['warning_sign'] + ' Это предыдущие замены\U00002026\nЗамены на {} ({}) ещё не вывесили:\n\n'.format(
                 day_of_parsing_week, not_noty)
-            not_repl_yet_on = const.emoji['clock'] + ' Замены на {} ({}) ещё не вывесили:\n\n'.format(
+            not_repl_yet_on = const.emoji['warning_sign'] + ' Замены на {} ({}) ещё не вывесили:\n\n'.format(
                 day_of_parsing_week, not_noty)
 
             if answer:
@@ -1738,7 +1738,6 @@ def send_schedule_force_week_answer(message, force_day_of_week=0):
             answer = const.emoji['calendar'] + ' '
             answer += const.num_day[str(td)]
 
-            answer += const.notify
 
             if force_day_of_week == 0:
                 if day_of_week != 7:
@@ -1764,6 +1763,8 @@ def send_schedule_force_week_answer(message, force_day_of_week=0):
             if td < 7:
                 week_info = day_info[shedule_week][td - 1]
                 td += 1
+
+                answer += const.notify
 
                 len_valid_days = len(valid_days)
 
@@ -1889,7 +1890,6 @@ def send_teacher_week_answer(message, teacher, free_week=False,
             answer = const.emoji['calendar'] + ' '
             answer += const.num_day[str(td)]
 
-            answer += const.notify
 
             xday = 1
             for i in week_day_info:
@@ -1977,6 +1977,8 @@ def send_teacher_week_answer(message, teacher, free_week=False,
                 len_valid_days = len(valid_days)
                 week_info = day_info[shedule_week][td - 1]
                 td += 1
+
+                answer += const.notify
 
                 if week_info:
                     answer += get_shedule_answer(week_info, full_date[1])
