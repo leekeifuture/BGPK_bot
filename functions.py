@@ -1235,13 +1235,13 @@ def search_teacher(name_for_search, dot_except=False, from_menu=False):
             full_teacher_name = const.cap_teachers[index]
             teachers.append(full_teacher_name)
     for i in const.cap_teachers:
-        if i.split()[1].lower().startswith(teacher_name):
+        splited = i.split()
+        if splited[1].lower().startswith(teacher_name):
             index = const.cap_teachers.index(i)
             full_teacher_name = const.cap_teachers[index]
             if full_teacher_name not in teachers:
                 teachers.append(full_teacher_name)
-    for i in const.cap_teachers:
-        if i.split()[2].lower().startswith(teacher_name):
+        if splited[2].lower().startswith(teacher_name):
             index = const.cap_teachers.index(i)
             full_teacher_name = const.cap_teachers[index]
             if full_teacher_name not in teachers:
