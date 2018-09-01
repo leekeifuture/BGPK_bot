@@ -764,9 +764,8 @@ def write_replacement_handler(message):
                                   loading_message.message_id,
                                   parse_mode='HTML')
 
-        bot.send_message(message.chat.id, answer,
-                         parse_mode='HTML',
-                         reply_markup=replacements_keyboard)
+        func.send_long_message(bot, answer, message.chat.id,
+                               replacements_keyboard)
 
         circle += 1
     func.log_me(message)

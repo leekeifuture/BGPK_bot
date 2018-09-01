@@ -3,11 +3,12 @@
 
 
 import re
+import telebot as tb
 import datetime as dt
+from json import loads
 from config import my_id
-import constants as const
 from sys import exc_info
-from telebot import types
+import constants as const
 from flask_app import bot
 from sqlite3 import connect
 from bs4 import BeautifulSoup
@@ -1043,6 +1044,23 @@ def delete_all_user_info(user_id):
     sql_con.close()
 
 
+def send_long_message(bot, text, user_id, markup=False):
+    try:
+        if markup:
+            bot.send_message(user_id, text, parse_mode='HTML',
+                             reply_markup=markup)
+        else:
+            bot.send_message(user_id, text, parse_mode='HTML')
+    except tb.apihelper.ApiException as ApiExcept:
+        json_err = loads(ApiExcept.result.text)
+        if json_err['description'] == 'Bad Request: message is too long':
+            event_count = len(text.split('\n\n'))
+            first_part = '\n\n'.join(text.split('\n\n')[:event_count // 2])
+            second_part = '\n\n'.join(text.split('\n\n')[event_count // 2:])
+            send_long_message(bot, first_part, user_id)
+            send_long_message(bot, second_part, user_id)
+
+
 def get_data_from_replacements(teacher=False, group=False):
     repls = []
     if teacher:
@@ -1675,14 +1693,14 @@ def send_schedule_force_week_answer(message, force_day_of_week=0):
     group = get_student_group(message.chat.id)
     day_of_week = dt.datetime.isoweekday(dt.datetime.now())
 
-    back_from_week = types.InlineKeyboardMarkup()
-    back_from_schedule = types.InlineKeyboardMarkup()
+    back_from_week = tb.types.InlineKeyboardMarkup()
+    back_from_schedule = tb.types.InlineKeyboardMarkup()
 
     back_from_week.row(
-        *[types.InlineKeyboardButton(text=name, callback_data=name) for
+        *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
             name in ['« Нaзад']])
     back_from_schedule.row(
-        *[types.InlineKeyboardButton(text=name, callback_data=name) for
+        *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
             name in ['« Haзад']])
 
     if day_of_week != 7:
