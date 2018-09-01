@@ -974,7 +974,7 @@ def send_newsletter_to_all_handler(message):
     for user in func.get_not_banned_users(message.chat.id):
         try:
             bot.send_message(user[0], message.text, True,
-                             parse_mode='HTML', reply_markup=main_keyboard)
+                             parse_mode='HTML')
         except Exception as err:
             answer = (const.emoji['cross_mark'] +
                       ' ' + str(user[0]) + '\n' + str(err))
