@@ -542,6 +542,8 @@ calls_sokrs = '''
 
 not_events = 'Пока что нет событий'
 
+not_events_for_teachers = 'Пока что нет событий'
+
 notify = '<code>В первое время расписание может быть не точным из-за частых изменений</code>\n\n'
 
 # shedule = {
