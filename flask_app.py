@@ -629,6 +629,7 @@ def select_type_of_search_handler(message):
         markup = force_markup
     elif message.text == 'Группа':
         markup = force_markup
+        answer = '%s (можно через запятую):' % answer.replace(':', '')
     elif message.text == 'Курс':
         [reply_markup.row(course) for course in const.existing_courses]
         reply_markup.row('« Нaзад')
@@ -647,29 +648,52 @@ def select_type_of_search_handler(message):
 @bot.message_handler(func=lambda mess: mess.reply_to_message is not None and
                      mess.reply_to_message.from_user.username ==
                      bot_username and
-                     ' для поиска:' in mess.reply_to_message.text,
+                     ' для поиска' in mess.reply_to_message.text,
                      content_types=['text'])
 def write_replacement_group_handler(message):
     bot.send_chat_action(message.chat.id, 'typing')
     answer = 'Меню замен'
+    nothing_to_search = []
+    valid_splited_mess = []
+    splited_mess = message.text.split(',')
 
-    if 'группу' in message.reply_to_message.text:
-        lower_groups = [group.lower() for group in const.existing_groups]
-        if message.text.lower().replace(' ', '') in lower_groups:
-            index = lower_groups.index(message.text.lower().replace(' ', ''))
-            answers = func.get_data_from_replacements(
-                group=const.existing_groups[index])
-            if answers != None:
-                for answer in answers:
-                    if answer != answers[-1]:
+    for mess in splited_mess:
+        if mess not in valid_splited_mess:
+            valid_splited_mess.append(mess)
+
+    for mess_text in valid_splited_mess:
+        if 'группу' in message.reply_to_message.text:
+            lower_groups = [group.lower() for group in const.existing_groups]
+            if mess_text.lower().replace(' ', '') in lower_groups:
+                index = lower_groups.index(mess_text.lower().replace(' ', ''))
+                group = const.existing_groups[index]
+                answers = func.get_data_from_replacements(group=group)
+                if answers != None:
+                    for answer in answers:
+                        if len(valid_splited_mess) != 1:
+                            answer = answer.replace(
+                                const.emoji['anticlockwise'],
+                                '%s <b>[%s]</b>' % (
+                                    const.emoji['anticlockwise'], group))
                         bot.send_message(message.chat.id, answer,
                                          parse_mode='HTML')
+                else:
+                    answer = const.emoji['clock'] + ' Замены ещё не вывесили.'
+                    bot.send_message(message.chat.id, answer,
+                                     reply_markup=replacements_keyboard)
             else:
-                answer = const.emoji['clock'] + ' Замены ещё не вывесили.'
-        else:
-            answer = 'Ничего не найдено'
-    bot.send_message(message.chat.id, answer,
-                     reply_markup=replacements_keyboard)
+                if mess_text not in nothing_to_search:
+                    nothing_to_search.append(mess_text)
+
+    if nothing_to_search:
+        nothing_answer = 'Ничего не найдено для:\n'
+        for text in nothing_to_search:
+            if text == nothing_to_search[-1]:
+                nothing_answer += '<b>%s</b>.' % text.strip()
+            else:
+                nothing_answer += '<b>%s</b>, ' % text.strip()
+        bot.send_message(message.chat.id, nothing_answer,
+                         reply_markup=replacements_keyboard, parse_mode='HTML')
     func.log_me(message)
 
 
