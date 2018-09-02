@@ -171,39 +171,49 @@ def search_teacher(name_for_search, dot_except=False):
 
     teachers = []
 
+    startswith_list = []
     for i in const.low_teachers:
         if i.startswith(teacher_name):
             index = const.low_teachers.index(i)
             full_teacher_name = const.cap_teachers[index]
-            teachers.append(full_teacher_name)
+            startswith_list.append(full_teacher_name)
+    startswith_list.sort()
+    for i in startswith_list:
+        if i not in teachers:
+            teachers.append(i)
+    first_name_lsit = []
+    second_name_lsit = []
     for i in const.cap_teachers:
         splited = i.split()
         if splited[1].lower().startswith(teacher_name):
             index = const.cap_teachers.index(i)
             full_teacher_name = const.cap_teachers[index]
-            if full_teacher_name not in teachers:
-                teachers.append(full_teacher_name)
+            if full_teacher_name not in first_name_lsit:
+                first_name_lsit.append(full_teacher_name)
         if splited[2].lower().startswith(teacher_name):
             index = const.cap_teachers.index(i)
             full_teacher_name = const.cap_teachers[index]
-            if full_teacher_name not in teachers:
-                teachers.append(full_teacher_name)
+            if full_teacher_name not in second_name_lsit:
+                second_name_lsit.append(full_teacher_name)
+    first_name_lsit.sort()    
+    for i in first_name_lsit:
+        if i not in teachers:
+            teachers.append(i)
+    second_name_lsit.sort()
+    for i in second_name_lsit:
+        if i not in teachers:
+            teachers.append(i)
+    existing_list = []
     for i in const.low_teachers:
         if teacher_name in i:
             index = const.low_teachers.index(i)
             full_teacher_name = const.cap_teachers[index]
-            if full_teacher_name not in teachers:
-                teachers.append(full_teacher_name)
-
-    if '.' in name_for_search:
-        match_teachers = [regex_matches(i).group() for i in const.sht_teachers]
-        dot_except = True
-        if teacher_name in match_teachers:
-            full_teacher_name = search_teacher(
-                name_for_search.split('.')[0], dot_except)
-            for i in full_teacher_name[0]:
-                if i not in teachers:
-                    teachers.append(i)
+            if full_teacher_name not in existing_list:
+                existing_list.append(full_teacher_name)
+    existing_list.sort()
+    for i in existing_list:
+        if i not in teachers:
+            teachers.append(i)
 
     return check_teacher(teachers, dot_except)
 
