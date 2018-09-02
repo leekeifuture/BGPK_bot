@@ -1253,7 +1253,7 @@ def search_teacher(name_for_search, dot_except=False, from_menu=False):
             full_teacher_name = const.cap_teachers[index]
             if full_teacher_name not in second_name_lsit:
                 second_name_lsit.append(full_teacher_name)
-    first_name_lsit.sort()    
+    first_name_lsit.sort()
     for i in first_name_lsit:
         if i not in teachers:
             teachers.append(i)
