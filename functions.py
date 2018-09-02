@@ -1628,7 +1628,7 @@ def create_schedule_answer(user_id, tomorrow=False):
     if day_info or alias != 'PREP':
         answer += get_shedule_answer(day_info, full_date[1])
     else:
-        answer += '<i>%s</i>' % const.not_events_for_teachers
+        return '%s Выходной' % const.emoji['sleep']
 
     if not day_info and alias != 'PREP':
         answer += '<i>%s</i>' % const.not_events
@@ -1697,7 +1697,7 @@ def create_schedule_week_answer(user_id, td, force_day_of_week=0):
     if day_info or alias != 'PREP':
         answer += get_shedule_answer(day_info, full_date[1])
     else:
-        answer += '<i>%s</i>' % const.not_events_for_teachers
+        return '%s Выходной' % const.emoji['sleep']
 
     if not day_info and alias != 'PREP':
         answer += '<i>%s</i>' % const.not_events

@@ -1342,6 +1342,7 @@ def select_week_day_schedule_handler(call_back):
     else:
         day += [item[0] for item in const.week_day_titles.items() if
                 item[1] == call_back.data][0]
+
     answer = 'Расписание на <i>{0}</i>\n'.format(day)
     week_type_keyboard = tb.types.InlineKeyboardMarkup()
     ned_week = func.get_week()
