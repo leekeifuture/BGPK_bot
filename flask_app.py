@@ -1466,8 +1466,8 @@ def select_week_day_replace_handler(call_back):
 @bot.callback_query_handler(func=lambda call_back:
                             'Расписание на неделю' in call_back.message.text)
 def all_week_schedule_handler(call_back):
-    if call_back.data == ('Текущее (' + const.emoji['arrow_up'] + ')' or
-                          call_back.data == 'Текущее (' + const.emoji['arrow_down'] + ')'):
+    if (call_back.data == 'Текущее (' + const.emoji['arrow_up'] + ')' or
+            call_back.data == 'Текущее (' + const.emoji['arrow_down'] + ')'):
         func.send_schedule_force_week_answer(call_back.message, 0)
     elif call_back.data == const.emoji['arrow_up'] + ' Верхнее':
         func.send_schedule_force_week_answer(call_back.message, 2)

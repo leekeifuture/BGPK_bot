@@ -572,7 +572,7 @@ def get_active_replace_days(chat_id=False, force_teacher=False,
     for i in range(1, 7):
         sql_con = connect(const.path + 'Parse.db')
         cursor = sql_con.cursor()
-        cursor.execute('''SELECT day_{} 
+        cursor.execute('''SELECT day_{0} 
                             FROM zam_from_site'''.format(str(i)))
         cfone = cursor.fetchone()[0].split('][')
         cursor.close()
@@ -1414,11 +1414,11 @@ def get_week():
 
     if dt.datetime.today().isocalendar()[1] % 2 == 0 and week[0] == True:
         return 'DOWN'
-    elif dt.datetime.today().isocalendar()[1] % 2 == 0 and week[0] == False:
+    elif dt.datetime.today().isocalendar()[1] % 2 == 0 and not week[0]:
         return 'UP'
     elif dt.datetime.today().isocalendar()[1] % 2 != 0 and week[0] == True:
         return 'UP'
-    elif dt.datetime.today().isocalendar()[1] % 2 != 0 and week[0] == False:
+    elif dt.datetime.today().isocalendar()[1] % 2 != 0 and not week[0]:
         return 'DOWN'
 
 
