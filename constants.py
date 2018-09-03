@@ -237,7 +237,8 @@ teachers = {
     '93': 'Дакало Юрий Александрович',
     '94': 'Табала Александра Васильевна',
     '95': 'Кипень Марина Николаевна',
-    '96': 'Басов Виктор Степанович'
+    '96': 'Басов Виктор Степанович',
+    '97': 'Рачко Татьяна Леонидовна'
 }
 
 
@@ -1687,7 +1688,7 @@ shedule = {
            ('', lesson_time['2'], 'Физкультура и здоровье', teacher_name[94], '',),
            ('', lesson_time['3'], 'Инженерная графика', teacher_name[61] + '/' + teacher_name[22], '',)],
           [('', lesson_time['1'], 'Техническая механика', teacher_name[54], '',),
-           ('', lesson_time['2'], 'Геодезия/Тех.механика ', teacher_name[5] + '/' + teacher_name[54], '',),
+           ('', lesson_time['2'], 'Геодезия', teacher_name[5] + '/' + teacher_name[54], '',),
            ('', lesson_time['3s'], 'Геодезия', teacher_name[54], '')]
         ],
     'DOWN': [
@@ -1707,7 +1708,7 @@ shedule = {
            ('', lesson_time['2'], 'Физкультура и здоровье', teacher_name[94], '',),
            ('', lesson_time['3'], 'Инженерная графика', teacher_name[61] + '/' + teacher_name[22], '',)],
           [('', lesson_time['1'], 'Техническая механика', teacher_name[54], '',),
-           ('', lesson_time['2'], 'Геодезия/Тех.механика ', teacher_name[5] + '/' + teacher_name[54], '',),
+           ('', lesson_time['2'], 'Геодезия', teacher_name[5] + '/' + teacher_name[54], '',),
            ('', lesson_time['3s'], 'Геодезия', teacher_name[54], '')]
         ]
     },
@@ -1841,8 +1842,8 @@ shedule = {
     },
   'С83': {
       'UP': [
-          [('', lesson_time['4'], 'КП ГПЗ/КП СТК', 'Рачко' + '/' + teacher_name[78], '',),
-           ('', lesson_time['5'], 'ГПЗ/СТК', 'Рачко' + '/' + teacher_name[78], '',),
+          [('', lesson_time['4'], 'КП ГПЗ/КП СТК', teacher_name[96] + '/' + teacher_name[78], '',),
+           ('', lesson_time['5'], 'ГПЗ/СТК', teacher_name[96] + '/' + teacher_name[78], '',),
            ('', lesson_time['6'], 'СТК', teacher_name[78], '',)],
           [('', lesson_time['4'], 'Охрана труда', teacher_name[14], '',),
            ('', lesson_time['5'], 'Физкультура и здоровье', teacher_name[94], '',),
@@ -1861,8 +1862,8 @@ shedule = {
            ('', lesson_time['6s'], 'Физкультура и здоровье', teacher_name[94], '')]
         ],
     'DOWN': [
-          [('', lesson_time['4'], 'КП ГПЗ/КП СТК', 'Рачко' + '/' + teacher_name[78], '',),
-           ('', lesson_time['5'], 'ГПЗ/СТК', 'Рачко' + '/' + teacher_name[78], '',),
+          [('', lesson_time['4'], 'КП ГПЗ/КП СТК', teacher_name[96] + '/' + teacher_name[78], '',),
+           ('', lesson_time['5'], 'ГПЗ/СТК', teacher_name[96] + '/' + teacher_name[78], '',),
            ('', lesson_time['6'], 'СТК', teacher_name[78], '',)],
           [('', lesson_time['4'], 'Охрана труда', teacher_name[14], '',),
            ('', lesson_time['5'], 'Физкультура и здоровье', teacher_name[94], '',),
