@@ -1798,8 +1798,7 @@ shedule = {
            ('', lesson_time['6'], 'ТСП/КП СТК', teacher_name[50] + '/' + teacher_name[46], '',)],
           [('', lesson_time['3s'], 'ОСГН', teacher_name[75], '',),
            ('', lesson_time['4s'], 'ГПЗ', teacher_name[48], '',),
-           ('', lesson_time['5s'], 'Охрана труда', teacher_name[61], '',),
-           ('', lesson_time['6s'], 'Физкультура и здоровье', teacher_name[59], '')]
+           ('', lesson_time['5s'], 'Охрана труда', teacher_name[61], '',)]
         ]
     },
   'С82': {
