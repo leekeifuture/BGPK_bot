@@ -875,17 +875,18 @@ def write_teacher_name_handler(message):
                          reply_markup=sched_keyboard)
         func.log_me(message)
 
-    @bot.message_handler(func=lambda mess: mess.reply_to_message is not None and
-                         mess.reply_to_message.from_user.username ==
-                         bot_username and
-                         'Напиши мне что-нибудь' in mess.reply_to_message.text,
-                         content_types=['text'])
-    def users_callback_handler(message):
-        bot.send_chat_action(message.chat.id, 'typing')
-        bot.forward_message(conf.my_id, message.chat.id, message.message_id)
-        bot.send_message(message.chat.id, 'Записал',
-                         reply_to_message_id=message.message_id,
-                         reply_markup=main_keyboard)
+
+@bot.message_handler(func=lambda mess: mess.reply_to_message is not None and
+                     mess.reply_to_message.from_user.username ==
+                     bot_username and
+                     'Напиши мне что-нибудь' in mess.reply_to_message.text,
+                     content_types=['text'])
+def users_callback_handler(message):
+    bot.send_chat_action(message.chat.id, 'typing')
+    bot.forward_message(conf.my_id, message.chat.id, message.message_id)
+    bot.send_message(message.chat.id, 'Записал. Жди ответа от разработчика.',
+                     reply_to_message_id=message.message_id,
+                     reply_markup=main_keyboard)
     func.log_me(message)
 
 
