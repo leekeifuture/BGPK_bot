@@ -832,7 +832,6 @@ def write_teacher_name_handler(message):
     else:
         sched_keyboard = schedule_keyboard
 
-
     if teachers[0] and len(teachers[0]) <= 20:
         if 'Введи Фамилию преподавателя:' in message.reply_to_message.text:
             if len(short_teachers) == 1:
