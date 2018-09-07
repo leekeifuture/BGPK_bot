@@ -652,7 +652,7 @@ shedule = {
           [('', lesson_time['1'], 'Обществоведение', teacher_name[75], '121',),
            ('', lesson_time['2'], 'Физика', teacher_name[16], '202',),
            ('', lesson_time['3'], 'Допризывная подготовка', teacher_name[9], '119',)],
-          [('', lesson_time['1'], 'Иностранный язык', teacher_name[53], '315/314',),
+          [('', lesson_time['1'], 'Иностранный язык', teacher_name[53] + '/' + teacher_name[77], '315/314',),
            ('', lesson_time['2'], 'Астрономия', teacher_name[76], '305',),
            ('', lesson_time['3'], 'Русский язык', teacher_name[2], '119',)],
           [('', lesson_time['1'], 'Физкультура и здоровье', teacher_name[31] + '/' + teacher_name[93], 'с/з',),
@@ -673,7 +673,7 @@ shedule = {
           [('', lesson_time['1'], 'Обществоведение', teacher_name[75], '121',),
            ('', lesson_time['2'], 'Физика', teacher_name[16], '202',),
            ('', lesson_time['3'], 'Допризывная подготовка', teacher_name[9], '119',)],
-          [('', lesson_time['1'], 'Иностранный язык', teacher_name[53], '315/314',),
+          [('', lesson_time['1'], 'Иностранный язык', teacher_name[53] + '/' + teacher_name[77], '315/314',),
            ('', lesson_time['2'], 'Всемирная история ', teacher_name[28], '121',),
            ('', lesson_time['3'], 'Русский язык', teacher_name[2], '119',)],
           [('', lesson_time['1'], 'Физкультура и здоровье', teacher_name[31] + '/' + teacher_name[93], 'с/з',),
@@ -1389,7 +1389,7 @@ shedule = {
            ('', lesson_time['6'], 'Охранные системы', teacher_name[3], '302',)],
           [('', lesson_time['4s'], 'Охранные системы', teacher_name[3], '302'),
            ('', lesson_time['5s'], 'Лок.системы автоматики', teacher_name[33], '319'),
-           ('', lesson_time['6s'], 'ТАП РЭС/ Конструирование РЭС', '', '305/311')]
+           ('', lesson_time['6s'], 'ТАП РЭС/ Конструирование РЭС', teacher_name[11] + '/' + teacher_name[3], '305/311')]
         ],
     'DOWN': [
           [('', lesson_time['4'], 'Основы права', teacher_name[41], '212',),
@@ -1451,7 +1451,7 @@ shedule = {
            ('', lesson_time['6'], 'Охранные системы ', teacher_name[3], '302',)],
           [('', lesson_time['4s'], 'Исп.и контр.РЭС', teacher_name[33], '319'),
            ('', lesson_time['5s'], 'Физкультура и здоровье', teacher_name[66], 'с/з'),
-           ('', lesson_time['6s'], 'ТАП РЭС/ Конструирование РЭС', '', '305/311')]
+           ('', lesson_time['6s'], 'ТАП РЭС/ Конструирование РЭС', teacher_name[11] + '/' + teacher_name[3], '305/311')]
         ]
     },
   'Ср23': {
@@ -1617,7 +1617,7 @@ shedule = {
            ('', lesson_time['3'], 'Информацион.технологии ', teacher_name[48] + '/' + teacher_name[15], '209/114',)],
           [('', lesson_time['1'], 'Инженерная графика', teacher_name[22] + '/' + teacher_name[23], '319/321',),
            ('', lesson_time['2'], 'Техническая механика', teacher_name[51], '207',),
-           ('', lesson_time['3'], 'Геодезия ', teacher_name[5], '164',),
+           ('', lesson_time['3'], 'Геодезия ', teacher_name[5], '106',),
            ('', lesson_time['4'], 'Физкультура и здоровье', teacher_name[31], 'с/з',)],
           [('', lesson_time['1'], 'Русская  литература', teacher_name[56], '307',),
            ('', lesson_time['2'], 'Строит.мат.и изделия', teacher_name[6], '104',),
@@ -2016,8 +2016,8 @@ shedule = {
   'С80': {
       'UP': [
           [('', lesson_time['4'], 'Ин.яз(проф.лекс)', teacher_name[53] + '/' + teacher_name[21], '315/318',),
-           ('', lesson_time['5'], 'КП ОСП/ТЭЗиС', teacher_name[14] + '/' + teacher_name[67], '306/321',),
-           ('', lesson_time['6'], 'НТС/ ОСП', teacher_name[61] + '/' + teacher_name[14], '202/321',)],
+           ('', lesson_time['5'], 'КП ОСП/ТЭЗиС', teacher_name[14] + '/' + teacher_name[67], '202/321',),
+           ('', lesson_time['6'], 'НТС/ ОСП', teacher_name[61] + '/' + teacher_name[14], '121/202',)],
           [('', lesson_time['4'], 'Основы менеджмента', teacher_name[56], '124',),
            ('', lesson_time['5'], 'НТС/ КП ОСП', teacher_name[61] + '/' + teacher_name[14], '102/202',),
            ('', lesson_time['6'], 'ТЭЗиС', teacher_name[67], '106',)],
@@ -2036,8 +2036,8 @@ shedule = {
         ],
     'DOWN': [
           [('', lesson_time['4'], 'Ин.яз(проф.лекс)', teacher_name[53] + '/' + teacher_name[21], '315/318',),
-           ('', lesson_time['5'], 'КП ОСП/ТЭЗиС', teacher_name[14] + '/' + teacher_name[67], '306/321',),
-           ('', lesson_time['6'], 'НТС/ ОСП', teacher_name[61] + '/' + teacher_name[14], '202/321',)],
+           ('', lesson_time['5'], 'КП ОСП/ТЭЗиС', teacher_name[14] + '/' + teacher_name[67], '202/321',),
+           ('', lesson_time['6'], 'НТС/ ОСП', teacher_name[61] + '/' + teacher_name[14], '121/202',)],
           [('', lesson_time['4'], 'Основы менеджмента', teacher_name[56], '124',),
            ('', lesson_time['5'], 'НТС/ КП ОСП', teacher_name[61] + '/' + teacher_name[14], '102/202',),
            ('', lesson_time['6'], 'ТЭЗиС', teacher_name[67], '106',)],
