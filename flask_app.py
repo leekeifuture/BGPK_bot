@@ -785,8 +785,7 @@ def write_replacement_handler(message):
 
         if circle == 1:
             bot.edit_message_text('Готово!', message.chat.id,
-                                  loading_message.message_id,
-                                  parse_mode='HTML')
+                                  loading_message.message_id)
 
         func.send_long_message(bot, answer, message.chat.id,
                                replacements_keyboard)
