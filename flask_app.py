@@ -832,7 +832,39 @@ def write_teacher_name_handler(message):
     else:
         sched_keyboard = schedule_keyboard
 
+
     if teachers[0] and len(teachers[0]) <= 20:
+        if 'Введи Фамилию преподавателя:' in message.reply_to_message.text:
+            if len(short_teachers) == 1:
+                answer += (const.emoji['mag_right'] +
+                           ' Найденный преподаватель:')
+                if func.is_data_invalid(short_teachers[0]):
+                    if short_teachers[0] in const.teacher_name:
+                        index = const.teacher_name.index(short_teachers[0])
+                    elif short_teachers[0] in const.sht_teachers:
+                        index = const.sht_teachers.index(short_teachers[0])
+                    elif short_teachers[0] in const.cap_teachers:
+                        index = const.cap_teachers.index(short_teachers[0])
+                    short_teachers[0] = const.teacher_name[index]
+            else:
+                answer += (const.emoji['mag_right'] +
+                           ' Найденные преподаватели:')
+        elif 'препoдавателя' in message.reply_to_message.text:
+            if len(short_teachers) == 1:
+                answer += (const.emoji['mag_right'] +
+                           ' Нaйденный преподаватель:')
+                if func.is_data_invalid(short_teachers[0]):
+                    if short_teachers[0] in const.teacher_name:
+                        index = const.teacher_name.index(short_teachers[0])
+                    elif short_teachers[0] in const.sht_teachers:
+                        index = const.sht_teachers.index(short_teachers[0])
+                    elif short_teachers[0] in const.cap_teachers:
+                        index = const.cap_teachers.index(short_teachers[0])
+                    short_teachers[0] = const.teacher_name[index]
+            else:
+                answer += (const.emoji['mag_right'] +
+                           ' Нaйденные преподаватели:')
+
         for teacher in short_teachers:
             try:
                 educators.append(tb.types.InlineKeyboardButton(
@@ -844,21 +876,6 @@ def write_teacher_name_handler(message):
         teachers_keyboard.add(*educators)
         teachers_keyboard.row(tb.types.InlineKeyboardButton(
             text='Отмена', callback_data='Отмена'))
-
-        if 'Введи Фамилию преподавателя:' in message.reply_to_message.text:
-            if len(short_teachers) == 1:
-                answer += (const.emoji['mag_right'] +
-                           ' Найденный преподаватель:')
-            else:
-                answer += (const.emoji['mag_right'] +
-                           ' Найденные преподаватели:')
-        elif 'препoдавателя' in message.reply_to_message.text:
-            if len(short_teachers) == 1:
-                answer += (const.emoji['mag_right'] +
-                           ' Нaйденный преподаватель:')
-            else:
-                answer += (const.emoji['mag_right'] +
-                           ' Нaйденные преподаватели:')
 
         bot.send_message(message.chat.id, 'Готово!',
                          reply_markup=sched_keyboard)

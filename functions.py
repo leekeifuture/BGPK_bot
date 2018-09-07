@@ -747,6 +747,13 @@ def rewrite_zam_data(parse_day, html='NULL'):
         sql_con.close()
 
 
+def is_data_invalid(string):
+    if len(string.encode('utf-8')) >= 64:
+        return True
+    else:
+        return False
+
+
 def pay_url(re):
     if re == 's':
         if dt.datetime.isoweekday(dt.datetime.now()) == 1:

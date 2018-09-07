@@ -371,6 +371,21 @@ def select_teacher(message):
             educators_keyboard = types.InlineKeyboardMarkup(
                 row_width=2)
 
+            if len(short_teachers) == 1:
+                answer += (const.emoji['mag_right'] +
+                           ' Найденный преподаватель:')
+                if len(short_teachers[0].encode('utf-8')) >= 64:
+                    if short_teachers[0] in const.teacher_name:
+                        index = const.teacher_name.index(short_teachers[0])
+                    elif short_teachers[0] in const.sht_teachers:
+                        index = const.sht_teachers.index(short_teachers[0])
+                    elif short_teachers[0] in const.cap_teachers:
+                        index = const.cap_teachers.index(short_teachers[0])
+                    short_teachers[0] = const.teacher_name[index]
+            else:
+                answer += (const.emoji['mag_right'] +
+                           ' Найденные преподаватели:')
+
             educators = []
             i = 0
             for teacher in short_teachers:
@@ -384,13 +399,6 @@ def select_teacher(message):
             educators_keyboard.add(*educators)
             educators_keyboard.row(types.InlineKeyboardButton(
                 text='« Назад', callback_data='back_reg'))
-
-            if len(short_teachers) == 1:
-                answer += (const.emoji['mag_right'] +
-                           ' Найденный преподаватель:')
-            else:
-                answer += (const.emoji['mag_right'] +
-                           ' Найденные преподаватели:')
 
             bot.send_message(message.chat.id, answer,
                              reply_markup=educators_keyboard)
