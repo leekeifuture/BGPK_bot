@@ -1321,10 +1321,10 @@ def select_teacher_id_handler(call_back):
                 if 'Нет замен' in answer:
                     none_repl.append(answer)
                     index_answer = answers.index(answer)
-                    answers[index_answer] = (answer
-                                      .replace('Нет замен',
-                                      'Для преподавателя <b>%s</b> нет замен'
-                                      % const.teacher_name[index]))
+                    answers[index_answer] = (
+                        answer.replace('Нет замен',
+                                       'Для преподавателя <b>%s</b> нет замен'
+                                       % const.teacher_name[index]))
 
             if len(answers) != 1 and len(none_repl) == len(answers):
                 first_date = (answers[0].replace('(', '').replace(')', '')
