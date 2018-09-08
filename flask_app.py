@@ -2257,16 +2257,25 @@ def handle_text(message):
                     if mess_text.split()[1].lower() == 'len':
                         bot.send_message(message.chat.id, len(send_ids))
                     else:
+                        sql_con = connect(const.path + 'Bot.db')
+                        cursor = sql_con.cursor()
+                        cursor.execute('''SELECT id_not_banned 
+                                            FROM banned_users''')
+                        not_banned_users = cursor.fetchall()
+                        cursor.close()
+                        sql_con.close()
+
                         for si in send_ids:
-                            try:
-                                if str(si[0]).isdigit():
-                                    bot.send_message(si[0], mess_text[len(mess_text.split()[0]):], True,
-                                                     parse_mode='HTML')
-                            except Exception as err:
-                                bot.send_message(message.chat.id, const.emoji[
-                                                 'cross_mark'] + ' ' + str(si[0]) + '\n' + str(err))
-                                continue
-                            sleep(0.04)
+                            if si in not_banned_users:
+                                try:
+                                    if str(si[0]).isdigit():
+                                        bot.send_message(si[0], mess_text[len(mess_text.split()[0]):], True,
+                                                         parse_mode='HTML')
+                                except Exception as err:
+                                    bot.send_message(message.chat.id, const.emoji[
+                                                     'cross_mark'] + ' ' + str(si[0]) + '\n' + str(err))
+                                    continue
+                                sleep(0.04)
                         bot.send_message(
                             message.chat.id, const.emoji['check_mark'])
                 else:
