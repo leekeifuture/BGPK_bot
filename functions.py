@@ -1482,31 +1482,36 @@ def get_shedule_answer(day_info, valid_date=False):
                 if different[0] in different[1]:
                     time = const.abridged_lesson_time[str(list(const.lesson_time.values())
                                                           .index(time) + 1)]
-            answer += const.emoji['clock'] + ' ' + time
             lesson_num = ''
 
             if (time == const.lesson_time['1'] or
                     time == const.abridged_lesson_time['1']):
                 lesson_num = '1.'
+                answer += const.emoji['clock_8-9'] + ' ' + time
             elif (time == const.lesson_time['2'] or
                   time == const.abridged_lesson_time['2']):
                 lesson_num = '2.'
+                answer += const.emoji['clock_9-11'] + ' ' + time
             elif (time == const.lesson_time['3'] or
                   time == const.lesson_time['3s'] or
                   time == const.abridged_lesson_time['3']):
                 lesson_num = '3.'
+                answer += const.emoji['clock_11-13'] + ' ' + time
             elif (time == const.lesson_time['4'] or
                   time == const.lesson_time['4s'] or
                   time == const.abridged_lesson_time['4']):
                 lesson_num = '4.'
+                answer += const.emoji['clock_14-16'] + ' ' + time
             elif (time == const.lesson_time['5'] or
                   time == const.lesson_time['5s'] or
                   time == const.abridged_lesson_time['5']):
                 lesson_num = '5.'
+                answer += const.emoji['clock_16-18'] + ' ' + time
             elif (time == const.lesson_time['6'] or
                   time == const.lesson_time['6s'] or
                   time == const.abridged_lesson_time['6']):
                 lesson_num = '6.'
+                answer += const.emoji['clock_18-19'] + ' ' + time
 
             if (valid_info != '' and len(lesson.split('/')) - 1 >=
                     valid_info):
