@@ -1148,15 +1148,13 @@ def banned_user_inline_handler(call_back):
                              'select_teacher' or
                              func.is_user_exist(call_back.message.chat.id)))
 def back_from_reg_handler(call_back):
-    if (func.is_user_exist(call_back.message.chat.id) and
-            reg_func.get_step(call_back.message.chat.id) != 'select_teacher'):
+    if func.is_user_exist(call_back.message.chat.id):
         answer = 'Главное меню'
         bot.edit_message_text(answer, call_back.message.chat.id,
                               call_back.message.message_id)
         bot.send_message(call_back.message.chat.id, answer,
                          reply_markup=main_keyboard)
-    elif (reg_func.get_step(call_back.message.chat.id) == 'select_teacher' and
-          func.is_user_exist(call_back.message.chat.id) == False):
+    else:
         start_handler(call_back.message, True)
     func.call_back_log_me(call_back)
 
