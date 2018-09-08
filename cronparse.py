@@ -305,7 +305,7 @@ def parse(html, parse_day, request_day):
                                      ' Для ' + for_any +
                                      ' <b>{0}</b> нет замен на {1} ('
                                      .format(group,
-                                             func.day_of_week_parsing_day(parse_day)) +
+                                             func.day_of_week_parsing_day(parse_day, dt.datetime.isoweekday(c))) +
                                      dataaa[-10:] + ').', parse_mode='HTML')
                     not_have_repl.append(inzs)
                 except Exception as err:
