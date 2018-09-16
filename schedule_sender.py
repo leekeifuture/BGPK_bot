@@ -29,11 +29,11 @@ def main(date):
         cursor.execute('''SELECT id 
                             FROM user_data
                            WHERE sending_rasp_5 = 1''')
-    sending_rasp_one = cursor.fetchall()
+    sending_sched_one = cursor.fetchall()
     cursor.close()
     sql_con.close()
 
-    for sro in sending_rasp_one:
+    for sro in sending_sched_one:
         if sro[0] not in id_real_sendig:
             id_real_sendig.append(sro[0])
 
@@ -51,6 +51,7 @@ def main(date):
             id_real_sendig.remove(ib[0])
 
     if id_real_sendig:
+        have_sched = []
         for irs in id_real_sendig:
             week = func.get_week()
             group = func.get_student_group(irs)
@@ -112,15 +113,23 @@ def main(date):
 
             try:
                 bot.send_message(irs, answer, parse_mode='HTML')
+                have_sched.append(irs)
             except Exception as err:
                 print(err)
                 bot.send_message(conf.my_id, const.emoji['cross_mark'] +
                                  ' ' + str(irs) + '\n' + str(err))
                 continue
             sleep(0.04)
+
+        difference = len(sending_sched_one) - len(have_sched)
+
+        print('\n' + str(dt.datetime.now())[:-7] + ' | ' +
+            '!!! SENDING SCHEDULE ' + str(date) + ' !!!' + '\n')
+        print(str(len(sending_sched_one)) + ' - ' + str(len(have_sched)))
+        print(difference)
     else:
         sys.exit()
 
 
 if __name__ == '__main__':
-    main(dt.datetime.strftime(dt.datetime.now(), '%H'))
+    main(dt.datetime.strftime(dt.datetime.now(), '21'))
