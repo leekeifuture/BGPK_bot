@@ -2085,41 +2085,27 @@ def callback_query_text_handler(call_back):
 @bot.message_handler(content_types=['text'])
 def handle_text(message):
     if str(message.chat.id) == conf.my_id:
-        mess_text = message.text
-        left_userid = r'\d{9}'
-        re_userid = ''.join(re.findall(left_userid, mess_text[:9]))
-
-        if re_userid:
-            try:
-                bot.send_message(re_userid, mess_text[9:], True,
-                                 parse_mode='HTML')
-                if message.content_type != mess_text[9:]:
-                    bot.send_message(
-                        message.chat.id, const.emoji['check_mark'])
-            except Exception as err:
-                bot.send_message(message.chat.id, const.emoji[
-                                 'cross_mark'] + '\n' + str(err))
-        elif mess_text[:4] == 'dis!':
-            for all_users in func.get_not_banned_users(message.chat.id):
+        if ' ' in  message.text:
+            text = message.text.split()
+            chat_id = text[0]
+            if chat_id.isdigit():
+                message_text = message.text[len(chat_id):]
                 try:
-                    if str(all_users[0]).isdigit():
-                        bot.send_message(all_users[0], mess_text[4:], True,
-                                         parse_mode='HTML',
-                                         disable_notification=True)
+                    bot.send_message(chat_id, message_text, True, parse_mode='HTML')
+                    if message.content_type != message_text:
+                        bot.send_message(
+                            message.chat.id, const.emoji['check_mark'])
                 except Exception as err:
                     bot.send_message(message.chat.id, const.emoji[
-                                     'cross_mark'] + ' ' + str(all_users[0]) + '\n' + str(err))
-                    continue
-                sleep(0.04)
-            bot.send_message(message.chat.id, const.emoji['check_mark'])
-        elif mess_text[:3].lower() == 'ban' and mess_text[3:].replace(' ', '') != conf.my_id:
+                                     'cross_mark'] + '\n' + str(err))
+        elif message.text[:3].lower() == 'ban' and message.text[3:].replace(' ', '') != conf.my_id:
             try:
-                if func.is_user_not_banned(int(mess_text[3:])):
+                if func.is_user_not_banned(int(message.text[3:])):
 
-                    func.ban_user(int(mess_text[3:]))
+                    func.ban_user(int(message.text[3:]))
 
                     remove_keyboard = tb.types.ReplyKeyboardRemove()
-                    bot.send_message(int(mess_text[3:]), const.emoji['cross_mark'] + ' Заблокирован',
+                    bot.send_message(int(message.text[3:]), const.emoji['cross_mark'] + ' Заблокирован',
                                      reply_markup=remove_keyboard)
 
                     bot.send_message(
@@ -2130,13 +2116,13 @@ def handle_text(message):
             except:
                 bot.send_message(message.chat.id, const.emoji['cross_mark'])
                 bot.send_message(message.chat.id, exc_info()[1])
-        elif mess_text[:5].lower() == 'unban':
+        elif message.text[:5].lower() == 'unban':
             try:
-                if func.is_user_banned(int(mess_text[5:])):
+                if func.is_user_banned(int(message.text[5:])):
 
-                    func.unban_user(int(mess_text[5:]))
+                    func.unban_user(int(message.text[5:]))
 
-                    bot.send_message(int(mess_text[5:]), const.emoji['check_mark'] + ' Разблокирован',
+                    bot.send_message(int(message.text[5:]), const.emoji['check_mark'] + ' Разблокирован',
                                      reply_markup=main_keyboard)
 
                     bot.send_message(
@@ -2147,79 +2133,79 @@ def handle_text(message):
             except:
                 bot.send_message(message.chat.id, const.emoji['cross_mark'])
                 bot.send_message(message.chat.id, exc_info()[1])
-        elif mess_text.lower() == 'up':
+        elif message.text.lower() == 'up':
             func.edit_week(True)
             bot.send_message(message.chat.id, const.emoji['check_mark'])
-        elif mess_text.lower() == 'down':
+        elif message.text.lower() == 'down':
             func.edit_week(False)
             bot.send_message(message.chat.id, const.emoji['check_mark'])
-        elif mess_text.lower() == 'onlog':
+        elif message.text.lower() == 'onlog':
             func.edit_sending_log(True)
             if func.get_sending_log() == 'ON':
                 bot.send_message(message.chat.id, const.emoji['check_mark'])
             else:
                 bot.send_message(message.chat.id, const.emoji['cross_mark'])
-        elif mess_text.lower() == 'offlog':
+        elif message.text.lower() == 'offlog':
             func.edit_sending_log(False)
             if func.get_sending_log() == 'OFF':
                 bot.send_message(message.chat.id, const.emoji['check_mark'])
             else:
                 bot.send_message(message.chat.id, const.emoji['cross_mark'])
-        elif mess_text.lower() == 'online':
+        elif message.text.lower() == 'online':
             func.edit_on_or_off_zam(True)
             if func.get_on_or_off_zam() == 'ONLINE':
                 bot.send_message(message.chat.id, const.emoji['check_mark'])
             else:
                 bot.send_message(message.chat.id, const.emoji['cross_mark'])
-        elif mess_text.lower() == 'offline':
+        elif message.text.lower() == 'offline':
             func.edit_on_or_off_zam(False)
             if func.get_on_or_off_zam() == 'OFFLINE':
                 bot.send_message(message.chat.id, const.emoji['check_mark'])
             else:
                 bot.send_message(message.chat.id, const.emoji['cross_mark'])
-        elif mess_text[:2].lower() == 're':
+        elif message.text[:2].lower() == 're':
             try:
-                if mess_text.lower().replace(' ', '') == 'res':
+                if message.text.lower().replace(' ', '') == 'res':
                     func.rewrite_zam_data(
                         's', func.get_html(func.pay_url('s'), message.chat.id))
                     bot.send_message(
                         message.chat.id, const.emoji['check_mark'])
-                elif mess_text.lower().replace(' ', '') == 'rez':
+                elif message.text.lower().replace(' ', '') == 'rez':
                     func.rewrite_zam_data(
                         'z', func.get_html(func.pay_url('z'), message.chat.id))
                     bot.send_message(
                         message.chat.id, const.emoji['check_mark'])
-                elif mess_text.lower().replace(' ', '') == 'reall':
+                elif message.text.lower().replace(' ', '') == 'reall':
                     func.rewrite_zam_data('all')
                     bot.send_message(
                         message.chat.id, const.emoji['check_mark'])
 
-                elif int(mess_text[2:]) == 1:
+                elif int(message.text[2:]) == 1:
                     func.rewrite_zam_data(
                         1, func.get_html(const.ponedelnik, message.chat.id))
                     bot.send_message(
                         message.chat.id, const.emoji['check_mark'])
-                elif int(mess_text[2:]) == 2:
+                elif int(message.text[2:]) == 2:
                     func.rewrite_zam_data(
                         2, func.get_html(const.vtornik, message.chat.id))
                     bot.send_message(
                         message.chat.id, const.emoji['check_mark'])
-                elif int(mess_text[2:]) == 3:
+                elif int(message.text[2:]) == 3:
                     func.rewrite_zam_data(
                         3, func.get_html(const.sreda, message.chat.id))
                     bot.send_message(
                         message.chat.id, const.emoji['check_mark'])
-                elif int(mess_text[2:]) == 4:
+                elif int(message.text[2:]) == 4:
                     func.rewrite_zam_data(
                         4, func.get_html(const.chetverg, message.chat.id))
                     bot.send_message(
                         message.chat.id, const.emoji['check_mark'])
-                elif int(mess_text[2:]) == 5:
+                elif int(message.text[2:]) == 5:
                     func.rewrite_zam_data(
                         5, func.get_html(const.pyatnica, message.chat.id))
                     bot.send_message(
                         message.chat.id, const.emoji['check_mark'])
-                elif int(mess_text[2:]) == 6:
+                elif int(message.text[2:]) == 6:
                     func.rewrite_zam_data(
                         6, func.get_html(const.subotta, message.chat.id))
                     bot.send_message(
@@ -2230,12 +2216,12 @@ def handle_text(message):
             except:
                 bot.send_message(message.chat.id, str(datetime.now())[
                                  :-7] + ' | ' + str(exc_info()[1]))
-        elif mess_text[:2].lower() == 'pd':
+        elif message.text[:2].lower() == 'pd':
             try:
                 sql_con = connect(const.path + 'Parse.db')
                 cursor = sql_con.cursor()
                 cursor.execute('''UPDATE parsing_days
-                                     SET pro_parsing_day = ?''', (int(mess_text[2:]),))
+                                     SET pro_parsing_day = ?''', (int(message.text[2:]),))
                 sql_con.commit()
                 cursor.close()
                 sql_con.close()
@@ -2243,18 +2229,18 @@ def handle_text(message):
             except:
                 bot.send_message(message.chat.id, str(datetime.now())[
                                  :-7] + ' | ' + str(exc_info()[1]))
-        elif mess_text.split()[0] in const.existing_groups:
+        elif message.text.split()[0] in const.existing_groups:
             try:
                 sql_con = connect(const.path + 'Bot.db')
                 cursor = sql_con.cursor()
                 cursor.execute('''SELECT id 
                                     FROM user_data
-                                   WHERE group_name = ?''', (mess_text.split()[0],))
+                                   WHERE group_name = ?''', (message.text.split()[0],))
                 send_ids = cursor.fetchall()
                 cursor.close()
                 sql_con.close()
                 if send_ids:
-                    if mess_text.split()[1].lower() == 'len':
+                    if message.text.split()[1].lower() == 'len':
                         bot.send_message(message.chat.id, len(send_ids))
                     else:
                         sql_con = connect(const.path + 'Bot.db')
@@ -2269,7 +2255,7 @@ def handle_text(message):
                             if si in not_banned_users:
                                 try:
                                     if str(si[0]).isdigit():
-                                        bot.send_message(si[0], mess_text[len(mess_text.split()[0]):], True,
+                                        bot.send_message(si[0], message.text[len(message.text.split()[0]):], True,
                                                          parse_mode='HTML')
                                 except Exception as err:
                                     bot.send_message(message.chat.id, const.emoji[
