@@ -265,6 +265,8 @@ def get_replacements_ansewer(row, chat_id=False, force_teacher=False,
                     surname = short_name
                 elif short_name == 'носовата':
                     surname = short_name
+                elif short_name == 'панасюкдю':
+                    surname = short_name
                 else:
                     surname = (i.split()[0].replace(' ', '')
                                .replace('.', '').lower()
@@ -284,6 +286,8 @@ def get_replacements_ansewer(row, chat_id=False, force_teacher=False,
             surname = 'носовасп'
         elif short_name == 'носовататьянаалександровна':
             surname = 'носовата'
+        elif short_name == 'панасюкдианаюрьевна':
+            surname = 'панасюкдю'
         else:
             surname = group.split()[0].replace(' ', '').replace('.', '')
 
@@ -623,6 +627,8 @@ def get_active_replace_days(chat_id=False, force_teacher=False,
                                 surname = short_name
                             elif short_name == 'носовата':
                                 surname = short_name
+                            elif short_name == 'панасюкдю':
+                                surname = short_name
                             else:
                                 surname = (teacher.split()[0].replace(' ', '')
                                            .replace('.', '')
@@ -664,6 +670,8 @@ def get_active_replace_days(chat_id=False, force_teacher=False,
                 surname = 'носовасп'
             elif short_name == 'носовататьянаалександровна':
                 surname = 'носовата'
+            elif short_name == 'панасюкдианаюрьевна':
+                surname = 'панасюкдю'
             else:
                 surname = group.split()[0].replace(' ', '').replace('.', '')
 
@@ -1200,6 +1208,8 @@ def check_teacher(teacher_names, full_teachers_name=False):
                     surname = short_name
                 elif short_name == 'носовата':
                     surname = short_name
+                elif short_name == 'панасюкдю':
+                    surname = short_name
                 else:
                     surname = (i.split()[0].replace(' ', '')
                                .replace('.', '')
@@ -1221,6 +1231,8 @@ def check_teacher(teacher_names, full_teachers_name=False):
                     surname = 'носовасп'
                 elif short_name == 'носовататьянаалександровна':
                     surname = 'носовата'
+                elif short_name == 'панасюкдианаюрьевна':
+                    surname = 'панасюкдю'
                 else:
                     surname = i.split()[0].replace(
                         ' ', '').replace('.', '').lower()
