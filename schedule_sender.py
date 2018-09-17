@@ -132,4 +132,4 @@ def main(date):
 
 
 if __name__ == '__main__':
-    main(dt.datetime.strftime(dt.datetime.now(), '21'))
+    main(dt.datetime.strftime(dt.datetime.now(), '%H'))
