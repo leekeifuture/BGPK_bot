@@ -490,27 +490,42 @@ def sending_handler(message):
               + const.emoji['negative_squared_cross_mark'] + ' – Рассылка отключена.')
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
-    cursor.execute('''SELECT sending_rasp, sending_rasp_5, sending_zam
+    cursor.execute('''SELECT sending_rasp, sending_rasp_5, sending_zam, sending_without_repl
                         FROM user_data
                        WHERE id = ?''',
                    (message.chat.id,))
     data = cursor.fetchall()[0]
     cursor.close()
     sql_con.close()
+
+    not_replace = False
     if data[0] or data[1]:
-        schedule = 'Расписания (' + const.emoji['check_mark'] + ')'
+        schedule = ('Расписания (%s)' %
+                    const.emoji['check_mark'])
     else:
-        schedule = ('Расписания (' +
-                    const.emoji['negative_squared_cross_mark'] + ')')
+        schedule = ('Расписания (%s)' %
+                    const.emoji['negative_squared_cross_mark'])
     if data[2]:
-        replace = 'Замен (' + const.emoji['check_mark'] + ')'
+        replace = ('Замен (%s)' %
+                   const.emoji['check_mark'])
+        if data[3]:
+            not_replace = ('Отсутствие замен (%s)' %
+                       const.emoji['check_mark'])
+        else:
+            not_replace = ('Отсутствие замен (%s)' %
+                       const.emoji['negative_squared_cross_mark'])
     else:
-        replace = 'Замен (' + const.emoji['negative_squared_cross_mark'] + ')'
+        replace = ('Замен (%s)' %
+                   const.emoji['negative_squared_cross_mark'])
+
     sending_keyboard = tb.types.InlineKeyboardMarkup(True)
     sending_keyboard.row(
         *[tb.types.InlineKeyboardButton(text=name,
                                         callback_data=name)
             for name in [schedule, replace]])
+    if not_replace:
+        sending_keyboard.row(tb.types.InlineKeyboardButton(
+            text=not_replace, callback_data=not_replace))
     bot.send_message(message.chat.id, answer, parse_mode='HTML',
                      reply_markup=sending_keyboard)
     func.log_me(message)
@@ -1764,9 +1779,10 @@ def podpis_rasp_5_or_9_handler(call_back):
 @bot.callback_query_handler(func=lambda call_back:
                             const.emoji['five_oclock'] + ' 17:00' in call_back.data)
 def podpis_rasp_5_handler(call_back):
-    answer = ('Здесь ты можешь <b>подписаться</b> на рассылку расписания на ' +
-              'следующий день или <b>отписаться</b> от неё.\n' +
-              'Рассылка производится в 17:00')
+    answer = (('%s Здесь ты можешь <b>подписаться</b> на рассылку расписания на '
+              'следующий день или <b>отписаться</b> от неё.\n'
+              '%s Рассылка производится в 17:00') %
+              (const.emoji['mailbox_on'], const.emoji['envelope']))
     sending_keyboard_rasp = tb.types.InlineKeyboardMarkup(True)
     if func.is_sending_rasp_on(call_back.message.chat.id, True):
         sending_keyboard_rasp.row(
@@ -1792,9 +1808,10 @@ def podpis_rasp_5_handler(call_back):
 @bot.callback_query_handler(func=lambda call_back:
                             const.emoji['nine_oclock'] + ' 21:00' in call_back.data)
 def podpis_rasp_9_handler(call_back):
-    answer = ('Здесь ты можешь <b>подписаться</b> на рассылку расписания на ' +
-              'следующий день или <b>отписаться</b> от неё.\n' +
-              'Рассылка производится в 21:00')
+    answer = (('%s Здесь ты можешь <b>подписаться</b> на рассылку расписания на '
+              'следующий день или <b>отписаться</b> от неё.\n'
+              '%s Рассылка производится в 21:00') %
+              (const.emoji['mailbox_on'], const.emoji['envelope']))
     sending_keyboard_rasp = tb.types.InlineKeyboardMarkup(True)
     if func.is_sending_rasp_on(call_back.message.chat.id):
         sending_keyboard_rasp.row(
@@ -1819,29 +1836,67 @@ def podpis_rasp_9_handler(call_back):
 
 @bot.callback_query_handler(func=lambda call_back:
                             'Замен' in call_back.data)
-def podpis_zam_handler(call_back):
-    answer = ('Здесь ты можешь <b>подписаться</b> на рассылку замен на ' +
-              'следующий день или <b>отписаться</b> от неё.\n' +
-              'Рассылка производится после публикования замен на сайте колледжа.')
-    sending_keyboard_zam = tb.types.InlineKeyboardMarkup(True)
+def podpis_repl_handler(call_back):
+    answer = (('%s Здесь ты можешь <b>подписаться</b> на рассылку замен на '
+              'следующий день или <b>отписаться</b> от неё.\n%s Рассылка '
+              'производится после публикования замен на сайте колледжа.') % 
+              (const.emoji['mailbox_on'], const.emoji['envelope']))
+    sending_keyboard_repl = tb.types.InlineKeyboardMarkup(True)
     if func.is_sending_zam_on(call_back.message.chat.id):
-        sending_keyboard_zam.row(
+        sending_keyboard_repl.row(
             *[tb.types.InlineKeyboardButton(text=name,
                                             callback_data='Отписaться')
                 for name in [const.emoji['cross_mark'] + ' Отписaться']])
     else:
-        sending_keyboard_zam.row(
+        sending_keyboard_repl.row(
             *[tb.types.InlineKeyboardButton(text=name,
                                             callback_data='Подписaться')
                 for name in [const.emoji['check_mark'] + ' Подписaться']])
-    sending_keyboard_zam.row(
+    sending_keyboard_repl.row(
         *[tb.types.InlineKeyboardButton(text=name,
                                         callback_data='« Назад')
             for name in ['« Назад']])
     bot.edit_message_text(text=answer,
                           chat_id=call_back.message.chat.id,
                           message_id=call_back.message.message_id,
-                          parse_mode='HTML', reply_markup=sending_keyboard_zam)
+                          parse_mode='HTML', reply_markup=sending_keyboard_repl)
+    func.call_back_log_me(call_back)
+
+
+@bot.callback_query_handler(func=lambda call_back:
+                            'Отсутствие замен' in call_back.data)
+def not_repl_handler(call_back):
+    sending_keyboard_repl = tb.types.InlineKeyboardMarkup(True)
+    if func.is_sending_not_repl_on(call_back.message.chat.id):
+        answer = (('%s <b>Отписка</b> от рассылки об <b>отсутствии замен</b> '
+                  'позволит <b>получать уведомления</b> только в том случае, '
+                  'если <b>замены присутствуют.</b>\n%s Рассылка производится '
+                  'после публикования замен на сайте колледжа.') %
+                  (const.emoji['mailbox_off'], const.emoji['envelope']))
+        sending_keyboard_repl.row(
+            *[tb.types.InlineKeyboardButton(
+                text=name,
+                callback_data='Отписaться (отсутствия замен)')
+                    for name in [const.emoji['cross_mark'] + ' Отписaться']])
+    else:
+        answer = (('%s <b>Подписка</b> к рассылке об <b>отсутствии замен</b> '
+                  'позволит <b>получать уведомления</b> даже в том случае, '
+                  'если <b>замены отсусвуют.</b>\n%s Рассылка производится '
+                  'после публикования замен на сайте колледжа.') % 
+                  (const.emoji['mailbox_on'], const.emoji['envelope']))
+        sending_keyboard_repl.row(
+            *[tb.types.InlineKeyboardButton(
+                text=name,
+                callback_data='Подписaться (отсутствия замен)')
+                    for name in [const.emoji['check_mark'] + ' Подписaться']])
+    sending_keyboard_repl.row(
+        *[tb.types.InlineKeyboardButton(text=name,
+                                        callback_data='« Назад')
+            for name in ['« Назад']])
+    bot.edit_message_text(text=answer,
+                          chat_id=call_back.message.chat.id,
+                          message_id=call_back.message.message_id,
+                          parse_mode='HTML', reply_markup=sending_keyboard_repl)
     func.call_back_log_me(call_back)
 
 
@@ -1853,27 +1908,43 @@ def back_from_podpis_handler(call_back):
               + const.emoji['negative_squared_cross_mark'] + ' – Рассылка отключена.')
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
-    cursor.execute('''SELECT sending_rasp, sending_rasp_5, sending_zam
+    cursor = sql_con.cursor()
+    cursor.execute('''SELECT sending_rasp, sending_rasp_5, sending_zam, sending_without_repl
                         FROM user_data
                        WHERE id = ?''',
                    (call_back.message.chat.id,))
     data = cursor.fetchall()[0]
     cursor.close()
     sql_con.close()
+
+    not_replace = False
     if data[0] or data[1]:
-        schedule = 'Расписания (' + const.emoji['check_mark'] + ')'
+        schedule = ('Расписания (%s)' %
+                    const.emoji['check_mark'])
     else:
-        schedule = ('Расписания (' +
-                    const.emoji['negative_squared_cross_mark'] + ')')
+        schedule = ('Расписания (%s)' %
+                    const.emoji['negative_squared_cross_mark'])
     if data[2]:
-        replace = 'Замен (' + const.emoji['check_mark'] + ')'
+        replace = ('Замен (%s)' %
+                   const.emoji['check_mark'])
+        if data[3]:
+            not_replace = ('Отсутствие замен (%s)' %
+                       const.emoji['check_mark'])
+        else:
+            not_replace = ('Отсутствие замен (%s)' %
+                       const.emoji['negative_squared_cross_mark'])
     else:
-        replace = 'Замен (' + const.emoji['negative_squared_cross_mark'] + ')'
+        replace = ('Замен (%s)' %
+                   const.emoji['negative_squared_cross_mark'])
+
     sending_keyboard = tb.types.InlineKeyboardMarkup(True)
     sending_keyboard.row(
         *[tb.types.InlineKeyboardButton(text=name,
                                         callback_data=name)
             for name in [schedule, replace]])
+    if not_replace:
+        sending_keyboard.row(tb.types.InlineKeyboardButton(
+            text=not_replace, callback_data=not_replace))
     bot.edit_message_text(text=answer,
                           chat_id=call_back.message.chat.id,
                           message_id=call_back.message.message_id,
@@ -1954,7 +2025,7 @@ def sending_off_rasp_9_handler(call_back):
 
 @bot.callback_query_handler(func=lambda call_back:
                             call_back.data == 'Подписaться')
-def sending_on_zam_handler(call_back):
+def sending_on_repl_handler(call_back):
     func.set_sending_zam(call_back.message.chat.id, True)
     back_from_podpis_handler = tb.types.InlineKeyboardMarkup()
     back_from_podpis_handler.row(
@@ -1969,16 +2040,50 @@ def sending_on_zam_handler(call_back):
                           reply_markup=back_from_podpis_handler)
     func.call_back_log_me(call_back)
 
-
 @bot.callback_query_handler(func=lambda call_back:
                             call_back.data == 'Отписaться')
-def sending_off_zam_handler(call_back):
+def sending_off_repl_handler(call_back):
     func.set_sending_zam(call_back.message.chat.id, False)
     back_from_podpis_handler = tb.types.InlineKeyboardMarkup()
     back_from_podpis_handler.row(
         *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
             name in ['« Назад']])
     answer = '{0} Рассылка <b>отключена</b>'.format(const.emoji['mailbox_off'])
+    bot.edit_message_text(text=answer,
+                          chat_id=call_back.message.chat.id,
+                          message_id=call_back.message.message_id,
+                          parse_mode='HTML',
+                          reply_markup=back_from_podpis_handler)
+    func.call_back_log_me(call_back)
+
+
+@bot.callback_query_handler(func=lambda call_back:
+                            call_back.data == 'Подписaться (отсутствия замен)')
+def sending_on_not_repl_handler(call_back):
+    func.set_sending_not_zam(call_back.message.chat.id, True)
+    back_from_podpis_handler = tb.types.InlineKeyboardMarkup()
+    back_from_podpis_handler.row(
+        *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
+            name in ['« Назад']])
+    answer = ('{0} Рассылка об отсутствии замен <b>активирована</b>\nЖди рассылку после опубликования замен.'
+              ''.format(const.emoji['mailbox_on']))
+    bot.edit_message_text(text=answer,
+                          chat_id=call_back.message.chat.id,
+                          message_id=call_back.message.message_id,
+                          parse_mode='HTML',
+                          reply_markup=back_from_podpis_handler)
+    func.call_back_log_me(call_back)
+
+
+@bot.callback_query_handler(func=lambda call_back:
+                            call_back.data == 'Отписaться (отсутствия замен)')
+def sending_off_not_repl_handler(call_back):
+    func.set_sending_not_zam(call_back.message.chat.id, False)
+    back_from_podpis_handler = tb.types.InlineKeyboardMarkup()
+    back_from_podpis_handler.row(
+        *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
+            name in ['« Назад']])
+    answer = '{0} Рассылка об отсутствии замен <b>отключена</b>'.format(const.emoji['mailbox_off'])
     bot.edit_message_text(text=answer,
                           chat_id=call_back.message.chat.id,
                           message_id=call_back.message.message_id,
@@ -2085,13 +2190,14 @@ def callback_query_text_handler(call_back):
 @bot.message_handler(content_types=['text'])
 def handle_text(message):
     if str(message.chat.id) == conf.my_id:
-        if ' ' in  message.text:
+        if ' ' in message.text:
             text = message.text.split()
             chat_id = text[0]
             if chat_id.isdigit():
                 message_text = message.text[len(chat_id):]
                 try:
-                    bot.send_message(chat_id, message_text, True, parse_mode='HTML')
+                    bot.send_message(chat_id, message_text,
+                                     True, parse_mode='HTML')
                     if message.content_type != message_text:
                         bot.send_message(
                             message.chat.id, const.emoji['check_mark'])

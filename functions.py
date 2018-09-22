@@ -2222,11 +2222,11 @@ def is_sending_rasp_on(user_id, rasp5=False):
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     if rasp5:
-        cursor.execute('''SELECT sending_rasp_5 
+        cursor.execute('''SELECT sending_rasp_5
                             FROM user_data
                            WHERE id = ?''', (user_id,))
     else:
-        cursor.execute('''SELECT sending_rasp 
+        cursor.execute('''SELECT sending_rasp
                             FROM user_data
                            WHERE id = ?''', (user_id,))
     data = cursor.fetchone()
@@ -2238,7 +2238,19 @@ def is_sending_rasp_on(user_id, rasp5=False):
 def is_sending_zam_on(user_id):
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
-    cursor.execute('''SELECT sending_zam 
+    cursor.execute('''SELECT sending_zam
+                        FROM user_data
+                       WHERE id = ?''', (user_id,))
+    data = cursor.fetchone()
+    cursor.close()
+    sql_con.close()
+    return data[0]
+
+
+def is_sending_not_repl_on(user_id):
+    sql_con = connect(const.path + 'Bot.db')
+    cursor = sql_con.cursor()
+    cursor.execute('''SELECT sending_without_repl
                         FROM user_data
                        WHERE id = ?''', (user_id,))
     data = cursor.fetchone()
@@ -2277,10 +2289,22 @@ def set_sending_zam(user_id, on=True):
     sql_con.close()
 
 
+def set_sending_not_zam(user_id, on=True):
+    sql_con = connect(const.path + 'Bot.db')
+    cursor = sql_con.cursor()
+    cursor.execute('''UPDATE user_data
+                         SET sending_without_repl = ?
+                       WHERE id = ?''',
+                   (int(on), user_id,))
+    sql_con.commit()
+    cursor.close()
+    sql_con.close()
+
+
 def get_rate_statistics():
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
-    cursor.execute('''SELECT sum(rate), count(id) 
+    cursor.execute('''SELECT sum(rate), count(id)
                         FROM user_data
                        WHERE rate != 0''')
     data = cursor.fetchone()

@@ -40,7 +40,8 @@ def create_sql(db_name):
                             sending_zam INT DEFAULT 1 NOT NULL,
                             step TEXT DEFAULT 'main_menu' NOT NULL,
                             rate INT DEFAULT 0 NOT NULL,
-                            sending_rasp_5 INT DEFAULT 0 NOT NULL
+                            sending_rasp_5 INT DEFAULT 0 NOT NULL,
+                            sending_without_repl INT DEFAULT 1 NOT NULL
                         )''')
     sql_con.commit()
 

@@ -337,7 +337,7 @@ emoji = {
     'magnifying_glass': u'\U0001F50E', 'clock_8-9': u'\U0001F557',
     'clock_9-11': u'\U0001F558', 'clock_11-13': u'\U0001F55A',
     'clock_14-16': u'\U0001F551', 'clock_16-18': u'\U0001F553',
-    'clock_18-19': u'\U0001F555'
+    'clock_18-19': u'\U0001F555', 'envelope': u'\U00002709'
 }
 
 briefly_info_answer = (

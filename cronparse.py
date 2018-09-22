@@ -296,31 +296,32 @@ def parse(html, parse_day, request_day):
 
         if id_non_repl_sending:
             for inzs in id_non_repl_sending:
-                group = func.get_student_group(inzs)
-                if func.get_alias(inzs) == 'PREP':
-                    index = const.cap_teachers.index(group)
-                    for_any = 'преподавателя'
-                    group = const.sht_teachers[index]
-                else:
-                    for_any = 'группы'
+                if func.is_sending_not_repl_on(inzs):
+                    group = func.get_student_group(inzs)
+                    if func.get_alias(inzs) == 'PREP':
+                        index = const.cap_teachers.index(group)
+                        for_any = 'преподавателя'
+                        group = const.sht_teachers[index]
+                    else:
+                        for_any = 'группы'
 
-                try:
-                    bot.send_message(inzs, const.emoji['anticlockwise'] +
-                                     ' Для ' + for_any +
-                                     ' <b>{0}</b> нет замен на {1} ('
-                                     .format(group,
-                                             func.day_of_week_parsing_day(
-                                                 parse_day,
-                                                 dt.datetime.isoweekday(c))) +
-                                     dataaa[-10:] + ').', parse_mode='HTML')
-                    not_have_repl.append(inzs)
-                except Exception as err:
-                    print(err)
-                    bot.send_message(conf.my_id, const.emoji['cross_mark'] + ' ' +
-                                     str(inzs) + '\n' + str(err))
-                    continue
+                    try:
+                        bot.send_message(inzs, const.emoji['anticlockwise'] +
+                                         ' Для ' + for_any +
+                                         ' <b>{0}</b> нет замен на {1} ('
+                                         .format(group,
+                                                 func.day_of_week_parsing_day(
+                                                     parse_day,
+                                                     dt.datetime.isoweekday(c))) +
+                                         dataaa[-10:] + ').', parse_mode='HTML')
+                        not_have_repl.append(inzs)
+                    except Exception as err:
+                        print(err)
+                        bot.send_message(conf.my_id, const.emoji['cross_mark'] + ' ' +
+                                         str(inzs) + '\n' + str(err))
+                        continue
 
-                sleep(0.04)
+                    sleep(0.04)
 
         sql_con = connect(const.path + 'Parse.db')
         cursor = sql_con.cursor()
