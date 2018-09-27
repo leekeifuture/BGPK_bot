@@ -125,6 +125,7 @@ def main(date):
 
         print('\n' + str(dt.datetime.now())[:-7] + ' | ' +
             '!!! SENDING SCHEDULE ' + str(date) + ' !!!' + '\n')
+        print('\n\n' + str(have_sched) + '\n\n')
         print(str(len(sending_sched_one)) + ' - ' + str(len(have_sched)))
         print(difference)
     else:

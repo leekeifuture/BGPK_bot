@@ -295,6 +295,7 @@ def parse(html, parse_day, request_day):
                 id_non_repl_sending.remove(ib[0])
 
         if id_non_repl_sending:
+            not_repl_off = []
             for inzs in id_non_repl_sending:
                 if func.is_sending_not_repl_on(inzs):
                     group = func.get_student_group(inzs)
@@ -322,6 +323,8 @@ def parse(html, parse_day, request_day):
                         continue
 
                     sleep(0.04)
+                else:
+                    not_repl_off.append(inzs)
 
         sql_con = connect(const.path + 'Parse.db')
         cursor = sql_con.cursor()
@@ -331,10 +334,11 @@ def parse(html, parse_day, request_day):
         cursor.close()
         sql_con.close()
 
-        shipped = have_repl + not_have_repl
+        shipped = have_repl + not_have_repl + not_repl_off
         difference = len(sending_zam_one) - len(shipped)
 
-        print('\n\n' + str(have_repl) + '\n\n' + str(not_have_repl) + '\n\n')
+        print('\n\n' + str(have_repl) + '\n\n' + str(not_have_repl) +
+              '\n\n' + str(not_repl_off) + '\n\n')
         print(str(len(sending_zam_one)) + ' - ' + str(len(shipped)))
         print(difference)
 
