@@ -826,9 +826,9 @@ def get_date(tomorrow=False, tomorrow_tomorrow=False, force_day_of_week=False, w
 
 def delta_seconds(hour, minute):
     year = dt.datetime.strftime(dt.date.today(), '%Y')
-    mounth = int(dt.datetime.strftime(dt.date.today(), '%m'))
+    month = int(dt.datetime.strftime(dt.date.today(), '%m'))
     day = int(dt.datetime.strftime(dt.date.today(), '%d'))
-    then = dt.datetime(int(year), int(mounth),
+    then = dt.datetime(int(year), int(month),
                        int(day), int(hour), int(minute))
     now = dt.datetime.now()
     delta = then - now
