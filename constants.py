@@ -465,6 +465,11 @@ month_list = [
     'августа', 'сентября', 'октября', 'ноября', 'декабря'
 ]
 
+month_only_list = {
+    1: 'январь', 2: 'февраль', 3: 'март', 4: 'апрель', 5: 'май', 6: 'июнь',
+    7: 'июль', 8: 'август', 9: 'сентябрь', 10: 'октябрь', 11: 'ноябрь', 12: 'декабрь'
+}
+
 lesson_time = {
     '1': '08:00–09:40',
     '2': '09:50–11:30',
@@ -2255,11 +2260,13 @@ shedule = {
 
 
 teachers_shedule = {}
-existing_teachers = []
 
 for teacher in teacher_name:
     teachers_shedule[teacher] = {'UP': [[], [], [], [], [], []],
                                  'DOWN': [[], [], [], [], [], []]}
+
+
+existing_teachers = []
 
 for group in shedule:
     for week in shedule[group]:
