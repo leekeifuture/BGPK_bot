@@ -4,11 +4,11 @@
 
 import re
 from os import environ
-from platform import system
+from platform import version
 from collections import Counter
 
 
-syst = system()
+vers = version()
 
 path = environ['path_to_bot_directory']
 

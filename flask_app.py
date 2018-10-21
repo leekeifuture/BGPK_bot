@@ -2389,7 +2389,7 @@ if __name__ == '__main__':
 
     bot.remove_webhook()
 
-    if const.syst == 'Linux':
+    if '#58' in const.vers:
 
         bot.set_webhook(url=conf.WEBHOOK_URL_BASE + conf.WEBHOOK_URL_PATH,
                         certificate=open(conf.WEBHOOK_SSL_CERT, 'r'))
@@ -2403,5 +2403,5 @@ if __name__ == '__main__':
         })
 
         cherrypy.quickstart(WebhookServer(), conf.WEBHOOK_URL_PATH, {'/': {}})
-    elif const.syst == 'Windows':
+    elif '#39' in const.vers:
         bot.polling(none_stop=True, interval=0)
