@@ -986,7 +986,7 @@ shedule = {
           [('', lesson_time['4'], 'Обраб.мат. и инструмент', teacher_name[8], '312',),
            ('', lesson_time['5'], 'Мет.станки/Обраб.мат.и инс', teacher_name[69] + '/' + teacher_name[8], '111/312',),
            ('', lesson_time['6'], 'Гидропривод и ГПА', teacher_name[26], '309',)],
-          [('', lesson_time['4'], 'Обраб.мат. и инструмент', teacher_name[8] + '/' + teacher_name[49], '312',),
+          [('', lesson_time['4'], 'Обраб.мат. и инструмент', teacher_name[8], '312',),
            ('', lesson_time['5'], 'Физкультура и здоровье', teacher_name[59], 'с/з',),
            ('', lesson_time['6'], 'Охр.окр.среды и энергосбер', teacher_name[62], '307',)],
           [('', lesson_time['4'], 'Электрооб.мет. станков', teacher_name[1], '120',),
