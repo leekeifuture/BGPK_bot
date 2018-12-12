@@ -1687,7 +1687,7 @@ shedule = {
           [('', lesson_time['1'], 'Геодезия ', teacher_name[65], '104',),
            ('', lesson_time['2'], 'Русская  литература', teacher_name[2], '120',),
            ('', lesson_time['3'], 'Физкультура и здоровье', teacher_name[31], 'с/з',)],
-          [('', lesson_time['1'], 'Инженерная графика', teacher_name[61] + '/' + teacher_name[23], '321',),
+          [('', lesson_time['1'], 'Инженерная графика', teacher_name[61] + '/' + teacher_name[23], '104/321',),
            ('', lesson_time['2'], 'Осн.электротехники', teacher_name[29], '102',),
            ('', lesson_time['3'], 'ГПЗ', teacher_name[15], '106',)],
           [('', lesson_time['1'], 'Инженерная графика ', teacher_name[61] + '/' + teacher_name[23], '321/104',),
