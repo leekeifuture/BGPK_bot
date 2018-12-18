@@ -3,14 +3,14 @@
 
 
 import re
-from os import environ
+# from os import environ
 from platform import version
 from collections import Counter
 
 
 vers = version()
 
-path = environ['path_to_bot_directory']
+path = '/home/ubuntu/bot/'
 
 types = [
     {'Alias': 'STUD',
@@ -1883,7 +1883,7 @@ shedule = {
            ('', lesson_time['6'], 'ТСП', teacher_name[5], '111',)],
           [('', lesson_time['4'], 'Инженерн.сети и оборудов', teacher_name[14], '106',),
            ('', lesson_time['5'], 'Физкультура и здоровье', teacher_name[94], 'с/з',),
-           ('', lesson_time['6'], 'Информ.технологии в строит. произв', teacher_name[48] + '/' + teacher_name[51], '219/114',)],
+           ('', lesson_time['6'], 'Информ.технологии в строит. произв', teacher_name[48] + '/' + teacher_name[99], '219/114',)],
           [('', lesson_time['4'], 'КП ТСП/ Инженерн.сети и оборудов', teacher_name[5] + '/' + teacher_name[14], '305/119',),
            ('', lesson_time['5'], 'ТСП', teacher_name[5], '104',),
            ('', lesson_time['6'], 'СТК', teacher_name[78], '119',)],
@@ -1912,7 +1912,7 @@ shedule = {
            ('', lesson_time['5'], 'Экономика строительства', teacher_name[85], '106',),
            ('', lesson_time['6'], 'Экономика строительства', teacher_name[85], '104',)],
           [('', lesson_time['4'], 'ТСП/СТК', teacher_name[5] + '/' + teacher_name[78], '23/114',),
-           ('', lesson_time['5'], 'Информ.технологии в строит. произв', teacher_name[48] + '/' + teacher_name[51], '209/114',),
+           ('', lesson_time['5'], 'Информ.технологии в строит. произв', teacher_name[48] + '/' + teacher_name[99], '209/114',),
            ('', lesson_time['6'], 'ТСП/СТК', teacher_name[5] + '/' + teacher_name[78], '106/124',)],
           [('', lesson_time['4s'], 'ТСП', teacher_name[5], '104'),
            ('', lesson_time['5s'], 'Инженерн.сети и оборудов', teacher_name[14], '121'),
