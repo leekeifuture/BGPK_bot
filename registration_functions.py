@@ -386,7 +386,7 @@ def select_teacher(message):
             if len(short_teachers) == 1:
                 answer += (const.emoji['mag_right'] +
                            ' Найденный преподаватель:')
-                if len(short_teachers[0].encode('utf-8')) >= 64:
+                if len(short_teachers[0].encode('utf-8')) >= 48:
                     if short_teachers[0] in const.teacher_name:
                         index = const.teacher_name.index(short_teachers[0])
                     elif short_teachers[0] in const.sht_teachers:

@@ -772,7 +772,7 @@ def rewrite_zam_data(parse_day, html='NULL'):
 
 
 def is_data_invalid(string):
-    if len(string.encode('utf-8')) >= 64:
+    if len(string.encode('utf-8')) >= 48:
         return True
     else:
         return False
