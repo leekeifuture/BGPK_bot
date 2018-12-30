@@ -3,14 +3,14 @@
 
 
 import re
-# from os import environ
+from os import environ
 from platform import version
 from collections import Counter
 
 
 vers = version()
 
-path = '/home/ubuntu/bot/'
+path = environ['path_to_bot_directory']
 
 types = [
     {'Alias': 'STUD',
@@ -241,7 +241,7 @@ teachers = {
     '97': 'Рачко Татьяна Леонидовна',
     '98': 'Старун Кирилл Николаевич',
     '99': 'Лукша Юлия Николаевна',
-    '100': 'Петручик Игроь Александрович'
+    '100': 'Петручик Игорь Александрович'
 }
 
 
