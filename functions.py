@@ -1673,7 +1673,10 @@ def create_schedule_answer(user_id, tomorrow=False):
                     '</b>" не найдено\U00002026')
     else:
         try:
-            day_info = const.shedule[group]
+            if group in const.existing_table_groups:
+                day_info = const.groups_schedule[group]
+            else:
+                day_info = const.shedule[group]
         except:
             return ('Расписание для группы "<b>' + group +
                     '</b>" не найдено\U00002026')
@@ -1743,7 +1746,10 @@ def create_schedule_week_answer(user_id, td, force_day_of_week=0):
                     '</b>" не найдено\U00002026')
     else:
         try:
-            day_info = const.shedule[group]
+            if group in const.existing_table_groups:
+                day_info = const.groups_schedule[group]
+            else:
+                day_info = const.shedule[group]
         except:
             return ('Расписание для группы "<b>' + group +
                     '</b>" не найдено\U00002026')
@@ -1819,7 +1825,10 @@ def send_schedule_force_week_answer(message, force_day_of_week=0):
             xday += 1
     else:
         try:
-            day_info = const.shedule[group]
+            if group in const.existing_table_groups:
+                day_info = const.groups_schedule[group]
+            else:
+                day_info = const.shedule[group]
         except:
             return bot.edit_message_text(
                 text='Расписание для группы "<b>' +

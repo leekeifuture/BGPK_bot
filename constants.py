@@ -3,14 +3,22 @@
 
 
 import re
+from os import walk
 from os import environ
 from platform import version
+from xlrd import open_workbook
 from collections import Counter
+
+
+def cls(data):
+    return str(data).replace(' ', '').lower()
 
 
 vers = version()
 
 path = environ['path_to_bot_directory']
+
+collage_folder = path + '/collage constants/'
 
 types = [
     {'Alias': 'STUD',
@@ -29,6 +37,28 @@ divisions = [
     {'Alias': 'YUR',
      'Name': 'Юридическое'}
 ]
+
+gep_workbook = open_workbook(collage_folder + '/gep/gep.xls')
+gep_sheet = gep_workbook.sheet_by_index(0)
+
+brly_aliases = {
+'с': 'STR',
+'м': 'MEH',
+'р': 'RAD',
+'ю': 'YUR'
+}
+
+student_groups = []
+
+for gep_gr in range(9, gep_sheet.nrows):
+    gep_group = gep_sheet.cell_value(gep_gr, 1)
+
+    crse_grps = []
+    if gep_group:
+        gep_cource = gep_sheet.cell_value(gep_gr, 2)
+
+        # print({brly_aliases[gep_group.lower()[0]] + str(gep_cource).replace('.0', ''): [for i in crse_grps]})
+
 
 courses = [
     {'Alias': '1',
@@ -245,6 +275,23 @@ teachers = {
 }
 
 
+table_lessons = {}
+lessons_workbook = open_workbook(collage_folder + '/lessons/Lessons.xls')
+lessons_sheet = lessons_workbook.sheet_by_index(0)
+for i in range(lessons_sheet.nrows):
+    table_lessons[lessons_sheet.cell_value(i, 1).replace(' ', '').lower()] = (
+        lessons_sheet.cell_value(i, 0).strip())
+
+
+table_teachers = {}
+teachers_workbook = open_workbook(collage_folder + '/teachers/Teachers.xls')
+teachers_sheet = teachers_workbook.sheet_by_index(0)
+for i in range(teachers_sheet.nrows):
+    table_teacher = teachers_sheet.cell_value(i, 0).strip()
+
+    if table_teacher:
+        table_teachers[str(i + 1)] = table_teacher.replace('ё', 'е')
+
 sub_pattern = r'[^\w+]'
 pattern = re.compile(r'\w+')
 
@@ -289,6 +336,53 @@ if duplicate:
                     sp_te[2][:2] + '.')
         sp_te = cap_teachers[index].split()
         teacher_name[index] = (
+            sp_te[0] + ' ' +
+            sp_te[1][:2] + '. ' +
+            sp_te[2][:2] + '.')
+
+## TABLE ##
+
+table_cap_teachers = [table_teachers[str(i)] for i in table_teachers.keys()]
+
+table_low_teachers = [table_teachers[str(i)].replace(' ', '').lower()
+                      for i in table_teachers.keys()]
+
+table_sht_teachers = []
+for i in table_teachers.keys():
+    sp_te = table_teachers[str(i)].split()
+    table_sht_teachers.append(sp_te[0] + ' ' +
+                              sp_te[1][0] + '. ' +
+                              sp_te[2][0] + '.')
+
+table_teacher_name = []
+for i in table_teachers.keys():
+    sp_te = table_teachers[str(i)].split()
+    table_teacher_name.append(sp_te[0] + ' ' +
+                              sp_te[1][0] + '. ' +
+                              sp_te[2][0] + '.')
+
+duplicate = [item for item, count in Counter(
+    table_teacher_name).items() if count > 1]
+if duplicate:
+    seen = set()
+    result = []
+    for idx, item in enumerate(table_teacher_name):
+        if item not in seen:
+            seen.add(item)
+        else:
+            result.append(idx)
+
+    for i in duplicate:
+        index = table_teacher_name.index(i)
+        for ind in result:
+            if table_teacher_name[index] == table_teacher_name[ind]:
+                sp_te = table_cap_teachers[ind].split()
+                table_teacher_name[ind] = (
+                    sp_te[0] + ' ' +
+                    sp_te[1][:2] + '. ' +
+                    sp_te[2][:2] + '.')
+        sp_te = table_cap_teachers[index].split()
+        table_teacher_name[index] = (
             sp_te[0] + ' ' +
             sp_te[1][:2] + '. ' +
             sp_te[2][:2] + '.')
@@ -451,6 +545,9 @@ num_day_titles = {
     '1': 'Пн', '2': 'Вт', '3': 'Ср',
     '4': 'Чт', '5': 'Пт', '6': 'Сб'
 }
+
+week_days = ['понедельник', 'вторник', 'среда',
+             'четверг',     'пятница', 'суббота']
 
 day_list = [
     'первое', 'второе', 'третье', 'четвёртое', 'пятое', 'шестое', 'седьмое',
@@ -2263,6 +2360,106 @@ shedule = {
 }
 
 
+def resub(data):
+    return re.sub(' +', ' ', data.strip())
+
+
+groups_schedule = {}
+
+for _, _, files in walk(collage_folder + '/groups/'):
+    files = [f for f in files if not f[0] == '.']
+
+for file in files:
+    groups_workbook = open_workbook('%s%s' % (collage_folder + '/groups/', file))
+    groups_sheet = groups_workbook.sheet_by_index(0)
+
+    if groups_sheet.ncols >= 3 and groups_sheet.nrows >= 2:
+        table_grp = cls(groups_sheet.cell_value(1, 2))
+        num_group = ''.join([i for i in table_grp if i.isdigit()])
+        group = (table_grp.replace(num_group, '') + num_group).capitalize()
+
+        if group in existing_groups:
+            groups_schedule[group] = {'UP': [[], [], [], [], [], []],
+                                      'DOWN': [[], [], [], [], [], []]}
+
+for file in files:
+    groups_workbook = open_workbook('%s%s' % (collage_folder + '/groups/', file))
+    groups_sheet = groups_workbook.sheet_by_index(0)
+
+    table_grp = cls(groups_sheet.cell_value(1, 2))
+    num_group = ''.join([i for i in table_grp if i.isdigit()])
+    group = (table_grp.replace(num_group, '') + num_group).capitalize()
+
+    day = 0
+    for i in range(3, groups_sheet.nrows):
+        day_of_week = cls(str(groups_sheet.cell_value(i, 1)).split('.')[0])
+
+        if day_of_week in week_days:
+            day += 1
+        else:
+            if day:
+                if day_of_week.isdigit():
+                    for row in [0, 2]:
+                        lesson_row = cls(
+                            groups_sheet.cell_value(i + row, 2))
+                        teacher_row = cls(
+                            groups_sheet.cell_value(i + 1 + row, 2))
+                        half_lesson = cls(
+                            lesson_row[1:]).split('/')
+                        if groups_sheet.ncols >= 4:
+                            audience = cls(str(groups_sheet.cell_value(
+                                i + row, 3)).replace('.0', '').replace('с/з', 'спорт. зал'))
+                        else:
+                            audience = ''
+
+                        if lesson_row:
+                            if lesson_row[0] == '1':
+                                week = 'UP'
+                            elif lesson_row[0] == '2':
+                                week = 'DOWN'
+
+                            if day == 6 and (day_of_week != '1' and day_of_week != '2'):
+                                lesson_day = str(day_of_week) + 's'
+                            else:
+                                lesson_day = str(day_of_week)
+
+                            all_teachers = ''
+                            for tchrs in cls(teacher_row).split('/'):
+                                teacher_id = ''
+                                for id in tchrs:
+                                    if id.isdigit():
+                                        teacher_id += id
+                                    else:
+                                        break
+
+                                all_teachers += ' %s' % teacher_id
+
+                            time = (
+                                lesson_time[lesson_day])
+                            lesson = (
+                                '/'.join(set([resub(table_lessons[lssns]) for lssns in half_lesson])))
+                            teachers = (
+                                [resub(table_teacher_name[int(tchr_id) - 1]) for tchr_id in all_teachers[1:].split()])
+                            if len(teachers) == len(set(teachers)):
+                                teacher = '/'.join(teachers)
+                            else:
+                                teacher = '/'.join(set(teachers))
+                                lesson += ' (делёжка)'
+                            reserv = ''
+
+                            day_student_shedule = (
+                                reserv,
+                                time,
+                                lesson,
+                                teacher,
+                                audience,)
+
+                            (groups_schedule[group][week][day - 1]
+                             .append(day_student_shedule))
+
+existing_table_groups = list(groups_schedule.keys())
+
+
 teachers_shedule = {}
 
 for teacher in teacher_name:
@@ -2272,9 +2469,15 @@ for teacher in teacher_name:
 
 existing_teachers = []
 
-for group in shedule:
-    for week in shedule[group]:
-        for day in shedule[group][week]:
+for group in existing_groups:
+
+    if group in existing_table_groups:
+        sched = groups_schedule
+    else:
+        sched = shedule
+
+    for week in sched[group]:
+        for day in sched[group][week]:
             for lesson_info in day:
                 time = re.sub(' +', ' ', lesson_info[1].strip())
                 lesson = re.sub(' +', ' ', lesson_info[2].strip())
@@ -2315,7 +2518,7 @@ for group in shedule:
 
                             if teacher == dived_teacher:
                                 (teachers_shedule[teacher][week]
-                                 [shedule[group][week]
+                                 [sched[group][week]
                                   .index(day)]
                                     .append(day_shedule))
 
@@ -2326,7 +2529,7 @@ for group in shedule:
                     if (teacher == name_of_teacher and
                             '/' not in name_of_teacher):
                         (teachers_shedule[teacher][week]
-                         [shedule[group][week]
+                         [sched[group][week]
                           .index(day)]
                             .append(day_shedule))
 
