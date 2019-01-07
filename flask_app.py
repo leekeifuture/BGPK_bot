@@ -60,7 +60,7 @@ replacements_keyboard.row(const.emoji['back'], const.emoji['magnifying_glass'])
 @bot.message_handler(func=lambda mess: func.is_user_banned(mess.chat.id),
                      content_types=['text'])
 def banned_user_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     remove_keyboard = tb.types.ReplyKeyboardRemove()
     answer = const.emoji['no_entry'] + (' Вы заблокированы по причине '
                                         'неоднократного спама! Если считаете что не виновны и хотите вновь '
@@ -83,7 +83,7 @@ def start_handler(message, back=False):
                                         message_id=message.message_id)
     else:
         bot_msg = bot.send_message(message.chat.id, answer)
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = 'Для начала выбери в качестве кого ты хочешь зайти:'
     types_keyboard = tb.types.ReplyKeyboardMarkup(True,
                                                   False,
@@ -120,7 +120,7 @@ def start_handler(message, back=False):
 @bot.message_handler(func=lambda mess: mess.text == 'Поддержка',
                      content_types=['text'])
 def problem_text_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = ('Если ты нашёл баг, возникла проблема или появилась идея, то ты '
               'всегда можешь связаться с <a href="https://t.me/lee_kei">разработчиком</a>.\n'
               '/help - краткая информация о возможностях бота.')
@@ -133,7 +133,7 @@ def problem_text_handler(message):
 @bot.message_handler(func=lambda mess: mess.text == 'Завершить',
                      content_types=['text'])
 def exit_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     func.delete_user(message.chat.id, only_choice=False)
     remove_keyboard = tb.types.ReplyKeyboardRemove()
     answer = 'До встречи!'
@@ -148,7 +148,7 @@ def exit_handler(message):
                       'Назад' not in mess.text),
                      content_types=['text'])
 def select_status_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     reg_func.select_status(message)
     func.log_me(message)
     return
@@ -161,7 +161,7 @@ def select_status_handler(message):
                       'Назад' not in mess.text),
                      content_types=['text'])
 def select_teacher_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     reg_func.select_teacher(message)
     func.log_me(message)
     return
@@ -174,7 +174,7 @@ def select_teacher_handler(message):
                       'Назад' not in mess.text),
                      content_types=['text'])
 def select_division_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     reg_func.select_division(message)
     func.log_me(message)
     return
@@ -187,7 +187,7 @@ def select_division_handler(message):
                       'Назад' not in mess.text),
                      content_types=['text'])
 def select_admission_year_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     reg_func.select_admission_year(message)
     func.log_me(message)
     return
@@ -200,7 +200,7 @@ def select_admission_year_handler(message):
                       'Назад' not in mess.text),
                      content_types=['text'])
 def select_student_group_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     reg_func.select_student_group(message)
     func.log_me(message)
     return
@@ -213,7 +213,7 @@ def select_student_group_handler(message):
                       'Назад' not in mess.text),
                      content_types=['text'])
 def confirm_choice_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     reg_func.confirm_choice(message)
     func.log_me(message)
     return
@@ -226,7 +226,7 @@ def confirm_choice_handler(message):
                       'Назад' not in mess.text),
                      content_types=['text'])
 def confirm_choice_teacher_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     reg_func.confirm_choice_teacher(message)
     func.log_me(message)
     return
@@ -247,7 +247,6 @@ def home_registration_handler(message):
 @bot.message_handler(func=lambda mess: not func.is_user_exist(mess.chat.id),
                      content_types=['text'])
 def not_exist_user_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
 
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
@@ -272,7 +271,6 @@ def not_exist_user_handler(message):
                      mess.text == 'Перезайти',
                      content_types=['text'])
 def change_group_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
 
     data = dumps(const.types, ensure_ascii=False)
     sql_con = connect(const.path + 'Bot.db')
@@ -304,7 +302,7 @@ def change_group_handler(message):
 @bot.message_handler(func=lambda mess: mess.text == const.emoji['info'],
                      content_types=['text'])
 def help_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     inline_full_info_keyboard = tb.types.InlineKeyboardMarkup()
     inline_full_info_keyboard.row(
         *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
@@ -318,7 +316,7 @@ def help_handler(message):
 
 @bot.message_handler(commands=['id'])
 def id_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     bot.send_message(message.chat.id, str(message.from_user.id))
     func.log_me(message)
 
@@ -329,7 +327,7 @@ def id_handler(message):
                      mess.text == const.emoji['back'],
                      content_types=['text'])
 def home_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     func.delete_user(message.chat.id, only_choice=True)
     answer = 'Главное меню'
     bot.send_message(message.chat.id, answer, reply_markup=main_keyboard)
@@ -340,7 +338,6 @@ def home_handler(message):
 @bot.message_handler(func=lambda mess: mess.text == const.emoji['settings'],
                      content_types=['text'])
 def settings_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
 
     alias = func.get_alias(message.chat.id)
     answer = 'Настройки'
@@ -367,7 +364,7 @@ def settings_handler(message):
 @bot.message_handler(func=lambda mess: mess.text == const.emoji['page_facing_up'] + ' Расписание',
                      content_types=['text'])
 def schedule_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = 'Меню расписания'
     bot.send_message(message.chat.id, answer, reply_markup=schedule_keyboard)
     func.log_me(message)
@@ -377,7 +374,7 @@ def schedule_handler(message):
                      mess.text == '« Назaд',
                      content_types=['text'])
 def replacements_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = 'Меню замен'
     bot.send_message(message.chat.id, answer,
                      reply_markup=replacements_keyboard)
@@ -386,7 +383,7 @@ def replacements_handler(message):
 
 @bot.message_handler(func=lambda mess: mess.text == 'Сегодня')
 def today_schedule_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = func.create_schedule_answer(message.chat.id)
     bot.send_message(message.chat.id, answer, parse_mode='HTML')
     func.log_me(message)
@@ -394,7 +391,7 @@ def today_schedule_handler(message):
 
 @bot.message_handler(func=lambda mess: mess.text == 'Завтра')
 def tomorrow_schedule_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = func.create_schedule_answer(message.chat.id, True)
     bot.send_message(message.chat.id, answer, parse_mode='HTML')
     func.log_me(message)
@@ -402,21 +399,21 @@ def tomorrow_schedule_handler(message):
 
 @bot.message_handler(func=lambda mess: mess.text == 'Сегoдня')
 def today_replace_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     func.replacements_today(message.chat.id)
     func.log_me(message)
 
 
 @bot.message_handler(func=lambda mess: mess.text == 'Зaвтрa')
 def tomorrow_replace_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     func.replacements_tomorrow(message.chat.id)
     func.log_me(message)
 
 
 @bot.message_handler(func=lambda mess: mess.text == 'Неделя')
 def calendar_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = 'Выбери день:'
     week_day_calendar = tb.types.InlineKeyboardMarkup()
     week_day_calendar.row(
@@ -431,7 +428,7 @@ def calendar_handler(message):
 
 @bot.message_handler(func=lambda mess: mess.text == 'Нeделя')
 def calendar_replace_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     group = func.get_student_group(message.chat.id)
     if func.get_alias(message.chat.id) == 'PREP':
         index = const.cap_teachers.index(group)
@@ -484,7 +481,7 @@ def calendar_replace_handler(message):
 
 @bot.message_handler(func=lambda mess: mess.text == const.emoji['alarm_clock'])
 def sending_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = ('Выбери, на рассылку чего ты хочешь <b>подписаться</b> или <b>отписаться</b>:\n'
               + const.emoji['check_mark'] + ' – Рассылка включена.\n'
               + const.emoji['negative_squared_cross_mark'] + ' – Рассылка отключена.')
@@ -510,10 +507,10 @@ def sending_handler(message):
                    const.emoji['check_mark'])
         if data[3]:
             not_replace = ('Отсутствие замен (%s)' %
-                       const.emoji['check_mark'])
+                           const.emoji['check_mark'])
         else:
             not_replace = ('Отсутствие замен (%s)' %
-                       const.emoji['negative_squared_cross_mark'])
+                           const.emoji['negative_squared_cross_mark'])
     else:
         replace = ('Замен (%s)' %
                    const.emoji['negative_squared_cross_mark'])
@@ -533,7 +530,7 @@ def sending_handler(message):
 
 @bot.message_handler(func=lambda mess: mess.text == const.emoji['star'])
 def rate_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = 'Оцените качество сервиса:'
     user_rate = func.get_user_rate(message.chat.id)
     rate_keyboard = tb.types.InlineKeyboardMarkup(row_width=5)
@@ -553,7 +550,7 @@ def rate_handler(message):
 
 @bot.message_handler(func=lambda mess: mess.text == const.emoji['bell'])
 def calls_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = 'Звонки'
     call_keyboard = tb.types.ReplyKeyboardMarkup(True)
     call_keyboard.row('Пн – пт', 'Суббота', 'В сокр. дни')
@@ -564,7 +561,7 @@ def calls_handler(message):
 
 @bot.message_handler(func=lambda mess: mess.text == 'Пн – пт')
 def calls_pnpt_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = const.calls_pnpt
     bot.send_message(message.chat.id, answer, True,
                      parse_mode='HTML')
@@ -573,7 +570,7 @@ def calls_pnpt_handler(message):
 
 @bot.message_handler(func=lambda mess: mess.text == 'Суббота')
 def calls_sb_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = const.calls_sb
     bot.send_message(message.chat.id, answer, True,
                      parse_mode='HTML')
@@ -582,7 +579,7 @@ def calls_sb_handler(message):
 
 @bot.message_handler(func=lambda mess: mess.text == 'В сокр. дни')
 def calls_sokr_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = const.calls_sokr
     bot.send_message(message.chat.id, answer, True,
                      parse_mode='HTML')
@@ -591,7 +588,7 @@ def calls_sokr_handler(message):
 
 @bot.message_handler(func=lambda mess: mess.text == 'Ближайший звонок')
 def bliz_zvonok_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     blzv0 = func.blzv()[0]
     minorh = 'мин'
     run = const.emoji['blue_diamond']
@@ -616,7 +613,7 @@ def bliz_zvonok_handler(message):
                      mess.text == '« Нaзад',
                      content_types=['text'])
 def search_replacements_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = 'Выбери, по какому признаку хочешь найти замены:'
     search_replacements_keyboard = tb.types.ReplyKeyboardMarkup(True)
     search_replacements_keyboard.row('Группа', 'Направление')
@@ -633,7 +630,7 @@ def search_replacements_handler(message):
                      mess.text == 'Препoдаватель',
                      content_types=['text'])
 def select_type_of_search_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = ('Укажи ' + message.text.lower().replace('па', 'пу') +
               ' для поиска:')
     reply_markup = tb.types.ReplyKeyboardMarkup(True)
@@ -666,7 +663,7 @@ def select_type_of_search_handler(message):
                      ' для поиска' in mess.reply_to_message.text,
                      content_types=['text'])
 def write_replacement_group_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = 'Меню замен'
     nothing_to_search = []
     valid_splited_mess = []
@@ -716,7 +713,7 @@ def write_replacement_group_handler(message):
                      mess.text in const.existing_divisions,
                      content_types=['text'])
 def write_replacement_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     loading_answer = 'Загрузка\U00002026'
     loading_message = bot.send_message(message.chat.id, loading_answer)
 
@@ -812,7 +809,7 @@ def write_replacement_handler(message):
 @bot.message_handler(func=lambda mess: mess.text == const.emoji['bust_in_silhouette'],
                      content_types=['text'])
 def teacher_schedule_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     if message.text == const.emoji['bust_in_silhouette']:
         answer = (
             'Введи Фамилию преподавателя: <i>(и И. О.)</i>\n'
@@ -832,7 +829,7 @@ def teacher_schedule_handler(message):
                       mess.reply_to_message.text),
                      content_types=['text'])
 def write_teacher_name_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     i = 0
     answer = ''
 
@@ -912,7 +909,7 @@ def write_teacher_name_handler(message):
                      'Напиши мне что-нибудь' in mess.reply_to_message.text,
                      content_types=['text'])
 def users_callback_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     bot.forward_message(conf.my_id, message.chat.id, message.message_id)
     bot.send_message(message.chat.id, 'Записал. Жди ответа от разработчика.',
                      reply_to_message_id=message.message_id,
@@ -924,7 +921,7 @@ def users_callback_handler(message):
                      mess.chat.id == int(conf.my_id),
                      content_types=['text'])
 def manage_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = 'Управление'
     manage_keyboard = tb.types.ReplyKeyboardMarkup(True)
     manage_keyboard.row('Сокращение звонков', 'Рассылка')
@@ -937,7 +934,7 @@ def manage_handler(message):
                      mess.chat.id == int(conf.my_id),
                      content_types=['text'])
 def abridged_calls_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = 'Укажи дату сокращенных пар:'
     force_reply = tb.types.ForceReply()
     bot.send_message(message.chat.id, answer, reply_markup=force_reply)
@@ -948,7 +945,7 @@ def abridged_calls_handler(message):
                      mess.chat.id == int(conf.my_id),
                      content_types=['text'])
 def newsletter_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = 'Для кого рассылка:'
     newsletter_keyboard = tb.types.ReplyKeyboardMarkup(True)
     newsletter_keyboard.row('Студентам', 'Преподавателям')
@@ -961,7 +958,7 @@ def newsletter_handler(message):
                      mess.chat.id == int(conf.my_id),
                      content_types=['text'])
 def students_newsletter_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = 'Введи список групп через запятую:'
     newsletter_keyboard = tb.types.ReplyKeyboardMarkup(True)
     newsletter_keyboard.row('Студентам', 'Преподавателям')
@@ -974,7 +971,7 @@ def students_newsletter_handler(message):
                      mess.chat.id == int(conf.my_id),
                      content_types=['text'])
 def teachers_newsletter_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = 'Введи список преподавателей через запятую:'
     newsletter_keyboard = tb.types.ReplyKeyboardMarkup(True)
     newsletter_keyboard.row('Студентам', 'Преподавателям')
@@ -987,7 +984,7 @@ def teachers_newsletter_handler(message):
                      mess.chat.id == int(conf.my_id),
                      content_types=['text'])
 def all_newsletter_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     answer = 'Укажи сообщение для отправки:'
     force_reply = tb.types.ForceReply()
     bot.send_message(message.chat.id, answer, reply_markup=force_reply)
@@ -1001,7 +998,7 @@ def all_newsletter_handler(message):
                      'Укажи сообщение для отправки:',
                      content_types=['text'])
 def send_newsletter_to_all_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     for user in func.get_not_banned_users(message.chat.id):
         try:
             bot.send_message(user[0], message.text, True,
@@ -1023,7 +1020,7 @@ def send_newsletter_to_all_handler(message):
                      and mess.chat.id == int(conf.my_id),
                      content_types=['text'])
 def save_abridged_call_handler(message):
-    bot.send_chat_action(message.chat.id, 'typing')
+
     write_answer = 'Записал'
     invalid_format_answer = 'Неверный формат'
 
@@ -1780,8 +1777,8 @@ def podpis_rasp_5_or_9_handler(call_back):
                             const.emoji['five_oclock'] + ' 17:00' in call_back.data)
 def podpis_rasp_5_handler(call_back):
     answer = (('%s Здесь ты можешь <b>подписаться</b> на рассылку расписания на '
-              'следующий день или <b>отписаться</b> от неё.\n'
-              '%s Рассылка производится в 17:00') %
+               'следующий день или <b>отписаться</b> от неё.\n'
+               '%s Рассылка производится в 17:00') %
               (const.emoji['mailbox_on'], const.emoji['envelope']))
     sending_keyboard_rasp = tb.types.InlineKeyboardMarkup(True)
     if func.is_sending_rasp_on(call_back.message.chat.id, True):
@@ -1809,8 +1806,8 @@ def podpis_rasp_5_handler(call_back):
                             const.emoji['nine_oclock'] + ' 21:00' in call_back.data)
 def podpis_rasp_9_handler(call_back):
     answer = (('%s Здесь ты можешь <b>подписаться</b> на рассылку расписания на '
-              'следующий день или <b>отписаться</b> от неё.\n'
-              '%s Рассылка производится в 21:00') %
+               'следующий день или <b>отписаться</b> от неё.\n'
+               '%s Рассылка производится в 21:00') %
               (const.emoji['mailbox_on'], const.emoji['envelope']))
     sending_keyboard_rasp = tb.types.InlineKeyboardMarkup(True)
     if func.is_sending_rasp_on(call_back.message.chat.id):
@@ -1838,8 +1835,8 @@ def podpis_rasp_9_handler(call_back):
                             'Замен' in call_back.data)
 def podpis_repl_handler(call_back):
     answer = (('%s Здесь ты можешь <b>подписаться</b> на рассылку замен на '
-              'следующий день или <b>отписаться</b> от неё.\n%s Рассылка '
-              'производится после публикования замен на сайте колледжа.') % 
+               'следующий день или <b>отписаться</b> от неё.\n%s Рассылка '
+               'производится после публикования замен на сайте колледжа.') %
               (const.emoji['mailbox_on'], const.emoji['envelope']))
     sending_keyboard_repl = tb.types.InlineKeyboardMarkup(True)
     if func.is_sending_zam_on(call_back.message.chat.id):
@@ -1869,26 +1866,26 @@ def not_repl_handler(call_back):
     sending_keyboard_repl = tb.types.InlineKeyboardMarkup(True)
     if func.is_sending_not_repl_on(call_back.message.chat.id):
         answer = (('%s <b>Отписка</b> от рассылки об <b>отсутствии замен</b> '
-                  'позволит <b>получать уведомления</b> только в том случае, '
-                  'если <b>замены присутствуют.</b>\n%s Рассылка производится '
-                  'после публикования замен на сайте колледжа.') %
+                   'позволит <b>получать уведомления</b> только в том случае, '
+                   'если <b>замены присутствуют.</b>\n%s Рассылка производится '
+                   'после публикования замен на сайте колледжа.') %
                   (const.emoji['mailbox_off'], const.emoji['envelope']))
         sending_keyboard_repl.row(
             *[tb.types.InlineKeyboardButton(
                 text=name,
                 callback_data='Отписaться (отсутствия замен)')
-                    for name in [const.emoji['cross_mark'] + ' Отписaться']])
+              for name in [const.emoji['cross_mark'] + ' Отписaться']])
     else:
         answer = (('%s <b>Подписка</b> к рассылке об <b>отсутствии замен</b> '
-                  'позволит <b>получать уведомления</b> даже в том случае, '
-                  'если <b>замены отсусвуют.</b>\n%s Рассылка производится '
-                  'после публикования замен на сайте колледжа.') % 
+                   'позволит <b>получать уведомления</b> даже в том случае, '
+                   'если <b>замены отсусвуют.</b>\n%s Рассылка производится '
+                   'после публикования замен на сайте колледжа.') %
                   (const.emoji['mailbox_on'], const.emoji['envelope']))
         sending_keyboard_repl.row(
             *[tb.types.InlineKeyboardButton(
                 text=name,
                 callback_data='Подписaться (отсутствия замен)')
-                    for name in [const.emoji['check_mark'] + ' Подписaться']])
+              for name in [const.emoji['check_mark'] + ' Подписaться']])
     sending_keyboard_repl.row(
         *[tb.types.InlineKeyboardButton(text=name,
                                         callback_data='« Назад')
@@ -1929,10 +1926,10 @@ def back_from_podpis_handler(call_back):
                    const.emoji['check_mark'])
         if data[3]:
             not_replace = ('Отсутствие замен (%s)' %
-                       const.emoji['check_mark'])
+                           const.emoji['check_mark'])
         else:
             not_replace = ('Отсутствие замен (%s)' %
-                       const.emoji['negative_squared_cross_mark'])
+                           const.emoji['negative_squared_cross_mark'])
     else:
         replace = ('Замен (%s)' %
                    const.emoji['negative_squared_cross_mark'])
@@ -2040,6 +2037,7 @@ def sending_on_repl_handler(call_back):
                           reply_markup=back_from_podpis_handler)
     func.call_back_log_me(call_back)
 
+
 @bot.callback_query_handler(func=lambda call_back:
                             call_back.data == 'Отписaться')
 def sending_off_repl_handler(call_back):
@@ -2083,7 +2081,8 @@ def sending_off_not_repl_handler(call_back):
     back_from_podpis_handler.row(
         *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
             name in ['« Назад']])
-    answer = '{0} Рассылка об отсутствии замен <b>отключена</b>'.format(const.emoji['mailbox_off'])
+    answer = '{0} Рассылка об отсутствии замен <b>отключена</b>'.format(const.emoji[
+                                                                        'mailbox_off'])
     bot.edit_message_text(text=answer,
                           chat_id=call_back.message.chat.id,
                           message_id=call_back.message.message_id,
@@ -2376,7 +2375,7 @@ def handle_text(message):
             except:
                 bot.send_message(message.chat.id, const.emoji['cross_mark'])
     else:
-        bot.send_chat_action(message.chat.id, 'typing')
+
         answer = 'Не понимаю'
         bot.send_message(message.chat.id, answer)
     func.log_me(message)
