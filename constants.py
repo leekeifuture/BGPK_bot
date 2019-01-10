@@ -48,16 +48,19 @@ brly_aliases = {
 'ю': 'YUR'
 }
 
-student_groups = []
+# student_groups = []
 
-for gep_gr in range(9, gep_sheet.nrows):
-    gep_group = gep_sheet.cell_value(gep_gr, 1)
+# for row in range(9, gep_sheet.nrows):
+#     gep_group = gep_sheet.cell_value(row, 1)
 
-    crse_grps = []
-    if gep_group:
-        gep_cource = gep_sheet.cell_value(gep_gr, 2)
+#     als = ''
+#     crse_grps = []
+#     if gep_group:
+#         gep_cource = str(gep_sheet.cell_value(row, 2)).replace('.0', '')
+#         alias = brly_aliases[cls(gep_group)[0]] + gep_cource
 
-        # print({brly_aliases[gep_group.lower()[0]] + str(gep_cource).replace('.0', ''): [for i in crse_grps]})
+
+#         print({alias: [{'StudentGroupName': i} for i in crse_grps]})
 
 
 courses = [
