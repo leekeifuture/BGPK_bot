@@ -1,5 +1,6 @@
 ﻿__pycache__
 telebot/__pycache__
+collage constants
 venv
 *.db
 test*.py
