@@ -59,8 +59,8 @@ brly_aliases = {
 #         gep_cource = str(gep_sheet.cell_value(row, 2)).replace('.0', '')
 #         alias = brly_aliases[cls(gep_group)[0]] + gep_cource
 
-
 #         print({alias: [{'StudentGroupName': i} for i in crse_grps]})
+#         print({brly_aliases[gep_group.lower()[0]] + str(gep_cource).replace('.0', ''): [for i in crse_grps]})
 
 
 courses = [

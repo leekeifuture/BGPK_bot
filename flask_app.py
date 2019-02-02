@@ -35,7 +35,7 @@ class WebhookServer(object):
             raise cherrypy.HTTPError(403)
 
 
-bot = tb.TeleBot(conf.token)
+bot = tb.TeleBot(conf.token)  # skip_pending=False
 bot_username = bot.get_me().username
 
 logger = tb.logger
