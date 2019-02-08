@@ -93,8 +93,13 @@ def main(date):
                                                    group) +
                                      str(sys.exc_info()[1]))
             else:
+                if group in const.existing_table_groups:
+                    sched = const.groups_schedule
+                else:
+                    sched = const.shedule
+
                 try:
-                    day_info = const.shedule[group]
+                    day_info = sched[group]
                 except:
                     bot.send_message(conf.my_id,  str(dt.datetime.now())[:-7] +
                                      ' | ' + 'Ошибка при рассылке расписания '
