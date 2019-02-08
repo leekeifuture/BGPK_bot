@@ -38,15 +38,15 @@ divisions = [
      'Name': 'Юридическое'}
 ]
 
-gep_workbook = open_workbook(collage_folder + '/gep/gep.xls')
-gep_sheet = gep_workbook.sheet_by_index(0)
-
 brly_aliases = {
 'с': 'STR',
 'м': 'MEH',
 'р': 'RAD',
 'ю': 'YUR'
 }
+
+# gep_workbook = open_workbook(collage_folder + '/gep/gep.xls')
+# gep_sheet = gep_workbook.sheet_by_index(0)
 
 # student_groups = []
 
@@ -266,7 +266,8 @@ teachers = {
     '97': 'Рачко Татьяна Леонидовна',
     '98': 'Старун Кирилл Николаевич',
     '99': 'Лукша Юлия Николаевна',
-    '100': 'Петручик Игорь Александрович'
+    '100': 'Петручик Игорь Александрович',
+    '101': 'Марциновский Сергей Анатольевич'
 }
 
 
@@ -289,6 +290,7 @@ for i in range(teachers_sheet.nrows):
 
 sub_pattern = r'[^\w+]'
 pattern = re.compile(r'\w+')
+
 
 cap_teachers = [teachers[str(i)] for i in teachers.keys()]
 
@@ -381,6 +383,7 @@ if duplicate:
             sp_te[0] + ' ' +
             sp_te[1][:2] + '. ' +
             sp_te[2][:2] + '.')
+
 
 existing_groups = []
 for student_group in student_groups:
@@ -962,136 +965,6 @@ shedule = {
            ('', lesson_time['3s'], 'Инженерная графика', teacher_name[82] + '/' + teacher_name[23], '319/321')]
         ]
     },
-  'М50': {
-      'UP': [
-          [('', lesson_time['4'], 'Гидропривод и ГПА', teacher_name[26], '309',),
-           ('', lesson_time['5'], 'Электрооб.мет. ст/Обраб.мат. и инс', teacher_name[49] + '/' + teacher_name[8], '314/312',),
-           ('', lesson_time['6'], 'Обраб.мат. и инструмент', teacher_name[8], '312',)],
-          [('', lesson_time['4'], 'Мет.станки/Гидроприв.и ГПА', teacher_name[69] + '/' + teacher_name[26], '111/309',),
-           ('', lesson_time['5'], 'Гидропривод и ГПА', teacher_name[26], '309',),
-           ('', lesson_time['6'], 'Охр.окр.среды и энергосбер', teacher_name[62], '212',)],
-          [('', lesson_time['4'], 'Мет.станки/КиРС', teacher_name[69] + '/' + teacher_name[1], '111/120',),
-           ('', lesson_time['5'], 'Электрооб.мет. станков', teacher_name[49], '321',),
-           ('', lesson_time['6'], 'Физкультура и здоровье', teacher_name[68], 'с/з',)],
-          [('', lesson_time['4'], 'КиРС', teacher_name[1], '120',),
-           ('', lesson_time['5'], 'Технология машиностроения', teacher_name[92], '119',),
-           ('', lesson_time['6'], 'Технол.машиностр/Обраб.мат. и инс', teacher_name[92] + '/' + teacher_name[8], '319/312',)],
-          [('', lesson_time['4'], 'КиРС ', teacher_name[1], '120',),
-           ('', lesson_time['5'], 'Физкультура и здоровье', teacher_name[68], 'с/з',),
-           ('', lesson_time['6'], 'Электрооб.мет. станков', teacher_name[49], '312',)],
-          [('', lesson_time['4s'], 'Технология машиностроения', teacher_name[92], '309'),
-           ('', lesson_time['5s'], 'Мет. станки', teacher_name[69], '111'),
-           ('', lesson_time['6s'], 'КиРС ', teacher_name[1], '120')]
-        ],
-    'DOWN': [
-          [('', lesson_time['4'], 'Гидропривод и ГПА', teacher_name[26], '309',),
-           ('', lesson_time['5'], 'Электрооб.мет. ст/Обраб.мат. и инс', teacher_name[49] + '/' + teacher_name[8], '314/312',),
-           ('', lesson_time['6'], 'Обраб.мат. и инструмент', teacher_name[8], '312',)],
-          [('', lesson_time['4'], 'Мет.станки/Гидроприв.и ГПА', teacher_name[69] + '/' + teacher_name[26], '111/309',),
-           ('', lesson_time['5'], 'Гидропривод и ГПА', teacher_name[26], '309',),
-           ('', lesson_time['6'], 'Охр.окр.среды и энергосбер', teacher_name[62], '212',)],
-          [('', lesson_time['4'], 'Мет.станки/КиРС', teacher_name[69] + '/' + teacher_name[1], '111/120',),
-           ('', lesson_time['5'], 'КиРС', teacher_name[1], '120',),
-           ('', lesson_time['6'], 'Обраб.мат. и инструмент', teacher_name[8], '312',)],
-          [('', lesson_time['4'], 'КиРС', teacher_name[1], '120',),
-           ('', lesson_time['5'], 'Технология машиностроения', teacher_name[92], '319',),
-           ('', lesson_time['6'], 'Электрооб.мет. станков', teacher_name[49], '321',)],
-          [('', lesson_time['3'], 'Охр.окр.среды и энергосбер', teacher_name[62], '312',),
-           ('', lesson_time['4'], 'Мет.станки ', teacher_name[69], '111',),
-           ('', lesson_time['5'], 'Физкультура и здоровье', teacher_name[68], 'с/з',),
-           ('', lesson_time['6'], 'Электрооб.мет. станков', teacher_name[49], '312',)],
-          [('', lesson_time['4s'], 'Технология машиностроения', teacher_name[92], '309'),
-           ('', lesson_time['5s'], 'Мет. станки', teacher_name[69], '111'),
-           ('', lesson_time['6s'], 'Электрооб.мет. станков', teacher_name[49], '312')]
-        ]
-    },
-  'М51': {
-      'UP': [
-          [('', lesson_time['4'], 'Обраб.мат. и инструмент', teacher_name[8], '312',),
-           ('', lesson_time['5'], 'Гидропривод и ГПА', teacher_name[26], '309',),
-           ('', lesson_time['6'], 'Охр.окр.среды и энергосбер', teacher_name[45], '124',)],
-          [('', lesson_time['4'], 'Электрооб.мет. станков', teacher_name[47], '310',),
-           ('', lesson_time['5'], 'Мет. станки', teacher_name[69], '111',),
-           ('', lesson_time['6'], 'Электрооб.мет. ст/Обраб.мат. и инс', teacher_name[47] + '/' + teacher_name[8], '310/312',)],
-          [('', lesson_time['4'], 'Гидропривод и ГПА', teacher_name[26], '309',),
-           ('', lesson_time['5'], 'Физкультура и здоровье', teacher_name[68], 'с/з',),
-           ('', lesson_time['6'], 'Технол.машиностр/Обраб.мат. и инс', teacher_name[92] + '/' + teacher_name[8], '319/312',)],
-          [('', lesson_time['4'], 'Технология машиностроения', teacher_name[92], '319',),
-           ('', lesson_time['5'], 'Мет.станки/Гидроприв.и ГПА', teacher_name[69] + '/' + teacher_name[26], '111/309',),
-           ('', lesson_time['6'], 'Мет.станки', teacher_name[69], '111',)],
-          [('', lesson_time['3'], 'Электрооб.мет. станков', teacher_name[47], '310',),
-           ('', lesson_time['4'], 'КиРС', teacher_name[47], '310',),
-           ('', lesson_time['5'], 'Мет.станки/КиРС', teacher_name[69] + '/' + teacher_name[47], '111/310',),
-           ('', lesson_time['6'], 'Физкультура и здоровье', teacher_name[68], 'с/з',)],
-          [('', lesson_time['4s'], 'Электрооб.мет. станков ', teacher_name[47], '310',),
-           ('', lesson_time['5s'], 'Технология машиностроения', teacher_name[92], '309',),
-           ('', lesson_time['6s'], 'КиРС', teacher_name[47], '310')]
-        ],
-    'DOWN': [
-          [('', lesson_time['4'], 'Обраб.мат. и инструмент', teacher_name[8], '312',),
-           ('', lesson_time['5'], 'Гидропривод и ГПА', teacher_name[26], '309',),
-           ('', lesson_time['6'], 'Охр.окр.среды и энергосбер', teacher_name[45], '124',)],
-          [('', lesson_time['4'], 'Электрооб.мет. станков', teacher_name[47], '310',),
-           ('', lesson_time['5'], 'Мет. станки', teacher_name[69], '111',),
-           ('', lesson_time['6'], 'Электрооб.мет. ст/Обраб.мат. и инс', teacher_name[47] + '/' + teacher_name[8], '310/312',)],
-          [('', lesson_time['4'], 'Гидропривод и ГПА', teacher_name[26], '309',),
-           ('', lesson_time['5'], 'КиРС', teacher_name[47], '310',)],
-          [('', lesson_time['4'], 'Технология машиностроения', teacher_name[92], '319',),
-           ('', lesson_time['5'], 'Мет.станки/Гидроприв.и ГПА', teacher_name[69] + '/' + teacher_name[26], '111/309',),
-           ('', lesson_time['6'], 'Обраб.мат. и инструмент', teacher_name[8], '312',)],
-          [('', lesson_time['3'], 'Электрооб.мет. станков', teacher_name[47], '310',),
-           ('', lesson_time['4'], 'КиРС', teacher_name[47], '310',),
-           ('', lesson_time['5'], 'Мет.станки/КиРС', teacher_name[69] + '/' + teacher_name[47], '111/310',),
-           ('', lesson_time['6'], 'Физкультура и здоровье', teacher_name[68], 'с/з',)],
-          [('', lesson_time['4s'], 'Охр.окр.среды и энергосбер', teacher_name[45], '124',),
-           ('', lesson_time['5s'], 'Технология машиностроения', teacher_name[92], '309',),
-           ('', lesson_time['6s'], 'КиРС', teacher_name[47], '310')]
-        ]
-    },
-  'Мс52': {
-      'UP': [
-          [('', lesson_time['3'], 'Физкультура и здоровье', teacher_name[59], 'с/з',),
-           ('', lesson_time['4'], 'Информационные технологии', teacher_name[58] + '/' + teacher_name[49], '205/114',),
-           ('', lesson_time['5'], 'Электрооб.мет. станков', teacher_name[1], '120',),
-           ('', lesson_time['6'], 'Гидропривод и ГПА', teacher_name[26], '309',)],
-          [('', lesson_time['4'], 'Информационные технологии', teacher_name[58] + '/' + teacher_name[49], '205/314',),
-           ('', lesson_time['5'], 'Стандартиз.и качество продукции', teacher_name[87], 'Чит. зал',),
-           ('', lesson_time['6'], 'Мет.станки/Гидроприв.и ГПА', teacher_name[69] + '/' + teacher_name[26], '111/309',)],
-          [('', lesson_time['4'], 'Обраб.мат. и инструмент', teacher_name[8], '312',),
-           ('', lesson_time['5'], 'Мет.станки/Обраб.мат.и инс', teacher_name[69] + '/' + teacher_name[8], '111/312',),
-           ('', lesson_time['6'], 'Гидропривод и ГПА', teacher_name[26], '309',)],
-          [('', lesson_time['4'], 'Информационные технологии', teacher_name[58] + '/' + teacher_name[49], '205/314',),
-           ('', lesson_time['5'], 'Физкультура и здоровье', teacher_name[59], 'с/з',),
-           ('', lesson_time['6'], 'Охр.окр.среды и энергосбер', teacher_name[62], '307',)],
-          [('', lesson_time['3'], 'Охр.окр.среды и энергосб.', teacher_name[62], '312',),
-           ('', lesson_time['4'], 'Мет.станки', teacher_name[69], '111',),
-           ('', lesson_time['5'], 'Электрооб.мет.ст/Станд.и кач.прод', teacher_name[1] + '/' + teacher_name[87], '120/Чит. зал',),
-           ('', lesson_time['6'], 'КиРС', teacher_name[69], '111',)],
-          [('', lesson_time['4s'], 'КиРС', teacher_name[69], '111'),
-           ('', lesson_time['5s'], 'Электрооб.мет. станков', teacher_name[1], '120'),
-           ('', lesson_time['6s'], 'Металлорежущие станки', teacher_name[69], '111')]
-        ],
-    'DOWN': [
-          [('', lesson_time['4'], 'Информационные технологии', teacher_name[58] + '/' + teacher_name[49], '205/114',),
-           ('', lesson_time['5'], 'Электрооб.мет. станков', teacher_name[1], '120',),
-           ('', lesson_time['6'], 'Гидропривод и ГПА', teacher_name[26], '309',)],
-          [('', lesson_time['4'], 'Информационные технологии', teacher_name[58] + '/' + teacher_name[49], '205/314',),
-           ('', lesson_time['5'], 'Стандартиз.и качество продукции', teacher_name[87], 'Чит. зал',),
-           ('', lesson_time['6'], 'Мет.станки/Гидроприв.и ГПА', teacher_name[69] + '/' + teacher_name[26], '111/309',)],
-          [('', lesson_time['4'], 'Обраб.мат. и инструмент', teacher_name[8], '312',),
-           ('', lesson_time['5'], 'Мет.станки/Обраб.мат.и инс', teacher_name[69] + '/' + teacher_name[8], '111/312',),
-           ('', lesson_time['6'], 'Гидропривод и ГПА', teacher_name[26], '309',)],
-          [('', lesson_time['4'], 'Обраб.мат. и инструмент', teacher_name[8], '312',),
-           ('', lesson_time['5'], 'Физкультура и здоровье', teacher_name[59], 'с/з',),
-           ('', lesson_time['6'], 'Охр.окр.среды и энергосбер', teacher_name[62], '307',)],
-          [('', lesson_time['4'], 'Электрооб.мет. станков', teacher_name[1], '120',),
-           ('', lesson_time['5'], 'Электрооб.мет.ст/Станд.и кач.прод', teacher_name[1] + '/' + teacher_name[87], '120/Чит. зал',),
-           ('', lesson_time['6'], 'КиРС', teacher_name[69], '111',)],
-          [('', lesson_time['4s'], 'КиРС', teacher_name[69], '111'),
-           ('', lesson_time['5s'], 'Электрооб.мет. станков', teacher_name[1], '120'),
-           ('', lesson_time['6s'], 'Металлорежущие станки', teacher_name[69], '111')]
-        ]
-    },
   'М47': {
       'UP': [
           [('', lesson_time['4'], 'ТОиН', teacher_name[1], '120',),
@@ -1311,94 +1184,6 @@ shedule = {
           [('', lesson_time['1'], 'Математика', teacher_name[13], '124',),
            ('', lesson_time['2'], 'Химия', teacher_name[44], '212',),
            ('', lesson_time['3s'], 'Белорусский язык', teacher_name[60], '20')]
-        ]
-    },
-  'Р51': {
-      'UP': [
-          [('', lesson_time['1'], 'Русская литература', teacher_name[2], '120',),
-           ('', lesson_time['2'], 'Электрорадиомат/Осн.инж.графики', teacher_name[7] + '/' + teacher_name[72], '308/305',),
-           ('', lesson_time['3'], 'ТОЭ', teacher_name[74], '302',)],
-          [('', lesson_time['1'], 'Охр.окр.среды и энергосбереж', teacher_name[62], '307',),
-           ('', lesson_time['2'], 'Математика', teacher_name[13], '124',),
-           ('', lesson_time['3'], 'Осн.электроники и микроэлектроники', teacher_name[33], '311',)],
-          [('', lesson_time['1'], 'Белорусская литература ', teacher_name[60], '20',),
-           ('', lesson_time['2'], 'Осн.инженерн.графики/Осн.техн.механики', teacher_name[72] + '/' + teacher_name[74], '302/305',),
-           ('', lesson_time['3'], 'Осн.электр. и микроэлектр', teacher_name[33], '302',)],
-          [('', lesson_time['1'], 'Математика', teacher_name[13], '124',),
-           ('', lesson_time['2'], 'Осн.инженерн.графики/ТОЭ', teacher_name[72] + '/' + teacher_name[74], '302/311',),
-           ('', lesson_time['3'], 'Физкультура и здоровье', teacher_name[31], 'с/з',)],
-          [('', lesson_time['1'], 'Математика', teacher_name[13], '124',),
-           ('', lesson_time['2'], 'Иностранный язык ', teacher_name[80] + '/' + teacher_name[39], '318/311',),
-           ('', lesson_time['3'], 'Электрорадиоматериалы', teacher_name[7], '307',)],
-          [('', lesson_time['1'], 'ОСГН', teacher_name[63], '121',),
-           ('', lesson_time['2'], 'Осн.технической механики', teacher_name[74], '302',),
-           ('', lesson_time['3s'], 'ТОЭ', teacher_name[74], '302')]
-        ],
-    'DOWN': [
-          [('', lesson_time['1'], 'Русская литература', teacher_name[2], '120',),
-           ('', lesson_time['2'], 'Бел.яз(проф.лекс)', teacher_name[55], '310',),
-           ('', lesson_time['3'], 'ТОЭ', teacher_name[74], '302',),
-           ('', lesson_time['4'], 'Осн.технич.механ', teacher_name[74], '302',)],
-          [('', lesson_time['1'], 'Охр.окр.среды и энергосбереж', teacher_name[62], '307',),
-           ('', lesson_time['2'], 'Математика', teacher_name[13], '124',),
-           ('', lesson_time['3'], 'Осн.электроники и микроэлектроники', teacher_name[33], '311',)],
-          [('', lesson_time['1'], 'Белорусская литература ', teacher_name[60], '20',),
-           ('', lesson_time['2'], 'Осн.инженерн.графики/Осн.техн.механики', teacher_name[72] + '/' + teacher_name[74], '302/305',),
-           ('', lesson_time['3'], 'Осн.инж.графики/Осн.электр.и микр', teacher_name[72] + '/' + teacher_name[33], '302/209',),
-           ('', lesson_time['4'], 'Иностранный язык ', teacher_name[80] + '/' + teacher_name[39], '308/114',)],
-          [('', lesson_time['1'], 'Математика', teacher_name[13], '124',),
-           ('', lesson_time['2'], 'Осн.инженерн.графики/ТОЭ', teacher_name[72] + '/' + teacher_name[74], '302/311',),
-           ('', lesson_time['3'], 'Физкультура и здоровье', teacher_name[31], 'с/з',)],
-          [('', lesson_time['1'], 'Математика', teacher_name[13], '124',),
-           ('', lesson_time['2'], 'Иностранный язык ', teacher_name[80] + '/' + teacher_name[39], '318/311',),
-           ('', lesson_time['3'], 'Электрорадиоматериалы', teacher_name[7], '307',)],
-          [('', lesson_time['1'], 'ОСГН', teacher_name[63], '121',),
-           ('', lesson_time['2'], 'ТОЭ/Осн.технич.механики', teacher_name[74], '302',),
-           ('', lesson_time['3s'], 'Физкультура и здоровье', teacher_name[31], 'с/з')]
-        ]
-    },
-  'Р52': {
-      'UP': [
-          [('', lesson_time['1'], 'Охр.окр.среды и энергосбереж', teacher_name[62], '307',),
-           ('', lesson_time['2'], 'Бел.яз(проф.лекс)', teacher_name[55], '310',),
-           ('', lesson_time['3'], 'Осн.инж.графики/Осн.электр.и микр', teacher_name[72] + '/' + teacher_name[81], '305/311',),
-           ('', lesson_time['4'], 'ТОЭ/Осн.технич.механики', teacher_name[74], '302',)],
-          [('', lesson_time['1'], 'Белорусская литература', teacher_name[60], '20',),
-           ('', lesson_time['2'], 'Русская литература', teacher_name[60], '20',),
-           ('', lesson_time['3'], 'Математика', teacher_name[13], '124',)],
-          [('', lesson_time['1'], 'Осн.инженерн.графики/Осн.техн.механики', teacher_name[72] + '/' + teacher_name[74], '302/305',),
-           ('', lesson_time['2'], 'Математика', teacher_name[13], '124',),
-           ('', lesson_time['3'], 'Осн.электроники и микроэлектроники', teacher_name[81], '311',)],
-          [('', lesson_time['1'], 'ТОЭ', teacher_name[74], '305',),
-           ('', lesson_time['2'], 'Физкультура и здоровье', teacher_name[31], 'с/з',),
-           ('', lesson_time['3'], 'Осн.инженерн.графики/ТОЭ', teacher_name[72] + '/' + teacher_name[74], '305/311',)],
-          [('', lesson_time['1'], 'Иностранный язык ', teacher_name[53] + '/' + teacher_name[77], '315/314',),
-           ('', lesson_time['2'], 'Электрорадиоматериалы', teacher_name[7], '307',),
-           ('', lesson_time['3'], 'Математика', teacher_name[13], '124',)],
-          [('', lesson_time['1'], 'Осн.технической механики', teacher_name[74], '302',),
-           ('', lesson_time['2'], 'ОСГН', teacher_name[63], '121',),
-           ('', lesson_time['3s'], 'Физкультура и здоровье', teacher_name[31], 'с/з')]
-        ],
-    'DOWN': [
-          [('', lesson_time['1'], 'Иностранный язык ', teacher_name[53] + '/' + teacher_name[77], '315/314',),
-           ('', lesson_time['2'], 'Электрорадиомат/Осн.инж.графики', teacher_name[55], '308/305',),
-           ('', lesson_time['3'], 'Осн.электроники микроэлектрон', teacher_name[81], '311',)],
-          [('', lesson_time['1'], 'Белорусская литература', teacher_name[60], '20',),
-           ('', lesson_time['2'], 'Русская литература', teacher_name[60], '20',),
-           ('', lesson_time['3'], 'Математика', teacher_name[13], '124',)],
-          [('', lesson_time['1'], 'Осн.инженерн.графики/Осн.техн.механики', teacher_name[72] + '/' + teacher_name[74], '305/305',),
-           ('', lesson_time['2'], 'Математика', teacher_name[13], '124',),
-           ('', lesson_time['3'], 'Осн.электроники и микроэлектроники', teacher_name[81], '311',)],
-          [('', lesson_time['1'], 'ТОЭ', teacher_name[74], '305',),
-           ('', lesson_time['2'], 'Физкультура и здоровье', teacher_name[31], 'с/з',),
-           ('', lesson_time['3'], 'Осн.инженерн.графики/ТОЭ', teacher_name[72] + '/' + teacher_name[74], '305/311',),
-           ('', lesson_time['4'], 'Охр.окр.среды и энергосбереж ', teacher_name[62], '212',)],
-          [('', lesson_time['1'], 'Иностранный язык ', teacher_name[53] + '/' + teacher_name[77], '315/314',),
-           ('', lesson_time['2'], 'Электрорадиоматериалы', teacher_name[7], '307',),
-           ('', lesson_time['3'], 'Математика', teacher_name[13], '124',)],
-          [('', lesson_time['1'], 'Осн.технической механики', teacher_name[74], '302',),
-           ('', lesson_time['2'], 'ОСГН', teacher_name[63], '121',),
-           ('', lesson_time['3s'], 'ТОЭ', teacher_name[74], '302')]
         ]
     },
   'Р49': {
@@ -1703,143 +1488,6 @@ shedule = {
            ('', lesson_time['3s'], 'География', teacher_name[52], '207')]
         ]
     },
-  'Ср22': {
-      'UP': [
-          [('', lesson_time['1'], 'Белорусская литература', teacher_name[55], '305',),
-           ('', lesson_time['2'], 'ГПЗ ', teacher_name[48], '209',)],
-          [('', lesson_time['1'], 'Инженерная графика', teacher_name[22] + '/' + teacher_name[23], '319/321',),
-           ('', lesson_time['2'], 'Техническая механика', teacher_name[51], '207',),
-           ('', lesson_time['3'], 'Геодезия ', teacher_name[5], '106',),
-           ('', lesson_time['4'], 'Инженерная графика ', teacher_name[22], '319',)],
-          [('', lesson_time['1'], 'Русская  литература', teacher_name[56], '307',),
-           ('', lesson_time['2'], 'Строит.мат.и изделия', teacher_name[6], '104',),
-           ('', lesson_time['3'], 'Инженерная графика', teacher_name[22] + '/' + teacher_name[23], '321/319',)],
-          [('', lesson_time['1'], 'Осн.электротехники', teacher_name[29], '102',),
-           ('', lesson_time['2'], 'Строит.мат.и изделия/Техн.механика', teacher_name[6] + '/' + teacher_name[51], '10/207',),
-           ('', lesson_time['3'], 'Инженерная графика', teacher_name[22] + '/' + teacher_name[23], '319/321',)],
-          [('', lesson_time['1'], 'Физкультура и здоровье', teacher_name[31], 'с/з',),
-           ('', lesson_time['2'], 'Иностранный язык', teacher_name[77] + '/' + teacher_name[53], '314/315',),
-           ('', lesson_time['3'], 'Геодезия', teacher_name[54] + '/' + teacher_name[5], '104/109',),
-           ('', lesson_time['4'], 'ГПЗ', teacher_name[48], '209',)],
-          [('', lesson_time['1'], 'Инженерная графика', teacher_name[23], '321',),
-           ('', lesson_time['2'], 'Информацион.технологии', teacher_name[48] + '/' + teacher_name[15], '209/205',),
-           ('', lesson_time['3s'], 'Геодезия ', teacher_name[5], '106')]
-        ],
-    'DOWN': [
-          [('', lesson_time['1'], 'Белорусская литература', teacher_name[55], '305',),
-           ('', lesson_time['2'], 'ГПЗ ', teacher_name[48], '209',),
-           ('', lesson_time['3'], 'Информационные технологии ', teacher_name[48] + '/' + teacher_name[15], '209/205',)],
-          [('', lesson_time['1'], 'Инженерная графика', teacher_name[22] + '/' + teacher_name[23], '319/321',),
-           ('', lesson_time['2'], 'Техническая механика', teacher_name[51], '207',),
-           ('', lesson_time['3'], 'Геодезия ', teacher_name[5], '106',),
-           ('', lesson_time['4'], 'Физкультура и здоровье', teacher_name[31], 'с/з',)],
-          [('', lesson_time['1'], 'Русская  литература', teacher_name[56], '307',),
-           ('', lesson_time['2'], 'Строит.мат.и изделия', teacher_name[6], '104',),
-           ('', lesson_time['3'], 'Иностранный язык', teacher_name[77] + '/' + teacher_name[53], '314/315',),
-           ('', lesson_time['4'], 'Инженерная графика ', teacher_name[22], '319',)],
-          [('', lesson_time['1'], 'Осн.электротехники', teacher_name[29], '102',),
-           ('', lesson_time['2'], 'Строит.мат.и изделия/Техн.механика', teacher_name[6] + '/' + teacher_name[51], '10/207',),
-           ('', lesson_time['3'], 'Инженерная графика', teacher_name[22] + '/' + teacher_name[23], '319/321',)],
-          [('', lesson_time['1'], 'Физкультура и здоровье', teacher_name[31], 'с/з',),
-           ('', lesson_time['2'], 'Иностранный язык', teacher_name[77] + '/' + teacher_name[53], '314/315',),
-           ('', lesson_time['3'], 'Геодезия', teacher_name[54] + '/' + teacher_name[5], '104/109',),
-           ('', lesson_time['4'], 'ГПЗ', teacher_name[48], '209',)],
-          [('', lesson_time['1'], 'Инженерная графика', teacher_name[23], '321',),
-           ('', lesson_time['2'], 'Информацион.технологии', teacher_name[48] + '/' + teacher_name[15], '209/205',),
-           ('', lesson_time['3s'], 'Геодезия ', teacher_name[5], '106')]
-        ]
-    },
-  'С84': {
-      'UP': [
-          [('', lesson_time['1'], 'Иностранный язык', teacher_name[77] + '/' + teacher_name[39], '314/311',),
-           ('', lesson_time['2'], 'Строит.мат.и изделия/Геодезия', teacher_name[6] + '/' + teacher_name[65], '10/104',),
-           ('', lesson_time['3'], 'Инженерная графика', teacher_name[61], '104',)],
-          [('', lesson_time['1'], 'Геодезия/Тех.механика', teacher_name[65] + '/' + teacher_name[54], '104/102',),
-           ('', lesson_time['2'], 'Геодезия ', teacher_name[65], '104',),
-           ('', lesson_time['3'], 'Техническая механика', teacher_name[54], '102',),
-           ('', lesson_time['4'], 'Инженерная графика', teacher_name[61] + '/' + teacher_name[23], '321/104',)],
-          [('', lesson_time['1'], 'Геодезия ', teacher_name[65], '104',),
-           ('', lesson_time['2'], 'Русская  литература', teacher_name[2], '120',),
-           ('', lesson_time['3'], 'Информацион.технологии', teacher_name[48] + '/' + teacher_name[15], '209/314',)],
-          [('', lesson_time['1'], 'Инженерная графика', teacher_name[61] + '/' + teacher_name[23], '321/104',),
-           ('', lesson_time['2'], 'Осн.электротехники', teacher_name[29], '102',),
-           ('', lesson_time['3'], 'ГПЗ', teacher_name[15], '106',)],
-          [('', lesson_time['1'], 'Инженерная графика ', teacher_name[61] + '/' + teacher_name[23], '102/321',),
-           ('', lesson_time['2'], 'Белорусская литература', teacher_name[60], '20',),
-           ('', lesson_time['3'], 'Иностранный язык', teacher_name[77] + '/' + teacher_name[39], '314/309',)],
-          [('', lesson_time['1'], 'ГПЗ', teacher_name[15], '106',),
-           ('', lesson_time['2'], 'Физкультура и здоровье', teacher_name[31], 'с/з',),
-           ('', lesson_time['3s'], 'Информацион.технологии', teacher_name[48] + '/' + teacher_name[15], '209'),
-           ('', lesson_time['4s'], 'Инженерная графика', teacher_name[23], '321',)]
-        ],
-    'DOWN': [
-          [('', lesson_time['1'], 'Строит.мат.и изделия', teacher_name[6], '106',),
-           ('', lesson_time['2'], 'Строит.мат.и изделия/Геодезия', teacher_name[6] + '/' + teacher_name[65], '10/104',),
-           ('', lesson_time['3'], 'Инженерная графика', teacher_name[61], '104',)],
-          [('', lesson_time['1'], 'Геодезия/Тех.механика', teacher_name[65] + '/' + teacher_name[54], '104/102',),
-           ('', lesson_time['2'], 'Геодезия ', teacher_name[65], '104',),
-           ('', lesson_time['3'], 'Техническая механика', teacher_name[54], '102',)],
-          [('', lesson_time['1'], 'Геодезия ', teacher_name[65], '104',),
-           ('', lesson_time['2'], 'Русская  литература', teacher_name[2], '120',),
-           ('', lesson_time['3'], 'Физкультура и здоровье', teacher_name[31], 'с/з',)],
-          [('', lesson_time['1'], 'Инженерная графика', teacher_name[61] + '/' + teacher_name[23], '104/321',),
-           ('', lesson_time['2'], 'Осн.электротехники', teacher_name[29], '102',),
-           ('', lesson_time['3'], 'ГПЗ', teacher_name[15], '106',)],
-          [('', lesson_time['1'], 'Инженерная графика ', teacher_name[61] + '/' + teacher_name[23], '321/104',),
-           ('', lesson_time['2'], 'Белорусская литература', teacher_name[60], '20',),
-           ('', lesson_time['3'], 'Иностранный язык', teacher_name[77] + '/' + teacher_name[39], '314/309',),
-           ('', lesson_time['4'], 'Строит.мат.и изделия ', teacher_name[6], '104',)],
-          [('', lesson_time['1'], 'ГПЗ', teacher_name[15], '106',),
-           ('', lesson_time['2'], 'Физкультура и здоровье', teacher_name[31], 'с/з',),
-           ('', lesson_time['3s'], 'Информацион.технологии', teacher_name[48] + '/' + teacher_name[15], '209'),
-           ('', lesson_time['4s'], 'Инженерная графика', teacher_name[23], '321',)]
-        ]
-    },
-  'С85': {
-      'UP': [
-          [('', lesson_time['1'], 'ГПЗ', teacher_name[48], '209',),
-           ('', lesson_time['2'], 'Русская  литература', teacher_name[2], '120',),
-           ('', lesson_time['3'], 'Информационные технологии', teacher_name[51] + '/' + teacher_name[15], '205/209',)],
-          [('', lesson_time['1'], 'Строит.мат.и изделия', teacher_name[6], '106',),
-           ('', lesson_time['2'], 'Строит.мат.и изделия /Тех.механика', teacher_name[6] + '/' + teacher_name[54], '10/102',),
-           ('', lesson_time['3'], 'Инженерная графика', teacher_name[61] + '/' + teacher_name[22], '104/312',),
-           ('', lesson_time['4'], 'Геодезия', teacher_name[54], '102',)],
-          [('', lesson_time['1'], 'Иностранный язык', teacher_name[21] + '/' + teacher_name[80], '318/321',),
-           ('', lesson_time['2'], 'Осн.электротехники', teacher_name[29], '102',),
-           ('', lesson_time['3'], 'Геодезия', teacher_name[54], '102',)],
-          [('', lesson_time['1'], 'Информацион.технологии', teacher_name[51] + '/' + teacher_name[15], '205/210',),
-           ('', lesson_time['2'], 'Инженерная графика', teacher_name[61] + '/' + teacher_name[22], '104/319',),
-           ('', lesson_time['3'], 'ГПЗ', teacher_name[48], '209',)],
-          [('', lesson_time['1'], 'Белорусская литература', teacher_name[55], '307',),
-           ('', lesson_time['2'], 'Физкультура и здоровье', teacher_name[94], 'с/з',),
-           ('', lesson_time['3'], 'Инженерная графика', teacher_name[61] + '/' + teacher_name[22], '102/321',)],
-          [('', lesson_time['1'], 'Техническая механика', teacher_name[54], '102',),
-           ('', lesson_time['2'], 'Геодезия', teacher_name[5] + '/' + teacher_name[54], '109/102',),
-           ('', lesson_time['3s'], 'Инженерная графика', teacher_name[61], '109')]
-        ],
-    'DOWN': [
-          [('', lesson_time['1'], 'ГПЗ', teacher_name[48], '209',),
-           ('', lesson_time['2'], 'Русская  литература', teacher_name[2], '120',),
-           ('', lesson_time['3'], 'Физкультура и здоровье', teacher_name[94], 'с/з',)],
-          [('', lesson_time['1'], 'Строит.мат.и изделия', teacher_name[6], '106',),
-           ('', lesson_time['2'], 'Строит.мат.и изделия /Тех.механика', teacher_name[6] + '/' + teacher_name[54], '10/102',),
-           ('', lesson_time['3'], 'Инженерная графика', teacher_name[61] + '/' + teacher_name[22], '104/312',),
-           ('', lesson_time['4'], 'Инженерная графика ', teacher_name[22], '319',)],
-          [('', lesson_time['1'], 'Иностранный язык', teacher_name[21] + '/' + teacher_name[80], '318/321',),
-           ('', lesson_time['2'], 'Осн.электротехники', teacher_name[29], '102',),
-           ('', lesson_time['3'], 'Геодезия', teacher_name[54], '102',)],
-          [('', lesson_time['1'], 'Информацион.технологии', teacher_name[51] + '/' + teacher_name[15], '205/210',),
-           ('', lesson_time['2'], 'Инженерная графика', teacher_name[61] + '/' + teacher_name[22], '104/319',),
-           ('', lesson_time['3'], 'ГПЗ', teacher_name[48], '209',),
-           ('', lesson_time['4'], 'Иностранный язык ', teacher_name[21] + '/' + teacher_name[80], '318/314',)],
-          [('', lesson_time['1'], 'Белорусская литература', teacher_name[55], '307',),
-           ('', lesson_time['2'], 'Физкультура и здоровье', teacher_name[94], 'с/з',),
-           ('', lesson_time['3'], 'Инженерная графика', teacher_name[61] + '/' + teacher_name[22], '102/321',)],
-          [('', lesson_time['1'], 'Техническая механика', teacher_name[54], '102',),
-           ('', lesson_time['2'], 'Геодезия', teacher_name[5] + '/' + teacher_name[54], '109/102',),
-           ('', lesson_time['3s'], 'Геодезия', teacher_name[54], '102')]
-        ]
-    },
   'Ср21': {
       'UP': [
           [('', lesson_time['4'], 'КП ГПЗ/СТК', teacher_name[15] + '/' + teacher_name[19], '106/20',),
@@ -2009,175 +1657,6 @@ shedule = {
           [('', lesson_time['4s'], 'ТСП', teacher_name[5], '104'),
            ('', lesson_time['5s'], 'Инженерн.сети и оборудов', teacher_name[14], '121'),
            ('', lesson_time['6s'], 'КП ТСП/ Инженерн.сети и оборудов', teacher_name[5] + '/' + teacher_name[14], '104/109')]
-        ]
-    },
-  'Ю44': {
-      'UP': [
-          [('', lesson_time['1'], 'История Беларуси', teacher_name[28], '210',),
-           ('', lesson_time['2'], 'Физкультура и здоровье', teacher_name[68] + '/' + teacher_name[31], 'с/з',),
-           ('', lesson_time['3'], 'Математика', teacher_name[71], '124',)],
-          [('', lesson_time['1'], 'Медицинская подготовка ', teacher_name[40], '200',),
-           ('', lesson_time['2'], 'Всемирная история ', teacher_name[28], '121',),
-           ('', lesson_time['3'], 'История Беларуси', teacher_name[28], '120',)],
-          [('', lesson_time['1'], 'Всемирная история', teacher_name[28], '121',),
-           ('', lesson_time['2'], 'Химия', teacher_name[40], '212',),
-           ('', lesson_time['3'], 'Белорусская литература', teacher_name[30], '207',),
-           ('', lesson_time['4'], 'Физкультура и здоровье', teacher_name[68] + '/' + teacher_name[31], 'с/з',)],
-          [('', lesson_time['1'], 'Белорусский язык ', teacher_name[30], '207',),
-           ('', lesson_time['2'], 'Иностранный язык', teacher_name[21] + '/' + teacher_name[80], '318/315',),
-           ('', lesson_time['3'], 'Математика', teacher_name[71], '124',)],
-          [('', lesson_time['1'], 'Русский язык', teacher_name[2], '120',),
-           ('', lesson_time['2'], 'Биология', teacher_name[24], '207',),
-           ('', lesson_time['3'], 'Математика', teacher_name[71], '119',)],
-          [('', lesson_time['1'], 'Физика', teacher_name[16], '202',),
-           ('', lesson_time['2'], 'География', teacher_name[52], '209',),
-           ('', lesson_time['3s'], 'Русская литература ', teacher_name[2], '120')]
-        ],
-    'DOWN': [
-          [('', lesson_time['1'], 'История Беларуси', teacher_name[28], '210',),
-           ('', lesson_time['2'], 'Физкультура и здоровье', teacher_name[68] + '/' + teacher_name[31], 'с/з',),
-           ('', lesson_time['3'], 'Математика', teacher_name[71], '124',)],
-          [('', lesson_time['1'], 'Допризывная подготовка', teacher_name[9], '119',),
-           ('', lesson_time['2'], 'Биология', teacher_name[24], '209',),
-           ('', lesson_time['3'], 'История Беларуси', teacher_name[28], '120',)],
-          [('', lesson_time['1'], 'Всемирная история', teacher_name[28], '121',),
-           ('', lesson_time['2'], 'Химия', teacher_name[40], '212',),
-           ('', lesson_time['3'], 'Белорусская литература', teacher_name[30], '207',)],
-          [('', lesson_time['1'], 'Белорусский язык ', teacher_name[30], '207',),
-           ('', lesson_time['2'], 'Иностранный язык', teacher_name[21] + '/' + teacher_name[80], '318/315',),
-           ('', lesson_time['3'], 'Математика', teacher_name[71], '124',)],
-          [('', lesson_time['1'], 'Русский язык', teacher_name[2], '120',),
-           ('', lesson_time['2'], 'Биология', teacher_name[24], '207',),
-           ('', lesson_time['3'], 'Математика', teacher_name[71], '119',)],
-          [('', lesson_time['1'], 'Физика', teacher_name[16], '202',),
-           ('', lesson_time['2'], 'География', teacher_name[52], '209',),
-           ('', lesson_time['3s'], 'Русская литература ', teacher_name[2], '120')]
-        ]
-    },
-  'Ю43': {
-      'UP': [
-          [('', lesson_time['1'], 'Конституционное право', teacher_name[27], '24',),
-           ('', lesson_time['2'], 'Иностранный язык', teacher_name[80] + '/' + teacher_name[77], '319/314',),
-           ('', lesson_time['3'], 'Основы экономики', teacher_name[4], '24',)],
-          [('', lesson_time['1'], 'Русская литература', teacher_name[2], '120',),
-           ('', lesson_time['2'], 'ИГиП зар.стран', teacher_name[41], '307',),
-           ('', lesson_time['3'], 'Основы экономики/Судоустройство', teacher_name[4] + '/' + teacher_name[34], '111/21',)],
-          [('', lesson_time['1'], 'Этика и психология в проф.деят. юриста', teacher_name[70], '21',),
-           ('', lesson_time['2'], 'Белорусская литература', teacher_name[30], '202',),
-           ('', lesson_time['3'], 'Физкультура и здоровье', teacher_name[31], 'с/з',)],
-          [('', lesson_time['1'], 'ИГиП зар.стран', teacher_name[41], '212',),
-           ('', lesson_time['2'], 'Защ.нас.и террит. от ЧС', teacher_name[40], '307',),
-           ('', lesson_time['3'], 'Конституционное право', teacher_name[27], '24',)],
-          [('', lesson_time['1'], 'ОСГН', teacher_name[28], '121',),
-           ('', lesson_time['2'], 'Общая теория права', teacher_name[27], '24',),
-           ('', lesson_time['3'], 'Административное право', teacher_name[27], '24',),
-           ('', lesson_time['4'], 'Бел.яз(проф.лекс)', teacher_name[30], '207',)],
-          [('', lesson_time['1'], 'Физкультура и здоровье', teacher_name[31], 'с/з',),
-           ('', lesson_time['2'], 'ОСГН', teacher_name[28], '305',)]
-        ],
-    'DOWN': [
-          [('', lesson_time['1'], 'Конституционное право', teacher_name[27], '24',),
-           ('', lesson_time['2'], 'Иностранный язык', teacher_name[80] + '/' + teacher_name[77], '319/314',),
-           ('', lesson_time['3'], 'Основы экономики', teacher_name[4], '24',)],
-          [('', lesson_time['1'], 'Русская литература', teacher_name[2], '120',),
-           ('', lesson_time['2'], 'Административное право', teacher_name[27], '24',),
-           ('', lesson_time['3'], 'Основы экономики/Судоустройство', teacher_name[4] + '/' + teacher_name[34], '111/21',)],
-          [('', lesson_time['1'], 'Этика и психология в проф.деят. юриста', teacher_name[70], '21',),
-           ('', lesson_time['2'], 'Белорусская литература', teacher_name[30], '202',),
-           ('', lesson_time['3'], 'Судоустройство', teacher_name[34], '111',)],
-          [('', lesson_time['1'], 'ИГиП зар.стран', teacher_name[41], '212',),
-           ('', lesson_time['2'], 'Общ.теория права', teacher_name[27], '24',),
-           ('', lesson_time['3'], 'Конституционное право', teacher_name[27], '24',)],
-          [('', lesson_time['1'], 'ОСГН', teacher_name[28], '121',),
-           ('', lesson_time['2'], 'Общая теория права', teacher_name[27], '24',),
-           ('', lesson_time['3'], 'Административное право', teacher_name[27], '24',)],
-          [('', lesson_time['1'], 'Физкультура и здоровье', teacher_name[31], 'с/з',),
-           ('', lesson_time['2'], 'ОСГН', teacher_name[28], '305',),
-           ('', lesson_time['3s'], 'Логика', teacher_name[21], '305')]
-        ]
-    },
-  'Ю41': {
-      'UP': [
-          [('', lesson_time['1'], 'Хозяйственное право', teacher_name[10], '23',),
-           ('', lesson_time['2'], 'Соц.и мед. право', teacher_name[27], '24',)],
-          [('', lesson_time['1'], 'Иностранный язык(проф.лекс)', teacher_name[21] + '/' + teacher_name[80], '318/315',),
-           ('', lesson_time['2'], 'Гражд.право/Уголовн.право', teacher_name[34], '23/21',),
-           ('', lesson_time['3'], 'Гражданское право', teacher_name[10], '23',),
-           ('', lesson_time['4'], 'Физкультура и здоровье', teacher_name[68], 'с/з',)],
-          [('', lesson_time['1'], 'Финансовое право', teacher_name[34], '24',),
-           ('', lesson_time['2'], 'Инф.технологии', teacher_name[71] + '/' + teacher_name[58], '209/205',),
-           ('', lesson_time['3'], 'Гражд.право/Уголовн.право', teacher_name[10] + '/' + teacher_name[70], '23/21',)],
-          [('', lesson_time['1'], 'Уголовное право', teacher_name[70], '21',),
-           ('', lesson_time['2'], 'Гражд.право/Уголовн.право', teacher_name[10] + '/' + teacher_name[70], '23/21',),
-           ('', lesson_time['3'], 'Финансовое право', teacher_name[34], '21',)],
-          [('', lesson_time['1'], 'Международное право', teacher_name[34], '21',),
-           ('', lesson_time['2'], 'Инф.технологии', teacher_name[58], '209',),
-           ('', lesson_time['3'], 'Физкультура и здоровье', teacher_name[68], 'с/з',)],
-          [('', lesson_time['1'], 'Гражданское право', teacher_name[10], '23',),
-           ('', lesson_time['2'], 'Международное право', teacher_name[34], '21',),
-           ('', lesson_time['3s'], 'Хозяйственное право', teacher_name[10], '23')]
-        ],
-    'DOWN': [
-          [('', lesson_time['1'], 'Хозяйственное право', teacher_name[10], '21',),
-           ('', lesson_time['2'], 'Соц.и мед. право', teacher_name[27], '24',),
-           ('', lesson_time['3'], 'Уголовное право', teacher_name[70], '21',)],
-          [('', lesson_time['1'], 'Иностранный язык(проф.лекс)', teacher_name[21] + '/' + teacher_name[80], '318/315',),
-           ('', lesson_time['2'], 'Гражд.право/Уголовн.право', teacher_name[10] + '/' + teacher_name[70], '23/21',),
-           ('', lesson_time['3'], 'Соц.и мед. право', teacher_name[27], '24',),
-           ('', lesson_time['4'], 'Физкультура и здоровье', teacher_name[68], 'с/з',)],
-          [('', lesson_time['1'], 'Финансовое право', teacher_name[34], '24',),
-           ('', lesson_time['2'], 'Инф.технологии', teacher_name[71] + '/' + teacher_name[58], '209/205',),
-           ('', lesson_time['3'], 'Гражд.право/Уголовн.право', teacher_name[10] + '/' + teacher_name[70], '23/21',)],
-          [('', lesson_time['1'], 'Уголовное право', teacher_name[70], '21',),
-           ('', lesson_time['2'], 'Гражд.право/Уголовн.право', teacher_name[10] + '/' + teacher_name[70], '23/21',)],
-          [('', lesson_time['1'], 'Международное право', teacher_name[34], '21',),
-           ('', lesson_time['2'], 'Инф.технологии', teacher_name[71] + '/' + teacher_name[58], '209',),
-           ('', lesson_time['3'], 'Иностранный язык(проф.лекс)', teacher_name[21] + '/' + teacher_name[80], '318/315',)],
-          [('', lesson_time['1'], 'Гражданское право', teacher_name[10], '23',),
-           ('', lesson_time['2'], 'Международное право', teacher_name[34], '21',),
-           ('', lesson_time['3s'], 'Хозяйственное право', teacher_name[10], '23')]
-        ]
-    },
-  'Юс42': {
-      'UP': [
-          [('', lesson_time['1'], 'Уголовное право', teacher_name[70], '21',),
-           ('', lesson_time['2'], 'Гражд.право/Уголовн.право', teacher_name[10] + '/' + teacher_name[70], '23/21',),
-           ('', lesson_time['3'], 'Физкультура и здоровье', teacher_name[31], 'с/з',)],
-          [('', lesson_time['1'], 'Гражд.право/Уголовн.право', teacher_name[10] + '/' + teacher_name[70], '23/21',),
-           ('', lesson_time['2'], 'Международное право', teacher_name[34], '305',),
-           ('', lesson_time['3'], 'Инф.технологии', teacher_name[58], '209',),
-           ('', lesson_time['4'], 'Уголовное право', teacher_name[70], '21',)],
-          [('', lesson_time['1'], 'Хозяйственное право', teacher_name[10], '23',),
-           ('', lesson_time['2'], 'Гражд.право/Уголовн.право', teacher_name[10] + '/' + teacher_name[70], '23/21',),
-           ('', lesson_time['3'], 'Финансовое право', teacher_name[34], '21',)],
-          [('', lesson_time['1'], 'Иностранный язык(проф.лекс)', teacher_name[53] + '/' + teacher_name[80], '315/314',),
-           ('', lesson_time['2'], 'Инф.технологии', teacher_name[71] + '/' + teacher_name[58], '314/205',),
-           ('', lesson_time['3'], 'Гражданское право', teacher_name[10], '23',)],
-          [('', lesson_time['1'], 'Соц.и мед. право', teacher_name[27], '24',),
-           ('', lesson_time['2'], 'Финансовое право', teacher_name[34], '21',),
-           ('', lesson_time['3'], 'Иностранный язык(проф.лекс)', teacher_name[53] + '/' + teacher_name[80], '315/318',)],
-          [('', lesson_time['2'], 'Хозяйственное право', teacher_name[10], '23',),
-           ('', lesson_time['3s'], 'Международное право', teacher_name[34], '21')]
-        ],
-    'DOWN': [
-          [('', lesson_time['1'], 'Уголовное право', teacher_name[70], '21',),
-           ('', lesson_time['2'], 'Гражд.право/Уголовн.право', teacher_name[10] + '/' + teacher_name[70], '23/21',),
-           ('', lesson_time['3'], 'Физкультура и здоровье', teacher_name[31], 'с/з',),
-           ('', lesson_time['4'], 'Гражданское право', teacher_name[10], '23',)],
-          [('', lesson_time['1'], 'Гражд.право/Уголовн.право', teacher_name[10] + '/' + teacher_name[70], '23/21',),
-           ('', lesson_time['2'], 'Международное право', teacher_name[34], '305',),
-           ('', lesson_time['3'], 'Инф.технологии', teacher_name[71] + '/' + teacher_name[58], '209/205',)],
-          [('', lesson_time['1'], 'Хозяйственное право', teacher_name[10], '23',),
-           ('', lesson_time['2'], 'Гражд.право/Уголовн.право', teacher_name[10] + '/' + teacher_name[70], '23/21',),
-           ('', lesson_time['3'], 'Соц.и мед. право', teacher_name[27], '24',)],
-          [('', lesson_time['1'], 'Иностранный язык(проф.лекс)', teacher_name[53] + '/' + teacher_name[80], '315/314',),
-           ('', lesson_time['2'], 'Инф.технологии', teacher_name[71] + '/' + teacher_name[58], '314/205',),
-           ('', lesson_time['3'], 'Гражданское право', teacher_name[10], '23',)],
-          [('', lesson_time['1'], 'Соц.и мед. право', teacher_name[27], '24',),
-           ('', lesson_time['2'], 'Финансовое право', teacher_name[34], '21',),
-           ('', lesson_time['3'], 'Физкультура и здоровье', teacher_name[31], 'с/з',)],
-          [('', lesson_time['2'], 'Хозяйственное право', teacher_name[10], '23',),
-           ('', lesson_time['3s'], 'Международное право', teacher_name[34], '21')]
         ]
     }
 }
