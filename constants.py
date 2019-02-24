@@ -1541,7 +1541,12 @@ for file in files:
     groups_sheet = groups_workbook.sheet_by_index(0)
 
     if groups_sheet.ncols >= 3 and groups_sheet.nrows >= 2:
-        table_grp = cls(groups_sheet.cell_value(1, 2))
+        table_grp = (cls(groups_sheet.cell_value(1, 2))
+            .replace('c', 'с')
+            .replace('s', 'с')
+            .replace('p', 'р')
+            .replace('m', 'м')
+            .replace('u', 'ю'))
         num_group = ''.join([i for i in table_grp if i.isdigit()])
         group = (table_grp.replace(num_group, '') + num_group).capitalize()
 
@@ -1553,7 +1558,12 @@ for file in files:
     groups_workbook = open_workbook('%s%s' % (collage_folder + '/groups/', file))
     groups_sheet = groups_workbook.sheet_by_index(0)
 
-    table_grp = cls(groups_sheet.cell_value(1, 2))
+    table_grp = (cls(groups_sheet.cell_value(1, 2))
+        .replace('c', 'с')
+        .replace('s', 'с')
+        .replace('p', 'р')
+        .replace('m', 'м')
+        .replace('u', 'ю'))
     num_group = ''.join([i for i in table_grp if i.isdigit()])
     group = (table_grp.replace(num_group, '') + num_group).capitalize()
 
