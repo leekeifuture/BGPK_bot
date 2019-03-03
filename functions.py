@@ -973,7 +973,7 @@ def blzv():
             elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '10:45:00':
                 return appendd(10, 45, '10:45', '11:30')
             elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '11:30:00':
-                return appendd(11, 30, '11:30', '11:50')
+                return appendd(11, 30, '11:30', '11:40')
             elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '11:40:00':
                 return appendd(11, 40, '11:40', '12:25')
             elif dt.datetime.strftime(time_now, '%H:%M:%S') <= '12:25:00':
