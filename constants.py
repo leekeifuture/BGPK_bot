@@ -8,10 +8,6 @@ from xlrd import open_workbook
 from collections import Counter
 
 
-def cls(data):
-    return str(data).replace(' ', '').lower()
-
-
 path = os.environ['path_to_bot_directory']
 
 collage_folder = path + '/collage constants/'
@@ -35,28 +31,11 @@ divisions = [
 ]
 
 brly_aliases = {
-'с': 'STR',
-'м': 'MEH',
-'р': 'RAD',
-'ю': 'YUR'
+    'с': 'STR',
+    'м': 'MEH',
+    'р': 'RAD',
+    'ю': 'YUR'
 }
-
-# gep_workbook = open_workbook(collage_folder + '/gep/gep.xls')
-# gep_sheet = gep_workbook.sheet_by_index(0)
-
-# student_groups = []
-
-# for row in range(9, gep_sheet.nrows):
-#     gep_group = gep_sheet.cell_value(row, 1)
-
-#     als = ''
-#     crse_grps = []
-#     if gep_group:
-#         gep_cource = str(gep_sheet.cell_value(row, 2)).replace('.0', '')
-#         alias = brly_aliases[cls(gep_group)[0]] + gep_cource
-
-#         print({alias: [{'StudentGroupName': i} for i in crse_grps]})
-#         print({brly_aliases[gep_group.lower()[0]] + str(gep_cource).replace('.0', ''): [for i in crse_grps]})
 
 
 courses = [
@@ -109,12 +88,6 @@ student_groups = [
         [
             {'StudentGroupName': 'Р49'},
             {'StudentGroupName': 'Р50'}
-        ]
-     },
-    {'RAD4':
-        [
-            {'StudentGroupName': 'Р47'},
-            {'StudentGroupName': 'Р48'}
         ]
      },
     {'MEH1':
@@ -260,132 +233,6 @@ teachers = {
     '102': 'Небелюк Анастасия Игоревна'
 }
 
-
-table_lessons = {}
-lessons_workbook = open_workbook(collage_folder + '/lessons/Lessons.xls')
-lessons_sheet = lessons_workbook.sheet_by_index(0)
-for i in range(lessons_sheet.nrows):
-    table_lessons[lessons_sheet.cell_value(i, 1).replace(' ', '').lower()] = (
-        lessons_sheet.cell_value(i, 0).strip())
-
-
-table_teachers = {}
-teachers_workbook = open_workbook(collage_folder + '/teachers/Teachers.xls')
-teachers_sheet = teachers_workbook.sheet_by_index(0)
-for i in range(teachers_sheet.nrows):
-    table_teacher = teachers_sheet.cell_value(i, 0).strip()
-
-    if table_teacher:
-        table_teachers[str(i + 1)] = table_teacher.replace('ё', 'е')
-
-sub_pattern = r'[^\w+]'
-pattern = re.compile(r'\w+')
-
-
-cap_teachers = [teachers[str(i)] for i in teachers.keys()]
-
-low_teachers = [teachers[str(i)].replace(' ', '').lower()
-                for i in teachers.keys()]
-
-sht_teachers = []
-for i in teachers.keys():
-    sp_te = teachers[str(i)].split()
-    sht_teachers.append(sp_te[0] + ' ' +
-                        sp_te[1][0] + '. ' +
-                        sp_te[2][0] + '.')
-
-teacher_name = []
-for i in teachers.keys():
-    sp_te = teachers[str(i)].split()
-    teacher_name.append(sp_te[0] + ' ' +
-                        sp_te[1][0] + '. ' +
-                        sp_te[2][0] + '.')
-
-duplicate = [item for item, count in Counter(
-    teacher_name).items() if count > 1]
-if duplicate:
-    seen = set()
-    result = []
-    for idx, item in enumerate(teacher_name):
-        if item not in seen:
-            seen.add(item)
-        else:
-            result.append(idx)
-
-    for i in duplicate:
-        index = teacher_name.index(i)
-        for ind in result:
-            if teacher_name[index] == teacher_name[ind]:
-                sp_te = cap_teachers[ind].split()
-                teacher_name[ind] = (
-                    sp_te[0] + ' ' +
-                    sp_te[1][:2] + '. ' +
-                    sp_te[2][:2] + '.')
-        sp_te = cap_teachers[index].split()
-        teacher_name[index] = (
-            sp_te[0] + ' ' +
-            sp_te[1][:2] + '. ' +
-            sp_te[2][:2] + '.')
-
-## TABLE ##
-
-table_cap_teachers = [table_teachers[str(i)] for i in table_teachers.keys()]
-
-table_low_teachers = [table_teachers[str(i)].replace(' ', '').lower()
-                      for i in table_teachers.keys()]
-
-table_sht_teachers = []
-for i in table_teachers.keys():
-    sp_te = table_teachers[str(i)].split()
-    table_sht_teachers.append(sp_te[0] + ' ' +
-                              sp_te[1][0] + '. ' +
-                              sp_te[2][0] + '.')
-
-table_teacher_name = []
-for i in table_teachers.keys():
-    sp_te = table_teachers[str(i)].split()
-    table_teacher_name.append(sp_te[0] + ' ' +
-                              sp_te[1][0] + '. ' +
-                              sp_te[2][0] + '.')
-
-duplicate = [item for item, count in Counter(
-    table_teacher_name).items() if count > 1]
-if duplicate:
-    seen = set()
-    result = []
-    for idx, item in enumerate(table_teacher_name):
-        if item not in seen:
-            seen.add(item)
-        else:
-            result.append(idx)
-
-    for i in duplicate:
-        index = table_teacher_name.index(i)
-        for ind in result:
-            if table_teacher_name[index] == table_teacher_name[ind]:
-                sp_te = table_cap_teachers[ind].split()
-                table_teacher_name[ind] = (
-                    sp_te[0] + ' ' +
-                    sp_te[1][:2] + '. ' +
-                    sp_te[2][:2] + '.')
-        sp_te = table_cap_teachers[index].split()
-        table_teacher_name[index] = (
-            sp_te[0] + ' ' +
-            sp_te[1][:2] + '. ' +
-            sp_te[2][:2] + '.')
-
-
-existing_groups = []
-for student_group in student_groups:
-    for alias in student_group:
-        for group in student_group[alias]:
-            existing_groups.append(group['StudentGroupName'])
-
-existing_courses = [course['Course'] for course in courses]
-
-existing_divisions = [division['Name'] for division in divisions]
-
-existing_types = [type['Type'] for type in types]
 
 site_prefix = 'http://www.bspc.brest.by/ru/uchashchimsya/zamena-zanyatij/'
 
@@ -649,131 +496,176 @@ not_events_for_teachers = 'Нет событий'
 notify = ''
 
 
-shedule = {
-  'Р47': {
-      'UP': [
-          [('', lesson_time['4'], 'Основы права', teacher_name[41], '212',),
-           ('', lesson_time['5'], 'Аудио и видеотехн/ КП Эконом.орг', teacher_name[7] + '/' + teacher_name[4], '308/24',),
-           ('', lesson_time['6'], 'Аудио и видеотехника', teacher_name[7], '307',)],
-          [('', lesson_time['4'], 'Осн.алгор.и прогр/ Исп.и контр.РЭС', teacher_name[18] + '/' + teacher_name[33], '210/311',),
-           ('', lesson_time['5'], 'ТАП РЭС/Экономика организации', teacher_name[11] + '/' + teacher_name[4], '305/23',),
-           ('', lesson_time['6'], 'Осн.алгор.и программир..', teacher_name[18], '210',)],
-          [('', lesson_time['4'], 'Основы менеджмента', teacher_name[56], '124',),
-           ('', lesson_time['5'], 'Исп.и контр.РЭС', teacher_name[33], '307',),
-           ('', lesson_time['6'], 'КРЭС', teacher_name[3], '302',)],
-          [('', lesson_time['4'], 'Аудио и видеотехн/ Лок.сист. автомат', teacher_name[7] + '/' + teacher_name[33], '308/311',),
-           ('', lesson_time['5'], 'Аудиовидеотехника и телевидение', teacher_name[7], '307',),
-           ('', lesson_time['6'], 'Физкультура и здоровье', teacher_name[66], 'с/з',)],
-          [('', lesson_time['4'], 'Аудио и видеотехн/КП ТАП РЭС ', teacher_name[7] + '/' + teacher_name[11], '308/305',),
-           ('', lesson_time['5'], 'Осн.алгор.и прогр/ Охранные системы', teacher_name[18] + '/' + teacher_name[3], '210/302',),
-           ('', lesson_time['6'], 'Охранные системы', teacher_name[3], '302',)],
-          [('', lesson_time['4s'], 'Охранные системы', teacher_name[3], '302'),
-           ('', lesson_time['5s'], 'Лок.системы автоматики', teacher_name[33], '311'),
-           ('', lesson_time['6s'], 'ТАП РЭС/ Конструирование РЭС', teacher_name[11] + '/' + teacher_name[3], '305/302')]
-        ],
-    'DOWN': [
-          [('', lesson_time['4'], 'Основы права', teacher_name[41], '212',),
-           ('', lesson_time['5'], 'Аудио и видеотехн/ КП Эконом.орг', teacher_name[7] + '/' + teacher_name[4], '308/24',),
-           ('', lesson_time['6'], 'Аудио и видеотехн/ ТАП РЭС', teacher_name[7] + '/' + teacher_name[11], '308/305',)],
-          [('', lesson_time['4'], 'Осн.алгор.и прогр/ Исп.и контр.РЭС', teacher_name[18] + '/' + teacher_name[33], '210/311',),
-           ('', lesson_time['5'], 'Экономика организации', teacher_name[4], '23',),
-           ('', lesson_time['6'], 'Осн.алгор.и программир..', teacher_name[18], '210',)],
-          [('', lesson_time['4'], 'Основы менеджмента', teacher_name[56], '124',),
-           ('', lesson_time['5'], 'Исп.и контр.РЭС', teacher_name[33], '307',),
-           ('', lesson_time['6'], 'Лок.системы автоматики', teacher_name[33], '307',)],
-          [('', lesson_time['4'], 'Аудио и видеотехн/ Лок.сист. автомат', teacher_name[7] + '/' + teacher_name[33], '308/311',),
-           ('', lesson_time['5'], 'Аудиовидеотехника и телевидение', teacher_name[7], '307',),
-           ('', lesson_time['6'], 'Физкультура и здоровье', teacher_name[66], 'с/з',)],
-          [('', lesson_time['4'], 'Аудио и видеотехн/КП ТАП РЭС ', teacher_name[7] + '/' + teacher_name[11], '308/305',),
-           ('', lesson_time['5'], 'Осн.алгор.и прогр/ Охранные системы', teacher_name[18] + '/' + teacher_name[3], '210/302',),
-           ('', lesson_time['6'], 'Аудио и видеотехника', teacher_name[7], '307',)],
-          [('', lesson_time['4s'], 'Охранные системы', teacher_name[3], '302'),
-           ('', lesson_time['5s'], 'Лок.системы автоматики', teacher_name[33], '311'),
-           ('', lesson_time['6s'], 'Физкультура и здоровье', teacher_name[66], 'с/з')]
-        ]
-    },
-  'Р48': {
-      'UP': [
-          [('', lesson_time['4'], 'Аудио и видеотехн/ КП Эконом.орг', teacher_name[7] + '/' + teacher_name[4], '308/24',),
-           ('', lesson_time['5'], 'Физкультура и здоровье', teacher_name[66], 'с/з',),
-           ('', lesson_time['6'], 'Основы менеджмента', teacher_name[56], '119',)],
-          [('', lesson_time['4'], 'ТАП РЭС/Экономика организации', teacher_name[11] + '/' + teacher_name[4], '305/23',),
-           ('', lesson_time['5'], 'Аудио и видеотехн', teacher_name[7], '307',),
-           ('', lesson_time['6'], 'Аудио и видеотехн/ КП ТАП РЭС', teacher_name[7] + '/' + teacher_name[11], '308/305',)],
-          [('', lesson_time['4'], 'Охранные системы', teacher_name[3], '302',),
-           ('', lesson_time['5'], 'Осн.алгор.и прогр/ Охранные системы', teacher_name[18] + '/' + teacher_name[3], '210/302',),
-           ('', lesson_time['6'], 'Лок.системы автоматики', teacher_name[33], '307',)],
-          [('', lesson_time['4'], 'Осн.алгор.и программир.', teacher_name[18], '210',),
-           ('', lesson_time['5'], 'Осн.алгор.и прогр/ Исп.и контр.РЭС', teacher_name[18] + '/' + teacher_name[33], '210/311',),
-           ('', lesson_time['6'], 'Аудио и видеотехн/ Лок.сист. автомат', teacher_name[7] + '/' + teacher_name[33], '308/111',)],
-          [('', lesson_time['4'], 'Основы права', teacher_name[41], '212',),
-           ('', lesson_time['5'], 'Аудиовидеотехника и телевидение', teacher_name[7], '307',),
-           ('', lesson_time['6'], 'Аудио и видеотехн/КП ТАП РЭС ', teacher_name[7] + '/' + teacher_name[11], '308/305',)],
-          [('', lesson_time['4s'], 'Исп.и контр.РЭС', teacher_name[33], '311'),
-           ('', lesson_time['5s'], 'КРЭС', teacher_name[3], '302'),
-           ('', lesson_time['6s'], 'Лок.системы автоматики', teacher_name[33], '307')]
-        ],
-    'DOWN': [
-          [('', lesson_time['4'], 'Аудио и видеотехн/ КП Эконом.орг', teacher_name[7] + '/' + teacher_name[4], '308/24',),
-           ('', lesson_time['5'], 'Физкультура и здоровье', teacher_name[66], 'с/з',),
-           ('', lesson_time['6'], 'Основы менеджмента', teacher_name[56], '119',)],
-          [('', lesson_time['4'], 'Экономика организации', teacher_name[4], '23',),
-           ('', lesson_time['5'], 'Аудио и видеотехн', teacher_name[7], '307',),
-           ('', lesson_time['6'], 'Аудио и видеотехн/ КП ТАП РЭС', teacher_name[7] + '/' + teacher_name[11], '308/305',)],
-          [('', lesson_time['4'], 'Лок.системы автоматики', teacher_name[33], '302',),
-           ('', lesson_time['5'], 'Осн.алгор.и прогр/ Охранные системы', teacher_name[18] + '/' + teacher_name[3], '210/302',),
-           ('', lesson_time['6'], 'Охранные системы', teacher_name[3], '302',)],
-          [('', lesson_time['4'], 'Осн.алгор.и программир.', teacher_name[18], '210',),
-           ('', lesson_time['5'], 'Осн.алгор.и прогр/ Исп.и контр.РЭС', teacher_name[18] + '/' + teacher_name[33], '210/311',),
-           ('', lesson_time['6'], 'Аудио и видеотехн/ Лок.сист. автомат', teacher_name[7] + '/' + teacher_name[33], '308/111',)],
-          [('', lesson_time['4'], 'Основы права', teacher_name[41], '212',),
-           ('', lesson_time['5'], 'Аудиовидеотехника и телевидение', teacher_name[7], '307',),
-           ('', lesson_time['6'], 'Охранные системы ', teacher_name[3], '302',)],
-          [('', lesson_time['4s'], 'Исп.и контр.РЭС', teacher_name[33], '311'),
-           ('', lesson_time['5s'], 'Физкультура и здоровье', teacher_name[66], 'с/з'),
-           ('', lesson_time['6s'], 'ТАП РЭС/ Конструирование РЭС', teacher_name[11] + '/' + teacher_name[3], '305/302')]
-        ]
-    }
-}
+table_lessons = {}
+lessons_workbook = open_workbook(collage_folder + '/lessons/Lessons.xls')
+lessons_sheet = lessons_workbook.sheet_by_index(0)
+for i in range(lessons_sheet.nrows):
+    table_lessons[lessons_sheet.cell_value(i, 1).replace(' ', '').lower()] = (
+        lessons_sheet.cell_value(i, 0).strip())
+
+
+table_teachers = {}
+teachers_workbook = open_workbook(collage_folder + '/teachers/Teachers.xls')
+teachers_sheet = teachers_workbook.sheet_by_index(0)
+for i in range(teachers_sheet.nrows):
+    table_teacher = teachers_sheet.cell_value(i, 0).strip()
+
+    if table_teacher:
+        table_teachers[str(i + 1)] = table_teacher.replace('ё', 'е')
+
+sub_pattern = r'[^\w+]'
+pattern = re.compile(r'\w+')
+
+
+cap_teachers = [teachers[str(i)] for i in teachers.keys()]
+
+low_teachers = [teachers[str(i)].replace(' ', '').lower()
+                for i in teachers.keys()]
+
+sht_teachers = []
+for i in teachers.keys():
+    sp_te = teachers[str(i)].split()
+    sht_teachers.append(sp_te[0] + ' ' +
+                        sp_te[1][0] + '. ' +
+                        sp_te[2][0] + '.')
+
+teacher_name = []
+for i in teachers.keys():
+    sp_te = teachers[str(i)].split()
+    teacher_name.append(sp_te[0] + ' ' +
+                        sp_te[1][0] + '. ' +
+                        sp_te[2][0] + '.')
+
+duplicate = [item for item, count in Counter(
+    teacher_name).items() if count > 1]
+if duplicate:
+    seen = set()
+    result = []
+    for idx, item in enumerate(teacher_name):
+        if item not in seen:
+            seen.add(item)
+        else:
+            result.append(idx)
+
+    for i in duplicate:
+        index = teacher_name.index(i)
+        for ind in result:
+            if teacher_name[index] == teacher_name[ind]:
+                sp_te = cap_teachers[ind].split()
+                teacher_name[ind] = (
+                    sp_te[0] + ' ' +
+                    sp_te[1][:2] + '. ' +
+                    sp_te[2][:2] + '.')
+        sp_te = cap_teachers[index].split()
+        teacher_name[index] = (
+            sp_te[0] + ' ' +
+            sp_te[1][:2] + '. ' +
+            sp_te[2][:2] + '.')
+
+## TABLE ##
+
+table_cap_teachers = [table_teachers[str(i)] for i in table_teachers.keys()]
+
+table_low_teachers = [table_teachers[str(i)].replace(' ', '').lower()
+                      for i in table_teachers.keys()]
+
+table_sht_teachers = []
+for i in table_teachers.keys():
+    sp_te = table_teachers[str(i)].split()
+    table_sht_teachers.append(sp_te[0] + ' ' +
+                              sp_te[1][0] + '. ' +
+                              sp_te[2][0] + '.')
+
+table_teacher_name = []
+for i in table_teachers.keys():
+    sp_te = table_teachers[str(i)].split()
+    table_teacher_name.append(sp_te[0] + ' ' +
+                              sp_te[1][0] + '. ' +
+                              sp_te[2][0] + '.')
+
+duplicate = [item for item, count in Counter(
+    table_teacher_name).items() if count > 1]
+if duplicate:
+    seen = set()
+    result = []
+    for idx, item in enumerate(table_teacher_name):
+        if item not in seen:
+            seen.add(item)
+        else:
+            result.append(idx)
+
+    for i in duplicate:
+        index = table_teacher_name.index(i)
+        for ind in result:
+            if table_teacher_name[index] == table_teacher_name[ind]:
+                sp_te = table_cap_teachers[ind].split()
+                table_teacher_name[ind] = (
+                    sp_te[0] + ' ' +
+                    sp_te[1][:2] + '. ' +
+                    sp_te[2][:2] + '.')
+        sp_te = table_cap_teachers[index].split()
+        table_teacher_name[index] = (
+            sp_te[0] + ' ' +
+            sp_te[1][:2] + '. ' +
+            sp_te[2][:2] + '.')
+
+
+existing_groups = []
+for student_group in student_groups:
+    for alias in student_group:
+        for group in student_group[alias]:
+            existing_groups.append(group['StudentGroupName'])
+
+existing_courses = [course['Course'] for course in courses]
+
+existing_divisions = [division['Name'] for division in divisions]
+
+existing_types = [type['Type'] for type in types]
 
 
 def resub(data):
     return re.sub(' +', ' ', data.strip())
 
 
-groups_schedule = {}
+def cls(data):
+    return str(data).replace(' ', '').lower()
+
+
+schedule = {}
 
 for _, _, files in os.walk(collage_folder + '/groups/'):
     files = [f for f in files if not f[0] == '.']
 
 for file in files:
-    groups_workbook = open_workbook('%s%s' % (collage_folder + '/groups/', file))
+    groups_workbook = open_workbook(
+        '%s%s' % (collage_folder + '/groups/', file))
     groups_sheet = groups_workbook.sheet_by_index(0)
 
     if groups_sheet.ncols >= 3 and groups_sheet.nrows >= 2:
         table_grp = (cls(groups_sheet.cell_value(1, 2))
-            .replace('c', 'с')
-            .replace('s', 'с')
-            .replace('p', 'р')
-            .replace('m', 'м')
-            .replace('u', 'ю'))
+                     .replace('c', 'с')
+                     .replace('s', 'с')
+                     .replace('p', 'р')
+                     .replace('m', 'м')
+                     .replace('u', 'ю'))
         num_group = ''.join([i for i in table_grp if i.isdigit()])
         group = (table_grp.replace(num_group, '') + num_group).capitalize()
 
         if group in existing_groups:
-            groups_schedule[group] = {'UP': [[], [], [], [], [], []],
-                                      'DOWN': [[], [], [], [], [], []]}
+            schedule[group] = {'UP': [[], [], [], [], [], []],
+                               'DOWN': [[], [], [], [], [], []]}
 
 for file in files:
-    groups_workbook = open_workbook('%s%s' % (collage_folder + '/groups/', file))
+    groups_workbook = open_workbook(
+        '%s%s' % (collage_folder + '/groups/', file))
     groups_sheet = groups_workbook.sheet_by_index(0)
 
     table_grp = (cls(groups_sheet.cell_value(1, 2))
-        .replace('c', 'с')
-        .replace('s', 'с')
-        .replace('p', 'р')
-        .replace('m', 'м')
-        .replace('u', 'ю'))
+                 .replace('c', 'с')
+                 .replace('s', 'с')
+                 .replace('p', 'р')
+                 .replace('m', 'м')
+                 .replace('u', 'ю'))
     num_group = ''.join([i for i in table_grp if i.isdigit()])
     group = (table_grp.replace(num_group, '') + num_group).capitalize()
 
@@ -841,10 +733,8 @@ for file in files:
                                 teacher,
                                 audience,)
 
-                            (groups_schedule[group][week][day - 1]
+                            (schedule[group][week][day - 1]
                              .append(day_student_shedule))
-
-existing_table_groups = list(groups_schedule.keys())
 
 
 teachers_shedule = {}
@@ -857,14 +747,8 @@ for teacher in teacher_name:
 existing_teachers = []
 
 for group in existing_groups:
-
-    if group in existing_table_groups:
-        sched = groups_schedule
-    else:
-        sched = shedule
-
-    for week in sched[group]:
-        for day in sched[group][week]:
+    for week in schedule[group]:
+        for day in schedule[group][week]:
             for lesson_info in day:
                 time = re.sub(' +', ' ', lesson_info[1].strip())
                 lesson = re.sub(' +', ' ', lesson_info[2].strip())
@@ -905,7 +789,7 @@ for group in existing_groups:
 
                             if teacher == dived_teacher:
                                 (teachers_shedule[teacher][week]
-                                 [sched[group][week]
+                                 [schedule[group][week]
                                   .index(day)]
                                     .append(day_shedule))
 
@@ -916,7 +800,7 @@ for group in existing_groups:
                     if (teacher == name_of_teacher and
                             '/' not in name_of_teacher):
                         (teachers_shedule[teacher][week]
-                         [sched[group][week]
+                         [schedule[group][week]
                           .index(day)]
                             .append(day_shedule))
 

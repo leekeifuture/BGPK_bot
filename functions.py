@@ -1672,14 +1672,7 @@ def create_schedule_answer(user_id, tomorrow=False):
             return ('Расписание для преподавателя "<b>' + group +
                     '</b>" не найдено\U00002026')
     else:
-        try:
-            if group in const.existing_table_groups:
-                day_info = const.groups_schedule[group]
-            else:
-                day_info = const.shedule[group]
-        except:
-            return ('Расписание для группы "<b>' + group +
-                    '</b>" не найдено\U00002026')
+        day_info = const.schedule[group]
 
     day_info = day_info[week][dt.datetime.isoweekday(dt.datetime.now() +
                                                      dt.timedelta(days=td)) - 1]
@@ -1745,14 +1738,7 @@ def create_schedule_week_answer(user_id, td, force_day_of_week=0):
             return ('Расписание для преподавателя "<b>' + group +
                     '</b>" не найдено\U00002026')
     else:
-        try:
-            if group in const.existing_table_groups:
-                day_info = const.groups_schedule[group]
-            else:
-                day_info = const.shedule[group]
-        except:
-            return ('Расписание для группы "<b>' + group +
-                    '</b>" не найдено\U00002026')
+        day_info = const.schedule[group]
 
     day_info = day_info[week][td - 1]
     if day_info or alias != 'PREP':
@@ -1824,18 +1810,7 @@ def send_schedule_force_week_answer(message, force_day_of_week=0):
                 valid_days.append(xday)
             xday += 1
     else:
-        try:
-            if group in const.existing_table_groups:
-                day_info = const.groups_schedule[group]
-            else:
-                day_info = const.shedule[group]
-        except:
-            return bot.edit_message_text(
-                text='Расписание для группы "<b>' +
-                group + '</b>" не найдено\U00002026',
-                chat_id=message.chat.id,
-                message_id=message.message_id,
-                parse_mode='HTML')
+        day_info = const.schedule[group]
 
     for day in range(6):
         if td < 8:
