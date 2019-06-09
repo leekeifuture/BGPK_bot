@@ -3,9 +3,7 @@
 
 
 import re
-from os import walk
-from os import environ
-from platform import version
+import os
 from xlrd import open_workbook
 from collections import Counter
 
@@ -14,9 +12,7 @@ def cls(data):
     return str(data).replace(' ', '').lower()
 
 
-vers = version()
-
-path = environ['path_to_bot_directory']
+path = os.environ['path_to_bot_directory']
 
 collage_folder = path + '/collage constants/'
 
@@ -747,7 +743,7 @@ def resub(data):
 
 groups_schedule = {}
 
-for _, _, files in walk(collage_folder + '/groups/'):
+for _, _, files in os.walk(collage_folder + '/groups/'):
     files = [f for f in files if not f[0] == '.']
 
 for file in files:
