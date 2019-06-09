@@ -5,6 +5,7 @@
 import re
 import cherrypy
 import telebot as tb
+from os import uname
 import config as conf
 from json import dumps
 from time import sleep
@@ -2388,8 +2389,9 @@ if __name__ == '__main__':
 
     bot.remove_webhook()
 
-    if '#58' in const.vers:
-
+    if 'generic' in uname()[2]:
+        bot.polling(none_stop=True, interval=0)
+    else:
         bot.set_webhook(url=conf.WEBHOOK_URL_BASE + conf.WEBHOOK_URL_PATH,
                         certificate=open(conf.WEBHOOK_SSL_CERT, 'r'))
 
@@ -2402,5 +2404,3 @@ if __name__ == '__main__':
         })
 
         cherrypy.quickstart(WebhookServer(), conf.WEBHOOK_URL_PATH, {'/': {}})
-    elif '#39' in const.vers:
-        bot.polling(none_stop=True, interval=0)
