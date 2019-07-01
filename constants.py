@@ -8,7 +8,7 @@ from xlrd import open_workbook
 from collections import Counter
 
 
-path = os.environ['path_to_bot_directory']
+path = os.environ['PATH_TO_BOT_DIRECTORY']
 
 collage_folder = path + '/collage constants/'
 

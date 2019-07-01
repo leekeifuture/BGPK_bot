@@ -5,11 +5,11 @@
 from os import environ
 
 
-my_id = environ['my_telegram_id']  # my id
+my_id = environ['MY_TELEGRAM_ID']  # my id
 
-token = environ['bot_token']  # bot token
+token = environ['BOT_TOKEN']  # bot token
 
-WEBHOOK_HOST = environ['server_ip']  # IP adress
+WEBHOOK_HOST = environ['SERVER_IP']  # IP adress
 WEBHOOK_PORT = 443  # 443, 80, 88, 8443
 WEBHOOK_LISTEN = '0.0.0.0'
 
