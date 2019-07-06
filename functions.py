@@ -160,8 +160,8 @@ def get_html(url, chat_id=my_id, printing=False):
 def get_student_group(chat_id):
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
-    cursor.execute('''SELECT group_name 
-                        FROM user_data 
+    cursor.execute('''SELECT group_name
+                        FROM user_data
                        WHERE id = ?''', (chat_id,))
     data = cursor.fetchone()
     cursor.close()
@@ -354,7 +354,7 @@ def replacements_today(chat_id):
         day_number = week_day
     sql_con = connect(const.path + 'Parse.db')
     cursor = sql_con.cursor()
-    cursor.execute('''SELECT day_{} 
+    cursor.execute('''SELECT day_{}
                         FROM zam_from_site'''.format(str(day_number)))
     cfone = cursor.fetchone()[0].split('][')
     cursor.close()
@@ -424,7 +424,7 @@ def replacements_tomorrow(chat_id):
             dt.datetime.now() + dt.timedelta(days=1))
     sql_con = connect(const.path + 'Parse.db')
     cursor = sql_con.cursor()
-    cursor.execute('''SELECT day_{} 
+    cursor.execute('''SELECT day_{}
                         FROM zam_from_site'''.format(str(day_number)))
     cfone = cursor.fetchone()[0].split('][')
     cursor.close()
@@ -505,7 +505,7 @@ def get_replace_of_day(day, chat_id=False, is_week=False, force_teacher=False,
 
     sql_con = connect(const.path + 'Parse.db')
     cursor = sql_con.cursor()
-    cursor.execute('''SELECT day_{} 
+    cursor.execute('''SELECT day_{}
                         FROM zam_from_site'''.format(str(day_number)))
     cfone = cursor.fetchone()[0].split('][')
     cursor.close()
@@ -584,7 +584,7 @@ def get_active_replace_days(chat_id=False, force_teacher=False,
     for i in range(1, 7):
         sql_con = connect(const.path + 'Parse.db')
         cursor = sql_con.cursor()
-        cursor.execute('''SELECT day_{0} 
+        cursor.execute('''SELECT day_{0}
                             FROM zam_from_site'''.format(str(i)))
         cfone = cursor.fetchone()[0].split('][')
         cursor.close()
@@ -1042,14 +1042,14 @@ def blzvs():
 def delete_user(user_id, only_choice=False):
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
-    cursor.execute('''DELETE FROM user_choice 
+    cursor.execute('''DELETE FROM user_choice
                             WHERE user_id = ?''', (user_id,))
     sql_con.commit()
     if not only_choice:
-        cursor.execute('''DELETE FROM banned_users 
+        cursor.execute('''DELETE FROM banned_users
                                 WHERE id_not_banned = ?''', (user_id,))
         sql_con.commit()
-        cursor.execute('''DELETE FROM user_data 
+        cursor.execute('''DELETE FROM user_data
                                 WHERE id = ?''', (user_id,))
         sql_con.commit()
     cursor.close()
@@ -1059,16 +1059,16 @@ def delete_user(user_id, only_choice=False):
 def delete_all_user_info(user_id):
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
-    cursor.execute('''DELETE FROM user_choice 
+    cursor.execute('''DELETE FROM user_choice
                             WHERE user_id = ?''', (user_id,))
     sql_con.commit()
-    cursor.execute('''DELETE FROM banned_users 
+    cursor.execute('''DELETE FROM banned_users
                             WHERE id_not_banned = ?''', (user_id,))
     sql_con.commit()
-    cursor.execute('''DELETE FROM banned_users 
+    cursor.execute('''DELETE FROM banned_users
                             WHERE id_banned = ?''', (user_id,))
     sql_con.commit()
-    cursor.execute('''DELETE FROM user_data 
+    cursor.execute('''DELETE FROM user_data
                             WHERE id = ?''', (user_id,))
     sql_con.commit()
     cursor.close()
@@ -1421,7 +1421,7 @@ def edit_on_or_off_zam(online=True):
 def get_sending_log():
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
-    cursor.execute('''SELECT sending_log 
+    cursor.execute('''SELECT sending_log
                         FROM offer''')
     sending_log = cursor.fetchone()
     cursor.close()
@@ -1435,7 +1435,7 @@ def get_sending_log():
 def get_on_or_off_zam():
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
-    cursor.execute('''SELECT on_or_off_zam 
+    cursor.execute('''SELECT on_or_off_zam
                         FROM offer''')
     on_or_off_zam = cursor.fetchone()[0]
     cursor.close()
@@ -1449,7 +1449,7 @@ def get_on_or_off_zam():
 def get_week():
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
-    cursor.execute('''SELECT week 
+    cursor.execute('''SELECT week
                         FROM offer''')
     week = cursor.fetchone()
     cursor.close()
@@ -2115,7 +2115,7 @@ def send_teacher_week_answer(message, teacher, free_week=False,
 def is_user_in_all_users(user_id):
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
-    cursor.execute('''SELECT count(id) 
+    cursor.execute('''SELECT count(id)
                         FROM all_users
                        WHERE id = ?''', (user_id,))
     data = cursor.fetchone()
@@ -2127,7 +2127,7 @@ def is_user_in_all_users(user_id):
 def is_user_exist(user_id):
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
-    cursor.execute('''SELECT count(id) 
+    cursor.execute('''SELECT count(id)
                         FROM user_data
                        WHERE id = ?''', (user_id,))
     data = cursor.fetchone()
@@ -2139,7 +2139,7 @@ def is_user_exist(user_id):
 def is_user_banned(user_id):
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
-    cursor.execute('''SELECT count(id_banned) 
+    cursor.execute('''SELECT count(id_banned)
                         FROM banned_users
                        WHERE id_banned = ?''', (user_id,))
     data = cursor.fetchone()
@@ -2151,7 +2151,7 @@ def is_user_banned(user_id):
 def is_user_not_banned(user_id):
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
-    cursor.execute('''SELECT count(id_not_banned) 
+    cursor.execute('''SELECT count(id_not_banned)
                         FROM banned_users
                        WHERE id_not_banned = ?''', (user_id,))
     data = cursor.fetchone()
@@ -2186,7 +2186,7 @@ def banned_users(user_id):
 def ban_user(user_id):
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
-    cursor.execute('''DELETE FROM banned_users 
+    cursor.execute('''DELETE FROM banned_users
                             WHERE id_not_banned = ?''', (user_id,))
     sql_con.commit()
     cursor.execute('''INSERT INTO banned_users (id_banned)
@@ -2199,7 +2199,7 @@ def ban_user(user_id):
 def unban_user(user_id):
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
-    cursor.execute('''DELETE FROM banned_users 
+    cursor.execute('''DELETE FROM banned_users
                             WHERE id_banned = ?''', (user_id,))
     sql_con.commit()
     cursor.execute('''INSERT INTO banned_users (id_not_banned)

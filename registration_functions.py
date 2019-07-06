@@ -16,7 +16,7 @@ def set_next_step(user_id, next_step):
     sql_con = sl3.connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''UPDATE user_choice
-                         SET step = ? 
+                         SET step = ?
                        WHERE user_id = ?''', (next_step, user_id,))
     sql_con.commit()
     cursor.close()
@@ -294,7 +294,7 @@ def select_status(message, change_group=False):
 
         sql_con = sl3.connect(const.path + 'Bot.db')
         cursor = sql_con.cursor()
-        cursor.execute('''UPDATE user_choice 
+        cursor.execute('''UPDATE user_choice
                              SET alias = ?
                            WHERE user_id = ?''',
                        (aliases[1], message.chat.id,))
@@ -320,7 +320,7 @@ def select_teacher(message):
     if message.text in const.cap_teachers:
         sql_con = sl3.connect(const.path + 'Bot.db')
         cursor = sql_con.cursor()
-        cursor.execute('''UPDATE user_choice 
+        cursor.execute('''UPDATE user_choice
                              SET student_group_name = ?
                            WHERE user_id = ?''',
                        (message.text, message.chat.id,))
@@ -440,8 +440,8 @@ def select_division(message):
 
     sql_con = sl3.connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
-    cursor.execute('''SELECT divisions_json 
-                        FROM user_choice 
+    cursor.execute('''SELECT divisions_json
+                        FROM user_choice
                        WHERE user_id = ?''', (message.chat.id,))
     data = cursor.fetchone()
     cursor.close()
@@ -463,10 +463,10 @@ def select_division(message):
         data = json.dumps(const.courses, ensure_ascii=False)
         sql_con = sl3.connect(const.path + 'Bot.db')
         cursor = sql_con.cursor()
-        cursor.execute('''UPDATE user_choice 
+        cursor.execute('''UPDATE user_choice
                              SET div_alias = ?,
-                                 division_name = ?, 
-                                 study_programs_json = ? 
+                                 division_name = ?,
+                                 study_programs_json = ?
                            WHERE user_id = ?''',
                        (alias, message.text, data, message.chat.id,))
         sql_con.commit()
@@ -493,7 +493,7 @@ def select_admission_year(message):
     sql_con = sl3.connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT study_programs_json, div_alias
-                        FROM user_choice 
+                        FROM user_choice
                        WHERE user_id = ?''', (message.chat.id,))
     data = cursor.fetchone()
     cursor.close()
@@ -526,9 +526,9 @@ def select_admission_year(message):
 
         sql_con = sl3.connect(const.path + 'Bot.db')
         cursor = sql_con.cursor()
-        cursor.execute('''UPDATE user_choice 
-                             SET alias = ?, admission_year_name = ?, 
-                                 student_groups_json = ? 
+        cursor.execute('''UPDATE user_choice
+                             SET alias = ?, admission_year_name = ?,
+                                 student_groups_json = ?
                            WHERE user_id = ?''',
                        (alias, message.text, data, message.chat.id,))
         sql_con.commit()
@@ -542,7 +542,7 @@ def select_admission_year(message):
         sql_con = sl3.connect(const.path + 'Bot.db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT types_json
-                            FROM user_choice 
+                            FROM user_choice
                            WHERE user_id = ?''', (message.chat.id,))
         data = cursor.fetchone()[0]
         cursor.close()
@@ -566,7 +566,7 @@ def select_student_group(message):
     sql_con = sl3.connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     cursor.execute('''SELECT student_groups_json, alias
-                        FROM user_choice 
+                        FROM user_choice
                        WHERE user_id = ?''', (message.chat.id,))
     data = cursor.fetchone()
     cursor.close()
@@ -587,15 +587,15 @@ def select_student_group(message):
 
         sql_con = sl3.connect(const.path + 'Bot.db')
         cursor = sql_con.cursor()
-        cursor.execute('''UPDATE user_choice 
+        cursor.execute('''UPDATE user_choice
                              SET student_group_name = ?
                            WHERE user_id = ?''',
                        (message.text, message.chat.id,))
         sql_con.commit()
         cursor.execute('''SELECT division_name,
                                  admission_year_name,
-                                 student_group_name 
-                            FROM user_choice 
+                                 student_group_name
+                            FROM user_choice
                            WHERE user_id = ?''', (message.chat.id,))
         data = cursor.fetchone()
         cursor.close()
@@ -646,7 +646,7 @@ def confirm_choice_teacher(message):
         sql_con = sl3.connect(const.path + 'Bot.db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT alias, student_group_name
-                            FROM user_choice 
+                            FROM user_choice
                            WHERE user_id = ?''', (message.chat.id,))
         data = cursor.fetchone()
         alias = data[0]
@@ -675,7 +675,7 @@ def confirm_choice_teacher(message):
                             str(datetime.now())[:-7],))
         except sl3.IntegrityError:
             sql_con.rollback()
-            cursor.execute('''UPDATE user_data 
+            cursor.execute('''UPDATE user_data
                                  SET alias = ?, group_name = ?
                                WHERE id = ?''',
                            (alias, group_name, message.chat.id,))
@@ -724,7 +724,7 @@ def confirm_choice(message):
         sql_con = sl3.connect(const.path + 'Bot.db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT alias, student_group_name
-                            FROM user_choice 
+                            FROM user_choice
                            WHERE user_id = ?''', (message.chat.id,))
         data = cursor.fetchone()
         alias = data[0]
@@ -753,7 +753,7 @@ def confirm_choice(message):
                             str(datetime.now())[:-7],))
         except sl3.IntegrityError:
             sql_con.rollback()
-            cursor.execute('''UPDATE user_data 
+            cursor.execute('''UPDATE user_data
                                  SET alias = ?, group_name = ?
                                WHERE id = ?''',
                            (alias, group_name, message.chat.id,))
@@ -783,7 +783,7 @@ def confirm_choice(message):
         sql_con = sl3.connect(const.path + 'Bot.db')
         cursor = sql_con.cursor()
         cursor.execute('''SELECT admission_year_name
-                            FROM user_choice 
+                            FROM user_choice
                            WHERE user_id = ?''', (message.chat.id,))
         data = cursor.fetchone()
         cursor.close()

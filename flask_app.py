@@ -1189,7 +1189,7 @@ def search_teacher_inline_handler(call_back):
 
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
-    cursor.execute('''UPDATE user_choice 
+    cursor.execute('''UPDATE user_choice
                          SET student_group_name = ?
                        WHERE user_id = ?''',
                    (teacher, call_back.message.chat.id,))
@@ -2339,7 +2339,7 @@ def handle_text(message):
             try:
                 sql_con = connect(const.path + 'Bot.db')
                 cursor = sql_con.cursor()
-                cursor.execute('''SELECT id 
+                cursor.execute('''SELECT id
                                     FROM user_data
                                    WHERE group_name = ?''', (message.text.split()[0],))
                 send_ids = cursor.fetchall()
@@ -2351,7 +2351,7 @@ def handle_text(message):
                     else:
                         sql_con = connect(const.path + 'Bot.db')
                         cursor = sql_con.cursor()
-                        cursor.execute('''SELECT id_not_banned 
+                        cursor.execute('''SELECT id_not_banned
                                             FROM banned_users''')
                         not_banned_users = cursor.fetchall()
                         cursor.close()

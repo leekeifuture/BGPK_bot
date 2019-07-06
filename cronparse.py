@@ -103,7 +103,7 @@ def parse(html, parse_day, request_day):
 
         sql_con = connect(const.path + 'Bot.db')
         cursor = sql_con.cursor()
-        cursor.execute('''SELECT id 
+        cursor.execute('''SELECT id
                             FROM user_data
                            WHERE sending_zam = 1''')
         sending_zam_one = list(cursor.fetchall())
@@ -125,8 +125,8 @@ def parse(html, parse_day, request_day):
         for szo in sending_zam_one:
             sql_con = connect(const.path + 'Bot.db')
             cursor = sql_con.cursor()
-            cursor.execute('''SELECT group_name 
-                                FROM user_data 
+            cursor.execute('''SELECT group_name
+                                FROM user_data
                                WHERE id = ?''', (szo[0],))
             group1 = cursor.fetchone()[0]
             cursor.close()
@@ -203,7 +203,7 @@ def parse(html, parse_day, request_day):
         for rs in real_sendig:
             sql_con = connect(const.path + 'Bot.db')
             cursor = sql_con.cursor()
-            cursor.execute('''SELECT id 
+            cursor.execute('''SELECT id
                                 FROM user_data
                                WHERE sending_zam = 1
                                  AND group_name = ?''', (rs,))
@@ -231,8 +231,8 @@ def parse(html, parse_day, request_day):
 
                 sql_con = connect(const.path + 'Bot.db')
                 cursor = sql_con.cursor()
-                cursor.execute('''SELECT group_name 
-                                    FROM user_data 
+                cursor.execute('''SELECT group_name
+                                    FROM user_data
                                    WHERE id = ?
                                      AND sending_zam = 1''', (id_send_repl,))
                 rs = cursor.fetchone()[0]
@@ -265,7 +265,7 @@ def parse(html, parse_day, request_day):
         for ag in all_groups:
             sql_con = connect(const.path + 'Bot.db')
             cursor = sql_con.cursor()
-            cursor.execute('''SELECT id 
+            cursor.execute('''SELECT id
                                 FROM user_data
                                WHERE sending_zam = 1
                                  AND group_name = ?''', (ag,))
@@ -279,7 +279,7 @@ def parse(html, parse_day, request_day):
         for at in all_teachers:
             sql_con = connect(const.path + 'Bot.db')
             cursor = sql_con.cursor()
-            cursor.execute('''SELECT id 
+            cursor.execute('''SELECT id
                                 FROM user_data
                                WHERE sending_zam = 1
                                  AND group_name = ?''', (at,))
@@ -388,7 +388,7 @@ def main():
 
     sql_con = connect(const.path + 'Parse.db')
     cursor = sql_con.cursor()
-    cursor.execute('''SELECT pro_parsing_day 
+    cursor.execute('''SELECT pro_parsing_day
                         FROM parsing_days''')
     pro_parsing_day = cursor.fetchone()[0]
     cursor.close()

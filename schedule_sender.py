@@ -22,11 +22,11 @@ def main(date):
     sql_con = connect(const.path + 'Bot.db')
     cursor = sql_con.cursor()
     if date == '21':
-        cursor.execute('''SELECT id 
+        cursor.execute('''SELECT id
                             FROM user_data
                            WHERE sending_rasp = 1''')
     elif date == '17':
-        cursor.execute('''SELECT id 
+        cursor.execute('''SELECT id
                             FROM user_data
                            WHERE sending_rasp_5 = 1''')
     sending_sched_one = cursor.fetchall()
