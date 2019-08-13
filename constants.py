@@ -52,19 +52,26 @@ courses = [
 student_groups = [
     {'STR1':
         [
+            {'StudentGroupName': 'С88'},
+            {'StudentGroupName': 'С89'},
+            {'StudentGroupName': 'Ср24'}
+        ]
+     },
+    {'STR2':
+        [
             {'StudentGroupName': 'С86'},
             {'StudentGroupName': 'С87'},
             {'StudentGroupName': 'Ср23'}
         ]
      },
-    {'STR2':
+    {'STR3':
         [
             {'StudentGroupName': 'С84'},
             {'StudentGroupName': 'С85'},
             {'StudentGroupName': 'Ср22'}
         ]
      },
-    {'STR3':
+    {'STR4':
         [
             {'StudentGroupName': 'С81'},
             {'StudentGroupName': 'С82'},
@@ -74,17 +81,23 @@ student_groups = [
      },
     {'RAD1':
         [
+            {'StudentGroupName': 'Р55'},
+            {'StudentGroupName': 'Р56'}
+        ]
+     },
+    {'RAD2':
+        [
             {'StudentGroupName': 'Р53'},
             {'StudentGroupName': 'Р54'}
         ]
      },
-    {'RAD2':
+    {'RAD3':
         [
             {'StudentGroupName': 'Р51'},
             {'StudentGroupName': 'Р52'}
         ]
      },
-    {'RAD3':
+    {'RAD4':
         [
             {'StudentGroupName': 'Р49'},
             {'StudentGroupName': 'Р50'}
@@ -92,18 +105,24 @@ student_groups = [
      },
     {'MEH1':
         [
+            {'StudentGroupName': 'М59'},
+            {'StudentGroupName': 'М60'}
+        ]
+     },
+    {'MEH2':
+        [
             {'StudentGroupName': 'М56'},
             {'StudentGroupName': 'М57'}
         ]
      },
-    {'MEH2':
+    {'MEH3':
         [
             {'StudentGroupName': 'М53'},
             {'StudentGroupName': 'М54'},
             {'StudentGroupName': 'Мс55'}
         ]
      },
-    {'MEH3':
+    {'MEH4':
         [
             {'StudentGroupName': 'М50'},
             {'StudentGroupName': 'М51'},
@@ -112,20 +131,19 @@ student_groups = [
      },
     {'YUR1':
         [
-            {'StudentGroupName': 'Ю44'}
+            {'StudentGroupName': 'Ю46'}
         ]
      },
     {'YUR2':
         [
-            {'StudentGroupName': 'Ю43'}
+            {'StudentGroupName': 'Ю44'}
         ]
      },
     {'YUR3':
         [
-            {'StudentGroupName': 'Ю41'},
-            {'StudentGroupName': 'Юс42'}
+            {'StudentGroupName': 'Ю43'}
         ]
-     }
+     },
 ]
 
 teachers = {
