@@ -139,7 +139,7 @@ student_groups = [
     {'YUR2':
         [
             {'StudentGroupName': 'Ю44'},
-            {'StudentGroupName': 'Юc45'}
+            {'StudentGroupName': 'Юс45'}
         ]
      },
     {'YUR3':
