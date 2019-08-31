@@ -82,7 +82,8 @@ student_groups = [
     {'RAD1':
         [
             {'StudentGroupName': 'Р55'},
-            {'StudentGroupName': 'Р56'}
+            {'StudentGroupName': 'Р56'},
+            {'StudentGroupName': 'Э1'}
         ]
      },
     {'RAD2':
@@ -112,7 +113,8 @@ student_groups = [
     {'MEH2':
         [
             {'StudentGroupName': 'М56'},
-            {'StudentGroupName': 'М57'}
+            {'StudentGroupName': 'М57'},
+            {'StudentGroupName': 'Мс58'}
         ]
      },
     {'MEH3':
@@ -136,7 +138,8 @@ student_groups = [
      },
     {'YUR2':
         [
-            {'StudentGroupName': 'Ю44'}
+            {'StudentGroupName': 'Ю44'},
+            {'StudentGroupName': 'Юc45'}
         ]
      },
     {'YUR3':
