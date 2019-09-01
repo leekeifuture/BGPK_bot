@@ -343,6 +343,16 @@ def select_teacher(message):
     else:
         teachers = search_teacher(message.text)
 
+        if len(teachers) == 0:
+            answer += ('Преподаватель "<b>' + message.text + '</b>" '
+                       'не найден.\nЕсли по какой-то причине отсусвует '
+                       'какой либо преподаватель, просьба сразу сообщить '
+                       '<a href="https://t.me/lee_kei">разработчику</a>.')
+
+            bot.send_message(message.chat.id, answer, True,
+                             parse_mode='HTML')
+            return
+
         if teachers[0] and len(teachers[0]) <= 10:
             short_teachers = []
             if len(teachers[0]) > 1:

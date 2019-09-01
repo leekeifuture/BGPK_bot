@@ -364,6 +364,8 @@ def settings_handler(message):
 
 @bot.message_handler(func=lambda mess: mess.text == const.emoji['page_facing_up'] + ' Расписание',
                      content_types=['text'])
+@bot.message_handler(func=lambda mess: mess.text.lower() == 'расписание',
+                     content_types=['text'])
 def schedule_handler(message):
 
     answer = 'Меню расписания'
@@ -373,6 +375,8 @@ def schedule_handler(message):
 
 @bot.message_handler(func=lambda mess: mess.text == const.emoji['anticlockwise'] + ' Замены' or
                      mess.text == '« Назaд',
+                     content_types=['text'])
+@bot.message_handler(func=lambda mess: mess.text.lower() == 'замены',
                      content_types=['text'])
 def replacements_handler(message):
 
@@ -836,13 +840,21 @@ def write_teacher_name_handler(message):
 
     educators = []
     teachers = func.search_teacher(message.text, from_menu=True)
-    short_teachers = func.shorting_teachers(teachers)
-    teachers_keyboard = tb.types.InlineKeyboardMarkup(row_width=2)
 
     if 'препoдавателя' in message.reply_to_message.text:
         sched_keyboard = replacements_keyboard
     else:
         sched_keyboard = schedule_keyboard
+
+    if len(teachers) is 0:
+      answer = 'Никого не найдено'
+      bot.send_message(message.chat.id, answer,
+                       reply_markup=sched_keyboard)
+      func.log_me(message)
+      return
+
+    short_teachers = func.shorting_teachers(teachers)
+    teachers_keyboard = tb.types.InlineKeyboardMarkup(row_width=2)
 
     if teachers[0] and len(teachers[0]) <= 20:
         if 'Введи Фамилию преподавателя:' in message.reply_to_message.text:
