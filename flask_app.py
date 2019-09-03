@@ -364,8 +364,6 @@ def settings_handler(message):
 
 @bot.message_handler(func=lambda mess: mess.text == const.emoji['page_facing_up'] + ' Расписание',
                      content_types=['text'])
-@bot.message_handler(func=lambda mess: mess.text.lower() == 'расписание',
-                     content_types=['text'])
 def schedule_handler(message):
 
     answer = 'Меню расписания'
@@ -375,8 +373,6 @@ def schedule_handler(message):
 
 @bot.message_handler(func=lambda mess: mess.text == const.emoji['anticlockwise'] + ' Замены' or
                      mess.text == '« Назaд',
-                     content_types=['text'])
-@bot.message_handler(func=lambda mess: mess.text.lower() == 'замены',
                      content_types=['text'])
 def replacements_handler(message):
 
