@@ -847,11 +847,11 @@ def write_teacher_name_handler(message):
         sched_keyboard = schedule_keyboard
 
     if len(teachers) is 0:
-      answer = 'Никого не найдено'
-      bot.send_message(message.chat.id, answer,
-                       reply_markup=sched_keyboard)
-      func.log_me(message)
-      return
+        answer = 'Никого не найдено'
+        bot.send_message(message.chat.id, answer,
+                         reply_markup=sched_keyboard)
+        func.log_me(message)
+        return
 
     short_teachers = func.shorting_teachers(teachers)
     teachers_keyboard = tb.types.InlineKeyboardMarkup(row_width=2)
@@ -2135,12 +2135,13 @@ def feedback_handler(call_back):
     force_reply = tb.types.ForceReply()
     feedback_answer = 'Обратная связь\nДля отмены используй /home'
     answer = ('Напиши мне что-нибудь\nРазработчик обязательно ответит на '
-              'твоё сообщение:')
+              'твоё сообщение (но лучше будет написать <a href="https://t.me/lee_kei">напрямую</a>):')
 
     bot.edit_message_text(feedback_answer, call_back.message.chat.id,
                           message_id=call_back.message.message_id)
-    bot.send_message(call_back.message.chat.id, answer,
-                     reply_markup=force_reply)
+    bot.send_message(call_back.message.chat.id, answer, True,
+                     reply_markup=force_reply,
+                     parse_mode='HTML')
     func.call_back_log_me(call_back)
 
 
