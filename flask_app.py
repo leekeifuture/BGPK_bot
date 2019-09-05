@@ -58,6 +58,18 @@ replacements_keyboard.row('Сегoдня', 'Зaвтрa', 'Нeделя')
 replacements_keyboard.row(const.emoji['back'], const.emoji['magnifying_glass'])
 
 
+'''
+@bot.message_handler(content_types=['text'])
+def handle_text(message):
+    print(message.text)
+
+
+@bot.callback_query_handler(func=lambda call_back: call_back.data)
+def callback_query_test(call_back):
+    print(call_back.data)
+'''
+
+
 @bot.message_handler(func=lambda mess: func.is_user_banned(mess.chat.id),
                      content_types=['text'])
 def banned_user_handler(message):
@@ -137,7 +149,7 @@ def exit_handler(message):
 
     func.delete_user(message.chat.id, only_choice=False)
     remove_keyboard = tb.types.ReplyKeyboardRemove()
-    answer = 'До встречи!'
+    answer = 'До встречи!\nДля регистрации используй /start'
     bot.send_message(message.chat.id, answer, reply_markup=remove_keyboard)
     func.log_me(message)
 
@@ -2190,7 +2202,7 @@ def set_rate_handler(call_back):
 
 @bot.callback_query_handler(func=lambda call_back: call_back.data)
 def callback_query_text_handler(call_back):
-    answer = 'Не понимаю'
+    answer = 'Не понимаю\nИспользуй /help для просмотра всех команд'
     bot.edit_message_text(answer, call_back.message.chat.id,
                           call_back.message.message_id)
     func.call_back_log_me(call_back)
@@ -2386,7 +2398,7 @@ def handle_text(message):
                 bot.send_message(message.chat.id, const.emoji['cross_mark'])
     else:
 
-        answer = 'Не понимаю'
+        answer = 'Не понимаю\nИспользуй /help для просмотра всех команд'
         bot.send_message(message.chat.id, answer)
     func.log_me(message)
 
