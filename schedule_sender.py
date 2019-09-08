@@ -102,10 +102,13 @@ def main(date):
                                      '\n\n'.format(str(irs),
                                                    group) +
                                      str(sys.exc_info()[1]))
+            try:
+                day_info = day_info[week][dt.datetime.isoweekday(dt.datetime.now() +
+                                                                 dt.timedelta(
+                    days=td)) - 1]
+            except:
+                continue
 
-            day_info = day_info[week][dt.datetime.isoweekday(dt.datetime.now() +
-                                                             dt.timedelta(
-                days=td)) - 1]
             if day_info:
                 answer += func.get_shedule_answer(day_info, full_date[1])
             else:
@@ -133,4 +136,4 @@ def main(date):
 
 
 if __name__ == '__main__':
-    main(dt.datetime.strftime(dt.datetime.now(), '%H'))
+    main('21')
