@@ -43,15 +43,14 @@ logger = tb.logger
 tb.logger.setLevel(INFO)
 
 main_keyboard = tb.types.ReplyKeyboardMarkup(True)
-main_keyboard.row(const.emoji['page_facing_up'] + ' Расписание',
-                  const.emoji['anticlockwise'] + ' Замены')
+main_keyboard.row(const.emoji['anticlockwise'] + ' Замены')
 main_keyboard.row(const.emoji['info'], const.emoji['star'],
                   const.emoji['settings'],
                   const.emoji['alarm_clock'], const.emoji['bell'])
 
-schedule_keyboard = tb.types.ReplyKeyboardMarkup(True)
-schedule_keyboard.row('Сегодня', 'Завтра', 'Неделя')
-schedule_keyboard.row(const.emoji['back'], const.emoji['bust_in_silhouette'])
+# schedule_keyboard = tb.types.ReplyKeyboardMarkup(True)
+# schedule_keyboard.row('Сегодня', 'Завтра', 'Неделя')
+# schedule_keyboard.row(const.emoji['back'], const.emoji['bust_in_silhouette'])
 
 replacements_keyboard = tb.types.ReplyKeyboardMarkup(True)
 replacements_keyboard.row('Сегoдня', 'Зaвтрa', 'Нeделя')
@@ -374,13 +373,13 @@ def settings_handler(message):
     func.log_me(message)
 
 
-@bot.message_handler(func=lambda mess: mess.text == const.emoji['page_facing_up'] + ' Расписание',
-                     content_types=['text'])
-def schedule_handler(message):
+# @bot.message_handler(func=lambda mess: mess.text == const.emoji['page_facing_up'] + ' Расписание',
+#                      content_types=['text'])
+# def schedule_handler(message):
 
-    answer = 'Меню расписания'
-    bot.send_message(message.chat.id, answer, reply_markup=schedule_keyboard)
-    func.log_me(message)
+#     answer = 'Меню расписания'
+#     bot.send_message(message.chat.id, answer, reply_markup=schedule_keyboard)
+#     func.log_me(message)
 
 
 @bot.message_handler(func=lambda mess: mess.text == const.emoji['anticlockwise'] + ' Замены' or
@@ -394,20 +393,20 @@ def replacements_handler(message):
     func.log_me(message)
 
 
-@bot.message_handler(func=lambda mess: mess.text == 'Сегодня')
-def today_schedule_handler(message):
+# @bot.message_handler(func=lambda mess: mess.text == 'Сегодня')
+# def today_schedule_handler(message):
 
-    answer = func.create_schedule_answer(message.chat.id)
-    bot.send_message(message.chat.id, answer, parse_mode='HTML')
-    func.log_me(message)
+#     answer = func.create_schedule_answer(message.chat.id)
+#     bot.send_message(message.chat.id, answer, parse_mode='HTML')
+#     func.log_me(message)
 
 
-@bot.message_handler(func=lambda mess: mess.text == 'Завтра')
-def tomorrow_schedule_handler(message):
+# @bot.message_handler(func=lambda mess: mess.text == 'Завтра')
+# def tomorrow_schedule_handler(message):
 
-    answer = func.create_schedule_answer(message.chat.id, True)
-    bot.send_message(message.chat.id, answer, parse_mode='HTML')
-    func.log_me(message)
+#     answer = func.create_schedule_answer(message.chat.id, True)
+#     bot.send_message(message.chat.id, answer, parse_mode='HTML')
+#     func.log_me(message)
 
 
 @bot.message_handler(func=lambda mess: mess.text == 'Сегoдня')
@@ -424,19 +423,19 @@ def tomorrow_replace_handler(message):
     func.log_me(message)
 
 
-@bot.message_handler(func=lambda mess: mess.text == 'Неделя')
-def calendar_handler(message):
+# @bot.message_handler(func=lambda mess: mess.text == 'Неделя')
+# def calendar_handler(message):
 
-    answer = 'Выбери день:'
-    week_day_calendar = tb.types.InlineKeyboardMarkup()
-    week_day_calendar.row(
-        *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
-            name in const.week_day_number.keys()])
-    week_day_calendar.row(
-        *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
-            name in ['Вся неделя']])
-    bot.send_message(message.chat.id, answer, reply_markup=week_day_calendar)
-    func.log_me(message)
+#     answer = 'Выбери день:'
+#     week_day_calendar = tb.types.InlineKeyboardMarkup()
+#     week_day_calendar.row(
+#         *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
+#             name in const.week_day_number.keys()])
+#     week_day_calendar.row(
+#         *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
+#             name in ['Вся неделя']])
+#     bot.send_message(message.chat.id, answer, reply_markup=week_day_calendar)
+#     func.log_me(message)
 
 
 @bot.message_handler(func=lambda mess: mess.text == 'Нeделя')
@@ -509,12 +508,12 @@ def sending_handler(message):
     sql_con.close()
 
     not_replace = False
-    if data[0] or data[1]:
-        schedule = ('Расписания (%s)' %
-                    const.emoji['check_mark'])
-    else:
-        schedule = ('Расписания (%s)' %
-                    const.emoji['negative_squared_cross_mark'])
+    # if data[0] or data[1]:
+    #     schedule = ('Расписания (%s)' %
+    #                 const.emoji['check_mark'])
+    # else:
+    #     schedule = ('Расписания (%s)' %
+    #                 const.emoji['negative_squared_cross_mark'])
     if data[2]:
         replace = ('Замен (%s)' %
                    const.emoji['check_mark'])
@@ -532,7 +531,7 @@ def sending_handler(message):
     sending_keyboard.row(
         *[tb.types.InlineKeyboardButton(text=name,
                                         callback_data=name)
-            for name in [schedule, replace]])
+            for name in [replace]])
     if not_replace:
         sending_keyboard.row(tb.types.InlineKeyboardButton(
             text=not_replace, callback_data=not_replace))
@@ -819,109 +818,109 @@ def write_replacement_handler(message):
     func.log_me(message)
 
 
-@bot.message_handler(func=lambda mess: mess.text == const.emoji['bust_in_silhouette'],
-                     content_types=['text'])
-def teacher_schedule_handler(message):
+# @bot.message_handler(func=lambda mess: mess.text == const.emoji['bust_in_silhouette'],
+#                      content_types=['text'])
+# def teacher_schedule_handler(message):
 
-    if message.text == const.emoji['bust_in_silhouette']:
-        answer = (
-            'Введи Фамилию преподавателя: <i>(и И. О.)</i>\n'
-            'Для отмены используй /home')
-    markup = tb.types.ForceReply()
-    bot.send_message(message.chat.id, answer, parse_mode='HTML',
-                     reply_markup=markup)
-    func.log_me(message)
+#     if message.text == const.emoji['bust_in_silhouette']:
+#         answer = (
+#             'Введи Фамилию преподавателя: <i>(и И. О.)</i>\n'
+#             'Для отмены используй /home')
+#     markup = tb.types.ForceReply()
+#     bot.send_message(message.chat.id, answer, parse_mode='HTML',
+#                      reply_markup=markup)
+#     func.log_me(message)
 
 
-@bot.message_handler(func=lambda mess: mess.reply_to_message is not None and
-                     mess.reply_to_message.from_user.username ==
-                     bot_username and
-                     ('Введи Фамилию преподавателя:' in
-                      mess.reply_to_message.text or
-                      'препoдавателя' in
-                      mess.reply_to_message.text),
-                     content_types=['text'])
-def write_teacher_name_handler(message):
+# @bot.message_handler(func=lambda mess: mess.reply_to_message is not None and
+#                      mess.reply_to_message.from_user.username ==
+#                      bot_username and
+#                      ('Введи Фамилию преподавателя:' in
+#                       mess.reply_to_message.text or
+#                       'препoдавателя' in
+#                       mess.reply_to_message.text),
+#                      content_types=['text'])
+# def write_teacher_name_handler(message):
 
-    i = 0
-    answer = ''
+#     i = 0
+#     answer = ''
 
-    educators = []
-    teachers = func.search_teacher(message.text, from_menu=True)
+#     educators = []
+#     teachers = func.search_teacher(message.text, from_menu=True)
 
-    if 'препoдавателя' in message.reply_to_message.text:
-        sched_keyboard = replacements_keyboard
-    else:
-        sched_keyboard = schedule_keyboard
+#     if 'препoдавателя' in message.reply_to_message.text:
+#         sched_keyboard = replacements_keyboard
+#     else:
+#         sched_keyboard = schedule_keyboard
 
-    if len(teachers) is 0:
-        answer = 'Никого не найдено'
-        bot.send_message(message.chat.id, answer,
-                         reply_markup=sched_keyboard)
-        func.log_me(message)
-        return
+#     if len(teachers) is 0:
+#         answer = 'Никого не найдено'
+#         bot.send_message(message.chat.id, answer,
+#                          reply_markup=sched_keyboard)
+#         func.log_me(message)
+#         return
 
-    short_teachers = func.shorting_teachers(teachers)
-    teachers_keyboard = tb.types.InlineKeyboardMarkup(row_width=2)
+#     short_teachers = func.shorting_teachers(teachers)
+#     teachers_keyboard = tb.types.InlineKeyboardMarkup(row_width=2)
 
-    if teachers[0] and len(teachers[0]) <= 20:
-        if 'Введи Фамилию преподавателя:' in message.reply_to_message.text:
-            if len(short_teachers) == 1:
-                answer += (const.emoji['mag_right'] +
-                           ' Найденный преподаватель:')
-                if func.is_data_invalid(short_teachers[0]):
-                    if short_teachers[0] in const.teacher_name:
-                        index = const.teacher_name.index(short_teachers[0])
-                    elif short_teachers[0] in const.sht_teachers:
-                        index = const.sht_teachers.index(short_teachers[0])
-                    elif short_teachers[0] in const.cap_teachers:
-                        index = const.cap_teachers.index(short_teachers[0])
-                    short_teachers[0] = const.teacher_name[index]
-            else:
-                answer += (const.emoji['mag_right'] +
-                           ' Найденные преподаватели:')
-        elif 'препoдавателя' in message.reply_to_message.text:
-            if len(short_teachers) == 1:
-                answer += (const.emoji['mag_right'] +
-                           ' Нaйденный преподаватель:')
-                if func.is_data_invalid(short_teachers[0]):
-                    if short_teachers[0] in const.teacher_name:
-                        index = const.teacher_name.index(short_teachers[0])
-                    elif short_teachers[0] in const.sht_teachers:
-                        index = const.sht_teachers.index(short_teachers[0])
-                    elif short_teachers[0] in const.cap_teachers:
-                        index = const.cap_teachers.index(short_teachers[0])
-                    short_teachers[0] = const.teacher_name[index]
-            else:
-                answer += (const.emoji['mag_right'] +
-                           ' Нaйденные преподаватели:')
+#     if teachers[0] and len(teachers[0]) <= 20:
+#         if 'Введи Фамилию преподавателя:' in message.reply_to_message.text:
+#             if len(short_teachers) == 1:
+#                 answer += (const.emoji['mag_right'] +
+#                            ' Найденный преподаватель:')
+#                 if func.is_data_invalid(short_teachers[0]):
+#                     if short_teachers[0] in const.teacher_name:
+#                         index = const.teacher_name.index(short_teachers[0])
+#                     elif short_teachers[0] in const.sht_teachers:
+#                         index = const.sht_teachers.index(short_teachers[0])
+#                     elif short_teachers[0] in const.cap_teachers:
+#                         index = const.cap_teachers.index(short_teachers[0])
+#                     short_teachers[0] = const.teacher_name[index]
+#             else:
+#                 answer += (const.emoji['mag_right'] +
+#                            ' Найденные преподаватели:')
+#         elif 'препoдавателя' in message.reply_to_message.text:
+#             if len(short_teachers) == 1:
+#                 answer += (const.emoji['mag_right'] +
+#                            ' Нaйденный преподаватель:')
+#                 if func.is_data_invalid(short_teachers[0]):
+#                     if short_teachers[0] in const.teacher_name:
+#                         index = const.teacher_name.index(short_teachers[0])
+#                     elif short_teachers[0] in const.sht_teachers:
+#                         index = const.sht_teachers.index(short_teachers[0])
+#                     elif short_teachers[0] in const.cap_teachers:
+#                         index = const.cap_teachers.index(short_teachers[0])
+#                     short_teachers[0] = const.teacher_name[index]
+#             else:
+#                 answer += (const.emoji['mag_right'] +
+#                            ' Нaйденные преподаватели:')
 
-        for teacher in short_teachers:
-            try:
-                educators.append(tb.types.InlineKeyboardButton(
-                    text=teacher,
-                    callback_data=teacher + '|' + str(teachers[1][i])))
-                i += 1
-            except:
-                continue
-        teachers_keyboard.add(*educators)
-        teachers_keyboard.row(tb.types.InlineKeyboardButton(
-            text='Отмена', callback_data='Отмена'))
+#         for teacher in short_teachers:
+#             try:
+#                 educators.append(tb.types.InlineKeyboardButton(
+#                     text=teacher,
+#                     callback_data=teacher + '|' + str(teachers[1][i])))
+#                 i += 1
+#             except:
+#                 continue
+#         teachers_keyboard.add(*educators)
+#         teachers_keyboard.row(tb.types.InlineKeyboardButton(
+#             text='Отмена', callback_data='Отмена'))
 
-        bot.send_message(message.chat.id, 'Готово!',
-                         reply_markup=sched_keyboard)
-        bot.send_message(message.chat.id, answer,
-                         reply_markup=teachers_keyboard)
-    elif len(teachers[0]) > 20:
-        answer += ('Слишком много преподавателей\n'
-                   'Пожалуйста, <b>уточни</b>')
-        bot.send_message(message.chat.id, answer, parse_mode='HTML',
-                         reply_markup=sched_keyboard)
-    else:
-        answer = 'Никого не найдено'
-        bot.send_message(message.chat.id, answer,
-                         reply_markup=sched_keyboard)
-        func.log_me(message)
+#         bot.send_message(message.chat.id, 'Готово!',
+#                          reply_markup=sched_keyboard)
+#         bot.send_message(message.chat.id, answer,
+#                          reply_markup=teachers_keyboard)
+#     elif len(teachers[0]) > 20:
+#         answer += ('Слишком много преподавателей\n'
+#                    'Пожалуйста, <b>уточни</b>')
+#         bot.send_message(message.chat.id, answer, parse_mode='HTML',
+#                          reply_markup=sched_keyboard)
+#     else:
+#         answer = 'Никого не найдено'
+#         bot.send_message(message.chat.id, answer,
+#                          reply_markup=sched_keyboard)
+#         func.log_me(message)
 
 
 @bot.message_handler(func=lambda mess: mess.reply_to_message is not None and
@@ -1023,7 +1022,7 @@ def send_newsletter_to_all_handler(message):
     for user in func.get_not_banned_users(message.chat.id):
         try:
             bot.send_message(user[0], message.text, True,
-                             parse_mode='HTML')
+                             parse_mode='HTML', reply_markup=main_keyboard)
         except Exception as err:
             answer = (const.emoji['cross_mark'] +
                       ' ' + str(user[0]) + '\n' + str(err))
@@ -1390,66 +1389,66 @@ def select_teacher_id_handler(call_back):
     func.call_back_log_me(call_back)
 
 
-@bot.callback_query_handler(func=lambda call_back: call_back.data == 'Отмена')
-def cancel_handler(call_back):
-    bot.send_chat_action(call_back.message.chat.id, 'typing')
-    answer = 'Отмена'
-    bot.edit_message_text(text=answer, chat_id=call_back.message.chat.id,
-                          message_id=call_back.message.message_id)
-    if 'Найденны' in call_back.message.text:
-        answer = 'Меню расписания'
-        bot.send_message(call_back.message.chat.id, answer,
-                         reply_markup=schedule_keyboard)
-    elif 'Нaйденны' in call_back.message.text:
-        answer = 'Меню замен'
-        bot.send_message(call_back.message.chat.id, answer,
-                         reply_markup=replacements_keyboard)
-    func.call_back_log_me(call_back)
+# @bot.callback_query_handler(func=lambda call_back: call_back.data == 'Отмена')
+# def cancel_handler(call_back):
+#     bot.send_chat_action(call_back.message.chat.id, 'typing')
+#     answer = 'Отмена'
+#     bot.edit_message_text(text=answer, chat_id=call_back.message.chat.id,
+#                           message_id=call_back.message.message_id)
+#     if 'Найденны' in call_back.message.text:
+#         answer = 'Меню расписания'
+#         bot.send_message(call_back.message.chat.id, answer,
+#                          reply_markup=schedule_keyboard)
+#     elif 'Нaйденны' in call_back.message.text:
+#         answer = 'Меню замен'
+#         bot.send_message(call_back.message.chat.id, answer,
+#                          reply_markup=replacements_keyboard)
+#     func.call_back_log_me(call_back)
 
 
-@bot.callback_query_handler(func=lambda call_back:
-                            call_back.data in const.week_day_number.keys() or
-                            call_back.data == 'Вся неделя')
-def select_week_day_schedule_handler(call_back):
-    day = ''
-    if call_back.data == 'Вся неделя':
-        day += 'неделю'
-    else:
-        day += [item[0] for item in const.week_day_titles.items() if
-                item[1] == call_back.data][0]
+# @bot.callback_query_handler(func=lambda call_back:
+#                             call_back.data in const.week_day_number.keys() or
+#                             call_back.data == 'Вся неделя')
+# def select_week_day_schedule_handler(call_back):
+#     day = ''
+#     if call_back.data == 'Вся неделя':
+#         day += 'неделю'
+#     else:
+#         day += [item[0] for item in const.week_day_titles.items() if
+#                 item[1] == call_back.data][0]
 
-    answer = 'Расписание на <i>{0}</i>\n'.format(day)
-    week_type_keyboard = tb.types.InlineKeyboardMarkup()
-    ned_week = func.get_week()
-    if datetime.isoweekday(datetime.now()) != 7:
-        if ned_week == 'UP':
-            arrow = const.emoji['arrow_up']
-        elif ned_week == 'DOWN':
-            arrow = const.emoji['arrow_down']
-    elif datetime.isoweekday(datetime.now()) == 7:
-        if ned_week == 'UP':
-            arrow = const.emoji['arrow_down']
-        elif ned_week == 'DOWN':
-            arrow = const.emoji['arrow_up']
-    week_type_keyboard.row(
-        *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
-            name in ['Текущее (' + arrow + ')']]
-    )
-    week_type_keyboard.row(
-        *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
-            name in [const.emoji['arrow_up'] + ' Верхнее',
-                     const.emoji['arrow_down'] + ' Нижнее']]
-    )
-    week_type_keyboard.row(
-        *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
-            name in ['« Нaзад']]
-    )
-    bot.edit_message_text(text=answer,
-                          chat_id=call_back.message.chat.id,
-                          message_id=call_back.message.message_id,
-                          parse_mode='HTML',
-                          reply_markup=week_type_keyboard)
-    func.call_back_log_me(call_back)
+#     answer = 'Расписание на <i>{0}</i>\n'.format(day)
+#     week_type_keyboard = tb.types.InlineKeyboardMarkup()
+#     ned_week = func.get_week()
+#     if datetime.isoweekday(datetime.now()) != 7:
+#         if ned_week == 'UP':
+#             arrow = const.emoji['arrow_up']
+#         elif ned_week == 'DOWN':
+#             arrow = const.emoji['arrow_down']
+#     elif datetime.isoweekday(datetime.now()) == 7:
+#         if ned_week == 'UP':
+#             arrow = const.emoji['arrow_down']
+#         elif ned_week == 'DOWN':
+#             arrow = const.emoji['arrow_up']
+#     week_type_keyboard.row(
+#         *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
+#             name in ['Текущее (' + arrow + ')']]
+#     )
+#     week_type_keyboard.row(
+#         *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
+#             name in [const.emoji['arrow_up'] + ' Верхнее',
+#                      const.emoji['arrow_down'] + ' Нижнее']]
+#     )
+#     week_type_keyboard.row(
+#         *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
+#             name in ['« Нaзад']]
+#     )
+#     bot.edit_message_text(text=answer,
+#                           chat_id=call_back.message.chat.id,
+#                           message_id=call_back.message.message_id,
+#                           parse_mode='HTML',
+#                           reply_markup=week_type_keyboard)
+#     func.call_back_log_me(call_back)
 
 
 @bot.callback_query_handler(func=lambda call_back:
@@ -1539,31 +1538,31 @@ def select_week_day_replace_handler(call_back):
     func.call_back_log_me(call_back)
 
 
-@bot.callback_query_handler(func=lambda call_back:
-                            'Расписание на неделю' in call_back.message.text)
-def all_week_schedule_handler(call_back):
-    if (call_back.data == 'Текущее (' + const.emoji['arrow_up'] + ')' or
-            call_back.data == 'Текущее (' + const.emoji['arrow_down'] + ')'):
-        func.send_schedule_force_week_answer(call_back.message, 0)
-    elif call_back.data == const.emoji['arrow_up'] + ' Верхнее':
-        func.send_schedule_force_week_answer(call_back.message, 2)
-    elif call_back.data == const.emoji['arrow_down'] + ' Нижнее':
-        func.send_schedule_force_week_answer(call_back.message, 1)
-    elif call_back.data == '« Нaзад':
-        answer = 'Выбери день:'
-        week_day_calendar = tb.types.InlineKeyboardMarkup()
-        week_day_calendar.row(
-            *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
-                name in const.week_day_number.keys()])
-        week_day_calendar.row(
-            *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
-                name in ['Вся неделя']])
-        bot.edit_message_text(text=answer,
-                              chat_id=call_back.message.chat.id,
-                              message_id=call_back.message.message_id,
-                              parse_mode='HTML',
-                              reply_markup=week_day_calendar)
-    func.call_back_log_me(call_back)
+# @bot.callback_query_handler(func=lambda call_back:
+#                             'Расписание на неделю' in call_back.message.text)
+# def all_week_schedule_handler(call_back):
+#     if (call_back.data == 'Текущее (' + const.emoji['arrow_up'] + ')' or
+#             call_back.data == 'Текущее (' + const.emoji['arrow_down'] + ')'):
+#         func.send_schedule_force_week_answer(call_back.message, 0)
+#     elif call_back.data == const.emoji['arrow_up'] + ' Верхнее':
+#         func.send_schedule_force_week_answer(call_back.message, 2)
+#     elif call_back.data == const.emoji['arrow_down'] + ' Нижнее':
+#         func.send_schedule_force_week_answer(call_back.message, 1)
+#     elif call_back.data == '« Нaзад':
+#         answer = 'Выбери день:'
+#         week_day_calendar = tb.types.InlineKeyboardMarkup()
+#         week_day_calendar.row(
+#             *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
+#                 name in const.week_day_number.keys()])
+#         week_day_calendar.row(
+#             *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
+#                 name in ['Вся неделя']])
+#         bot.edit_message_text(text=answer,
+#                               chat_id=call_back.message.chat.id,
+#                               message_id=call_back.message.message_id,
+#                               parse_mode='HTML',
+#                               reply_markup=week_day_calendar)
+#     func.call_back_log_me(call_back)
 
 
 @bot.callback_query_handler(func=lambda call_back:
@@ -1756,100 +1755,100 @@ def back_from_week_handler(call_back):
     func.call_back_log_me(call_back)
 
 
-@bot.callback_query_handler(func=lambda call_back:
-                            'Расписания' in call_back.data)
-def podpis_rasp_5_or_9_handler(call_back):
-    answer = 'Выбери, в какое время ты хочешь получать <b>расписание на следующий день</b>:'
-    sql_con = connect(const.path + 'Bot.db')
-    cursor = sql_con.cursor()
-    cursor.execute('''SELECT sending_rasp, sending_rasp_5
-                        FROM user_data
-                       WHERE id = ?''',
-                   (call_back.message.chat.id,))
-    data = cursor.fetchall()[0]
-    cursor.close()
-    sql_con.close()
-    if data[0]:
-        is_rasp_9 = const.emoji['check_mark']
-    else:
-        is_rasp_9 = const.emoji['negative_squared_cross_mark']
-    if data[1]:
-        is_rasp_5 = const.emoji['check_mark']
-    else:
-        is_rasp_5 = const.emoji['negative_squared_cross_mark']
-    sending_keyboard_rasp = tb.types.InlineKeyboardMarkup(True)
-    sending_keyboard_rasp.row(
-        *[tb.types.InlineKeyboardButton(text=name,
-                                        callback_data=name)
-            for name in [const.emoji['five_oclock'] + ' 17:00 (' + is_rasp_5 + ')',
-                         const.emoji['nine_oclock'] + ' 21:00 (' + is_rasp_9 + ')']])
-    sending_keyboard_rasp.row(
-        *[tb.types.InlineKeyboardButton(text=name,
-                                        callback_data='« Назад')
-            for name in ['« Назад']])
-    bot.edit_message_text(text=answer,
-                          chat_id=call_back.message.chat.id,
-                          message_id=call_back.message.message_id,
-                          parse_mode='HTML', reply_markup=sending_keyboard_rasp)
-    func.call_back_log_me(call_back)
+# @bot.callback_query_handler(func=lambda call_back:
+#                             'Расписания' in call_back.data)
+# def podpis_rasp_5_or_9_handler(call_back):
+#     answer = 'Выбери, в какое время ты хочешь получать <b>расписание на следующий день</b>:'
+#     sql_con = connect(const.path + 'Bot.db')
+#     cursor = sql_con.cursor()
+#     cursor.execute('''SELECT sending_rasp, sending_rasp_5
+#                         FROM user_data
+#                        WHERE id = ?''',
+#                    (call_back.message.chat.id,))
+#     data = cursor.fetchall()[0]
+#     cursor.close()
+#     sql_con.close()
+#     if data[0]:
+#         is_rasp_9 = const.emoji['check_mark']
+#     else:
+#         is_rasp_9 = const.emoji['negative_squared_cross_mark']
+#     if data[1]:
+#         is_rasp_5 = const.emoji['check_mark']
+#     else:
+#         is_rasp_5 = const.emoji['negative_squared_cross_mark']
+#     sending_keyboard_rasp = tb.types.InlineKeyboardMarkup(True)
+#     sending_keyboard_rasp.row(
+#         *[tb.types.InlineKeyboardButton(text=name,
+#                                         callback_data=name)
+#             for name in [const.emoji['five_oclock'] + ' 17:00 (' + is_rasp_5 + ')',
+#                          const.emoji['nine_oclock'] + ' 21:00 (' + is_rasp_9 + ')']])
+#     sending_keyboard_rasp.row(
+#         *[tb.types.InlineKeyboardButton(text=name,
+#                                         callback_data='« Назад')
+#             for name in ['« Назад']])
+#     bot.edit_message_text(text=answer,
+#                           chat_id=call_back.message.chat.id,
+#                           message_id=call_back.message.message_id,
+#                           parse_mode='HTML', reply_markup=sending_keyboard_rasp)
+#     func.call_back_log_me(call_back)
 
 
-@bot.callback_query_handler(func=lambda call_back:
-                            const.emoji['five_oclock'] + ' 17:00' in call_back.data)
-def podpis_rasp_5_handler(call_back):
-    answer = (('%s Здесь ты можешь <b>подписаться</b> на рассылку расписания на '
-               'следующий день или <b>отписаться</b> от неё.\n'
-               '%s Рассылка производится в 17:00') %
-              (const.emoji['mailbox_on'], const.emoji['envelope']))
-    sending_keyboard_rasp = tb.types.InlineKeyboardMarkup(True)
-    if func.is_sending_rasp_on(call_back.message.chat.id, True):
-        sending_keyboard_rasp.row(
-            *[tb.types.InlineKeyboardButton(text=name,
-                                            callback_data='Отписаться_5')
-                for name in [const.emoji['cross_mark'] + ' Отписаться']])
-    else:
-        sending_keyboard_rasp.row(
-            *[tb.types.InlineKeyboardButton(text=name,
-                                            callback_data='Подписаться_5')
-                for name in [const.emoji['check_mark'] + ' Подписаться']])
-    sending_keyboard_rasp.row(
-        *[tb.types.InlineKeyboardButton(text=name,
-                                        callback_data='« Назад')
-            for name in ['« Назад']])
-    bot.edit_message_text(text=answer,
-                          chat_id=call_back.message.chat.id,
-                          message_id=call_back.message.message_id,
-                          parse_mode='HTML', reply_markup=sending_keyboard_rasp)
-    func.call_back_log_me(call_back)
+# @bot.callback_query_handler(func=lambda call_back:
+#                             const.emoji['five_oclock'] + ' 17:00' in call_back.data)
+# def podpis_rasp_5_handler(call_back):
+#     answer = (('%s Здесь ты можешь <b>подписаться</b> на рассылку расписания на '
+#                'следующий день или <b>отписаться</b> от неё.\n'
+#                '%s Рассылка производится в 17:00') %
+#               (const.emoji['mailbox_on'], const.emoji['envelope']))
+#     sending_keyboard_rasp = tb.types.InlineKeyboardMarkup(True)
+#     if func.is_sending_rasp_on(call_back.message.chat.id, True):
+#         sending_keyboard_rasp.row(
+#             *[tb.types.InlineKeyboardButton(text=name,
+#                                             callback_data='Отписаться_5')
+#                 for name in [const.emoji['cross_mark'] + ' Отписаться']])
+#     else:
+#         sending_keyboard_rasp.row(
+#             *[tb.types.InlineKeyboardButton(text=name,
+#                                             callback_data='Подписаться_5')
+#                 for name in [const.emoji['check_mark'] + ' Подписаться']])
+#     sending_keyboard_rasp.row(
+#         *[tb.types.InlineKeyboardButton(text=name,
+#                                         callback_data='« Назад')
+#             for name in ['« Назад']])
+#     bot.edit_message_text(text=answer,
+#                           chat_id=call_back.message.chat.id,
+#                           message_id=call_back.message.message_id,
+#                           parse_mode='HTML', reply_markup=sending_keyboard_rasp)
+#     func.call_back_log_me(call_back)
 
 
-@bot.callback_query_handler(func=lambda call_back:
-                            const.emoji['nine_oclock'] + ' 21:00' in call_back.data)
-def podpis_rasp_9_handler(call_back):
-    answer = (('%s Здесь ты можешь <b>подписаться</b> на рассылку расписания на '
-               'следующий день или <b>отписаться</b> от неё.\n'
-               '%s Рассылка производится в 21:00') %
-              (const.emoji['mailbox_on'], const.emoji['envelope']))
-    sending_keyboard_rasp = tb.types.InlineKeyboardMarkup(True)
-    if func.is_sending_rasp_on(call_back.message.chat.id):
-        sending_keyboard_rasp.row(
-            *[tb.types.InlineKeyboardButton(text=name,
-                                            callback_data='Отписаться_9')
-                for name in [const.emoji['cross_mark'] + ' Отписаться']])
-    else:
-        sending_keyboard_rasp.row(
-            *[tb.types.InlineKeyboardButton(text=name,
-                                            callback_data='Подписаться_9')
-                for name in [const.emoji['check_mark'] + ' Подписаться']])
-    sending_keyboard_rasp.row(
-        *[tb.types.InlineKeyboardButton(text=name,
-                                        callback_data='« Назад')
-            for name in ['« Назад']])
-    bot.edit_message_text(text=answer,
-                          chat_id=call_back.message.chat.id,
-                          message_id=call_back.message.message_id,
-                          parse_mode='HTML', reply_markup=sending_keyboard_rasp)
-    func.call_back_log_me(call_back)
+# @bot.callback_query_handler(func=lambda call_back:
+#                             const.emoji['nine_oclock'] + ' 21:00' in call_back.data)
+# def podpis_rasp_9_handler(call_back):
+#     answer = (('%s Здесь ты можешь <b>подписаться</b> на рассылку расписания на '
+#                'следующий день или <b>отписаться</b> от неё.\n'
+#                '%s Рассылка производится в 21:00') %
+#               (const.emoji['mailbox_on'], const.emoji['envelope']))
+#     sending_keyboard_rasp = tb.types.InlineKeyboardMarkup(True)
+#     if func.is_sending_rasp_on(call_back.message.chat.id):
+#         sending_keyboard_rasp.row(
+#             *[tb.types.InlineKeyboardButton(text=name,
+#                                             callback_data='Отписаться_9')
+#                 for name in [const.emoji['cross_mark'] + ' Отписаться']])
+#     else:
+#         sending_keyboard_rasp.row(
+#             *[tb.types.InlineKeyboardButton(text=name,
+#                                             callback_data='Подписаться_9')
+#                 for name in [const.emoji['check_mark'] + ' Подписаться']])
+#     sending_keyboard_rasp.row(
+#         *[tb.types.InlineKeyboardButton(text=name,
+#                                         callback_data='« Назад')
+#             for name in ['« Назад']])
+#     bot.edit_message_text(text=answer,
+#                           chat_id=call_back.message.chat.id,
+#                           message_id=call_back.message.message_id,
+#                           parse_mode='HTML', reply_markup=sending_keyboard_rasp)
+#     func.call_back_log_me(call_back)
 
 
 @bot.callback_query_handler(func=lambda call_back:
@@ -1936,12 +1935,12 @@ def back_from_podpis_handler(call_back):
     sql_con.close()
 
     not_replace = False
-    if data[0] or data[1]:
-        schedule = ('Расписания (%s)' %
-                    const.emoji['check_mark'])
-    else:
-        schedule = ('Расписания (%s)' %
-                    const.emoji['negative_squared_cross_mark'])
+    # if data[0] or data[1]:
+    #     schedule = ('Расписания (%s)' %
+    #                 const.emoji['check_mark'])
+    # else:
+    #     schedule = ('Расписания (%s)' %
+    #                 const.emoji['negative_squared_cross_mark'])
     if data[2]:
         replace = ('Замен (%s)' %
                    const.emoji['check_mark'])
@@ -1959,7 +1958,7 @@ def back_from_podpis_handler(call_back):
     sending_keyboard.row(
         *[tb.types.InlineKeyboardButton(text=name,
                                         callback_data=name)
-            for name in [schedule, replace]])
+            for name in [replace]])
     if not_replace:
         sending_keyboard.row(tb.types.InlineKeyboardButton(
             text=not_replace, callback_data=not_replace))
