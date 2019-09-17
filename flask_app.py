@@ -48,9 +48,16 @@ main_keyboard.row(const.emoji['info'], const.emoji['star'],
                   const.emoji['settings'],
                   const.emoji['alarm_clock'], const.emoji['bell'])
 
-# schedule_keyboard = tb.types.ReplyKeyboardMarkup(True)
-# schedule_keyboard.row('Сегодня', 'Завтра', 'Неделя')
-# schedule_keyboard.row(const.emoji['back'], const.emoji['bust_in_silhouette'])
+main_keyboard_m50 = tb.types.ReplyKeyboardMarkup(True)
+main_keyboard_m50.row(const.emoji['page_facing_up'] + ' Расписание',
+                      const.emoji['anticlockwise'] + ' Замены')
+main_keyboard_m50.row(const.emoji['info'], const.emoji['star'],
+                      const.emoji['settings'],
+                      const.emoji['alarm_clock'], const.emoji['bell'])
+
+schedule_keyboard = tb.types.ReplyKeyboardMarkup(True)
+schedule_keyboard.row('Сегодня', 'Завтра', 'Неделя')
+schedule_keyboard.row(const.emoji['back'])
 
 replacements_keyboard = tb.types.ReplyKeyboardMarkup(True)
 replacements_keyboard.row('Сегoдня', 'Зaвтрa', 'Нeделя')
@@ -342,7 +349,11 @@ def home_handler(message):
 
     func.delete_user(message.chat.id, only_choice=True)
     answer = 'Главное меню'
-    bot.send_message(message.chat.id, answer, reply_markup=main_keyboard)
+    if message.chat.id in const.m50ids and func.get_student_group(message.chat.id).lower() == 'м50':
+        bot.send_message(message.chat.id, answer,
+                         reply_markup=main_keyboard_m50)
+    else:
+        bot.send_message(message.chat.id, answer, reply_markup=main_keyboard)
     func.log_me(message)
 
 
@@ -373,13 +384,13 @@ def settings_handler(message):
     func.log_me(message)
 
 
-# @bot.message_handler(func=lambda mess: mess.text == const.emoji['page_facing_up'] + ' Расписание',
-#                      content_types=['text'])
-# def schedule_handler(message):
+@bot.message_handler(func=lambda mess: mess.text == const.emoji['page_facing_up'] + ' Расписание' and (mess.chat.id in const.m50ids and func.get_student_group(mess.chat.id).lower() == 'м50'),
+                     content_types=['text'])
+def schedule_handler(message):
 
-#     answer = 'Меню расписания'
-#     bot.send_message(message.chat.id, answer, reply_markup=schedule_keyboard)
-#     func.log_me(message)
+    answer = 'Меню расписания'
+    bot.send_message(message.chat.id, answer, reply_markup=schedule_keyboard)
+    func.log_me(message)
 
 
 @bot.message_handler(func=lambda mess: mess.text == const.emoji['anticlockwise'] + ' Замены' or
@@ -393,20 +404,20 @@ def replacements_handler(message):
     func.log_me(message)
 
 
-# @bot.message_handler(func=lambda mess: mess.text == 'Сегодня')
-# def today_schedule_handler(message):
+@bot.message_handler(func=lambda mess: mess.text == 'Сегодня' and (mess.chat.id in const.m50ids and func.get_student_group(mess.chat.id).lower() == 'м50'))
+def today_schedule_handler(message):
 
-#     answer = func.create_schedule_answer(message.chat.id)
-#     bot.send_message(message.chat.id, answer, parse_mode='HTML')
-#     func.log_me(message)
+    answer = func.create_schedule_answer(message.chat.id)
+    bot.send_message(message.chat.id, answer, parse_mode='HTML')
+    func.log_me(message)
 
 
-# @bot.message_handler(func=lambda mess: mess.text == 'Завтра')
-# def tomorrow_schedule_handler(message):
+@bot.message_handler(func=lambda mess: mess.text == 'Завтра' and (mess.chat.id in const.m50ids and func.get_student_group(mess.chat.id).lower() == 'м50'))
+def tomorrow_schedule_handler(message):
 
-#     answer = func.create_schedule_answer(message.chat.id, True)
-#     bot.send_message(message.chat.id, answer, parse_mode='HTML')
-#     func.log_me(message)
+    answer = func.create_schedule_answer(message.chat.id, True)
+    bot.send_message(message.chat.id, answer, parse_mode='HTML')
+    func.log_me(message)
 
 
 @bot.message_handler(func=lambda mess: mess.text == 'Сегoдня')
@@ -423,19 +434,19 @@ def tomorrow_replace_handler(message):
     func.log_me(message)
 
 
-# @bot.message_handler(func=lambda mess: mess.text == 'Неделя')
-# def calendar_handler(message):
+@bot.message_handler(func=lambda mess: mess.text == 'Неделя' and (mess.chat.id in const.m50ids and func.get_student_group(mess.chat.id).lower() == 'м50'))
+def calendar_handler(message):
 
-#     answer = 'Выбери день:'
-#     week_day_calendar = tb.types.InlineKeyboardMarkup()
-#     week_day_calendar.row(
-#         *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
-#             name in const.week_day_number.keys()])
-#     week_day_calendar.row(
-#         *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
-#             name in ['Вся неделя']])
-#     bot.send_message(message.chat.id, answer, reply_markup=week_day_calendar)
-#     func.log_me(message)
+    answer = 'Выбери день:'
+    week_day_calendar = tb.types.InlineKeyboardMarkup()
+    week_day_calendar.row(
+        *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
+            name in const.week_day_number.keys()])
+    week_day_calendar.row(
+        *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
+            name in ['Вся неделя']])
+    bot.send_message(message.chat.id, answer, reply_markup=week_day_calendar)
+    func.log_me(message)
 
 
 @bot.message_handler(func=lambda mess: mess.text == 'Нeделя')
@@ -818,7 +829,7 @@ def write_replacement_handler(message):
     func.log_me(message)
 
 
-# @bot.message_handler(func=lambda mess: mess.text == const.emoji['bust_in_silhouette'],
+# @bot.message_handler(func=lambda mess: mess.text == const.emoji['bust_in_silhouette'] and (mess.chat.id in const.m50ids and func.get_student_group(mess.chat.id).lower() == 'м50'),
 #                      content_types=['text'])
 # def teacher_schedule_handler(message):
 
@@ -834,7 +845,7 @@ def write_replacement_handler(message):
 
 # @bot.message_handler(func=lambda mess: mess.reply_to_message is not None and
 #                      mess.reply_to_message.from_user.username ==
-#                      bot_username and
+#                      bot_username and (mess.chat.id in const.m50ids and func.get_student_group(mess.chat.id).lower() == 'м50') and
 #                      ('Введи Фамилию преподавателя:' in
 #                       mess.reply_to_message.text or
 #                       'препoдавателя' in
@@ -1389,66 +1400,66 @@ def select_teacher_id_handler(call_back):
     func.call_back_log_me(call_back)
 
 
-# @bot.callback_query_handler(func=lambda call_back: call_back.data == 'Отмена')
-# def cancel_handler(call_back):
-#     bot.send_chat_action(call_back.message.chat.id, 'typing')
-#     answer = 'Отмена'
-#     bot.edit_message_text(text=answer, chat_id=call_back.message.chat.id,
-#                           message_id=call_back.message.message_id)
-#     if 'Найденны' in call_back.message.text:
-#         answer = 'Меню расписания'
-#         bot.send_message(call_back.message.chat.id, answer,
-#                          reply_markup=schedule_keyboard)
-#     elif 'Нaйденны' in call_back.message.text:
-#         answer = 'Меню замен'
-#         bot.send_message(call_back.message.chat.id, answer,
-#                          reply_markup=replacements_keyboard)
-#     func.call_back_log_me(call_back)
+@bot.callback_query_handler(func=lambda call_back: call_back.data == 'Отмена' and (call_back.message.chat.id in const.m50ids and func.get_student_group(call_back.message.chat.id).lower() == 'м50'))
+def cancel_handler(call_back):
+    bot.send_chat_action(call_back.message.chat.id, 'typing')
+    answer = 'Отмена'
+    bot.edit_message_text(text=answer, chat_id=call_back.message.chat.id,
+                          message_id=call_back.message.message_id)
+    if 'Найденны' in call_back.message.text:
+        answer = 'Меню расписания'
+        bot.send_message(call_back.message.chat.id, answer,
+                         reply_markup=schedule_keyboard)
+    elif 'Нaйденны' in call_back.message.text:
+        answer = 'Меню замен'
+        bot.send_message(call_back.message.chat.id, answer,
+                         reply_markup=replacements_keyboard)
+    func.call_back_log_me(call_back)
 
 
-# @bot.callback_query_handler(func=lambda call_back:
-#                             call_back.data in const.week_day_number.keys() or
-#                             call_back.data == 'Вся неделя')
-# def select_week_day_schedule_handler(call_back):
-#     day = ''
-#     if call_back.data == 'Вся неделя':
-#         day += 'неделю'
-#     else:
-#         day += [item[0] for item in const.week_day_titles.items() if
-#                 item[1] == call_back.data][0]
+@bot.callback_query_handler(func=lambda call_back:
+                            (call_back.data in const.week_day_number.keys() or
+                             call_back.data == 'Вся неделя') and (call_back.message.chat.id in const.m50ids and func.get_student_group(call_back.message.chat.id).lower() == 'м50'))
+def select_week_day_schedule_handler(call_back):
+    day = ''
+    if call_back.data == 'Вся неделя':
+        day += 'неделю'
+    else:
+        day += [item[0] for item in const.week_day_titles.items() if
+                item[1] == call_back.data][0]
 
-#     answer = 'Расписание на <i>{0}</i>\n'.format(day)
-#     week_type_keyboard = tb.types.InlineKeyboardMarkup()
-#     ned_week = func.get_week()
-#     if datetime.isoweekday(datetime.now()) != 7:
-#         if ned_week == 'UP':
-#             arrow = const.emoji['arrow_up']
-#         elif ned_week == 'DOWN':
-#             arrow = const.emoji['arrow_down']
-#     elif datetime.isoweekday(datetime.now()) == 7:
-#         if ned_week == 'UP':
-#             arrow = const.emoji['arrow_down']
-#         elif ned_week == 'DOWN':
-#             arrow = const.emoji['arrow_up']
-#     week_type_keyboard.row(
-#         *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
-#             name in ['Текущее (' + arrow + ')']]
-#     )
-#     week_type_keyboard.row(
-#         *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
-#             name in [const.emoji['arrow_up'] + ' Верхнее',
-#                      const.emoji['arrow_down'] + ' Нижнее']]
-#     )
-#     week_type_keyboard.row(
-#         *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
-#             name in ['« Нaзад']]
-#     )
-#     bot.edit_message_text(text=answer,
-#                           chat_id=call_back.message.chat.id,
-#                           message_id=call_back.message.message_id,
-#                           parse_mode='HTML',
-#                           reply_markup=week_type_keyboard)
-#     func.call_back_log_me(call_back)
+    answer = 'Расписание на <i>{0}</i>\n'.format(day)
+    week_type_keyboard = tb.types.InlineKeyboardMarkup()
+    ned_week = func.get_week()
+    if datetime.isoweekday(datetime.now()) != 7:
+        if ned_week == 'UP':
+            arrow = const.emoji['arrow_up']
+        elif ned_week == 'DOWN':
+            arrow = const.emoji['arrow_down']
+    elif datetime.isoweekday(datetime.now()) == 7:
+        if ned_week == 'UP':
+            arrow = const.emoji['arrow_down']
+        elif ned_week == 'DOWN':
+            arrow = const.emoji['arrow_up']
+    week_type_keyboard.row(
+        *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
+            name in ['Текущее (' + arrow + ')']]
+    )
+    week_type_keyboard.row(
+        *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
+            name in [const.emoji['arrow_up'] + ' Верхнее',
+                     const.emoji['arrow_down'] + ' Нижнее']]
+    )
+    week_type_keyboard.row(
+        *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
+            name in ['« Нaзад']]
+    )
+    bot.edit_message_text(text=answer,
+                          chat_id=call_back.message.chat.id,
+                          message_id=call_back.message.message_id,
+                          parse_mode='HTML',
+                          reply_markup=week_type_keyboard)
+    func.call_back_log_me(call_back)
 
 
 @bot.callback_query_handler(func=lambda call_back:
@@ -1538,31 +1549,31 @@ def select_week_day_replace_handler(call_back):
     func.call_back_log_me(call_back)
 
 
-# @bot.callback_query_handler(func=lambda call_back:
-#                             'Расписание на неделю' in call_back.message.text)
-# def all_week_schedule_handler(call_back):
-#     if (call_back.data == 'Текущее (' + const.emoji['arrow_up'] + ')' or
-#             call_back.data == 'Текущее (' + const.emoji['arrow_down'] + ')'):
-#         func.send_schedule_force_week_answer(call_back.message, 0)
-#     elif call_back.data == const.emoji['arrow_up'] + ' Верхнее':
-#         func.send_schedule_force_week_answer(call_back.message, 2)
-#     elif call_back.data == const.emoji['arrow_down'] + ' Нижнее':
-#         func.send_schedule_force_week_answer(call_back.message, 1)
-#     elif call_back.data == '« Нaзад':
-#         answer = 'Выбери день:'
-#         week_day_calendar = tb.types.InlineKeyboardMarkup()
-#         week_day_calendar.row(
-#             *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
-#                 name in const.week_day_number.keys()])
-#         week_day_calendar.row(
-#             *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
-#                 name in ['Вся неделя']])
-#         bot.edit_message_text(text=answer,
-#                               chat_id=call_back.message.chat.id,
-#                               message_id=call_back.message.message_id,
-#                               parse_mode='HTML',
-#                               reply_markup=week_day_calendar)
-#     func.call_back_log_me(call_back)
+@bot.callback_query_handler(func=lambda call_back:
+                            'Расписание на неделю' in call_back.message.text and (call_back.message.chat.id in const.m50ids and func.get_student_group(call_back.message.chat.id).lower() == 'м50'))
+def all_week_schedule_handler(call_back):
+    if (call_back.data == 'Текущее (' + const.emoji['arrow_up'] + ')' or
+            call_back.data == 'Текущее (' + const.emoji['arrow_down'] + ')'):
+        func.send_schedule_force_week_answer(call_back.message, 0)
+    elif call_back.data == const.emoji['arrow_up'] + ' Верхнее':
+        func.send_schedule_force_week_answer(call_back.message, 2)
+    elif call_back.data == const.emoji['arrow_down'] + ' Нижнее':
+        func.send_schedule_force_week_answer(call_back.message, 1)
+    elif call_back.data == '« Нaзад':
+        answer = 'Выбери день:'
+        week_day_calendar = tb.types.InlineKeyboardMarkup()
+        week_day_calendar.row(
+            *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
+                name in const.week_day_number.keys()])
+        week_day_calendar.row(
+            *[tb.types.InlineKeyboardButton(text=name, callback_data=name) for
+                name in ['Вся неделя']])
+        bot.edit_message_text(text=answer,
+                              chat_id=call_back.message.chat.id,
+                              message_id=call_back.message.message_id,
+                              parse_mode='HTML',
+                              reply_markup=week_day_calendar)
+    func.call_back_log_me(call_back)
 
 
 @bot.callback_query_handler(func=lambda call_back:
