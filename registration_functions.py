@@ -648,7 +648,7 @@ def select_student_group(message):
 
 
 def confirm_choice_teacher(message):
-    from flask_app import bot, start_handler, main_keyboard
+    from flask_app import bot, start_handler, main_keyboard, main_keyboard_m50
 
     answer = ''
 
@@ -708,8 +708,14 @@ def confirm_choice_teacher(message):
                                                     const.emoji['settings'],
                                                     const.emoji['alarm_clock'],
                                                     const.emoji['bell']))
+
+        if message.chat.id in const.m50ids and group_name.lower() == 'м50':
+            keyboard = main_keyboard_m50
+        else:
+            keyboard = main_keyboard
+
         bot.send_message(message.chat.id, answer,
-                         reply_markup=main_keyboard,
+                         reply_markup=keyboard,
                          parse_mode='HTML')
     elif message.text == 'Другой преподаватель':
         message.text = 'Преподаватель'
@@ -726,7 +732,7 @@ def confirm_choice_teacher(message):
 
 
 def confirm_choice(message):
-    from flask_app import bot, start_handler, main_keyboard
+    from flask_app import bot, start_handler, main_keyboard, main_keyboard_m50
 
     answer = ''
 
@@ -786,8 +792,14 @@ def confirm_choice(message):
                                                     const.emoji['settings'],
                                                     const.emoji['alarm_clock'],
                                                     const.emoji['bell']))
+
+        if message.chat.id in const.m50ids and group_name.lower() == 'м50':
+            keyboard = main_keyboard_m50
+        else:
+            keyboard = main_keyboard
+
         bot.send_message(message.chat.id, answer,
-                         reply_markup=main_keyboard,
+                         reply_markup=keyboard,
                          parse_mode='HTML')
     elif message.text == 'Другая группа':
         sql_con = sl3.connect(const.path + 'Bot.db')
