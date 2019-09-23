@@ -3,3 +3,5 @@ venv
 *.db
 test*.py
 *.pem
+
+.idea

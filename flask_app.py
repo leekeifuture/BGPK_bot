@@ -42,9 +42,9 @@ bot_username = bot.get_me().username
 logger = tb.logger
 tb.logger.setLevel(INFO)
 
-main_keyboard = tb.types.ReplyKeyboardMarkup(True)
-main_keyboard.row(const.emoji['anticlockwise'] + ' Замены')
-main_keyboard.row(const.emoji['info'], const.emoji['star'],
+main_keyboard_btn = tb.types.ReplyKeyboardMarkup(True)
+main_keyboard_btn.row(const.emoji['anticlockwise'] + ' Замены')
+main_keyboard_btn.row(const.emoji['info'], const.emoji['star'],
                   const.emoji['settings'],
                   const.emoji['alarm_clock'], const.emoji['bell'])
 
@@ -54,6 +54,13 @@ main_keyboard_m50.row(const.emoji['page_facing_up'] + ' Расписание',
 main_keyboard_m50.row(const.emoji['info'], const.emoji['star'],
                       const.emoji['settings'],
                       const.emoji['alarm_clock'], const.emoji['bell'])
+
+def main_keyboard(user_id):
+    if (user_id in const.m50ids and
+            func.get_student_group(user_id).lower()) == 'м50':
+        return main_keyboard_m50
+    return main_keyboard_btn
+
 
 schedule_keyboard = tb.types.ReplyKeyboardMarkup(True)
 schedule_keyboard.row('Сегодня', 'Завтра', 'Неделя')
@@ -349,11 +356,7 @@ def home_handler(message):
 
     func.delete_user(message.chat.id, only_choice=True)
     answer = 'Главное меню'
-    if message.chat.id in const.m50ids and func.get_student_group(message.chat.id).lower() == 'м50':
-        bot.send_message(message.chat.id, answer,
-                         reply_markup=main_keyboard_m50)
-    else:
-        bot.send_message(message.chat.id, answer, reply_markup=main_keyboard)
+    bot.send_message(message.chat.id, answer, reply_markup=main_keyboard(message.chat.id))
     func.log_me(message)
 
 
@@ -944,7 +947,7 @@ def users_callback_handler(message):
     bot.forward_message(conf.my_id, message.chat.id, message.message_id)
     bot.send_message(message.chat.id, 'Записал. Жди ответа от разработчика.',
                      reply_to_message_id=message.message_id,
-                     reply_markup=main_keyboard)
+                     reply_markup=main_keyboard(message.chat.id))
     func.log_me(message)
 
 
@@ -1033,7 +1036,7 @@ def send_newsletter_to_all_handler(message):
     for user in func.get_not_banned_users(message.chat.id):
         try:
             bot.send_message(user[0], message.text, True,
-                             parse_mode='HTML', reply_markup=main_keyboard)
+                             parse_mode='HTML', reply_markup=main_keyboard(message.chat.id))
         except Exception as err:
             answer = (const.emoji['cross_mark'] +
                       ' ' + str(user[0]) + '\n' + str(err))
@@ -1082,7 +1085,7 @@ def save_abridged_call_handler(message):
         answer = invalid_format_answer
     bot.send_message(message.chat.id, answer,
                      reply_to_message_id=message.message_id,
-                     reply_markup=main_keyboard)
+                     reply_markup=main_keyboard(message.chat.id))
     func.log_me(message)
 
 
@@ -1196,7 +1199,7 @@ def back_from_reg_handler(call_back):
         bot.edit_message_text(answer, call_back.message.chat.id,
                               call_back.message.message_id)
         bot.send_message(call_back.message.chat.id, answer,
-                         reply_markup=main_keyboard)
+                         reply_markup=main_keyboard(call_back.message.chat.id))
     else:
         start_handler(call_back.message, True)
     func.call_back_log_me(call_back)
@@ -2260,7 +2263,7 @@ def handle_text(message):
                     func.unban_user(int(message.text[5:]))
 
                     bot.send_message(int(message.text[5:]), const.emoji['check_mark'] + ' Разблокирован',
-                                     reply_markup=main_keyboard)
+                                     reply_markup=main_keyboard(message.chat.id))
 
                     bot.send_message(
                         message.chat.id, const.emoji['check_mark'])
