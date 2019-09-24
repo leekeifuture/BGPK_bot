@@ -55,9 +55,10 @@ main_keyboard_m50.row(const.emoji['info'], const.emoji['star'],
                       const.emoji['settings'],
                       const.emoji['alarm_clock'], const.emoji['bell'])
 
-def main_keyboard(user_id):
-    if (user_id in const.m50ids and
-            func.get_student_group(user_id).lower()) == 'м50':
+
+def main_keyboard(chat_id):
+    if (chat_id in const.m50ids and
+            func.get_student_group(chat_id).lower()) == 'м50':
         return main_keyboard_m50
     return main_keyboard_btn
 
@@ -356,7 +357,8 @@ def home_handler(message):
 
     func.delete_user(message.chat.id, only_choice=True)
     answer = 'Главное меню'
-    bot.send_message(message.chat.id, answer, reply_markup=main_keyboard(message.chat.id))
+    bot.send_message(message.chat.id, answer,
+                     reply_markup=main_keyboard(message.chat.id))
     func.log_me(message)
 
 
