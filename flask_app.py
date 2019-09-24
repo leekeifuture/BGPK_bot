@@ -45,8 +45,8 @@ tb.logger.setLevel(INFO)
 main_keyboard_btn = tb.types.ReplyKeyboardMarkup(True)
 main_keyboard_btn.row(const.emoji['anticlockwise'] + ' Замены')
 main_keyboard_btn.row(const.emoji['info'], const.emoji['star'],
-                  const.emoji['settings'],
-                  const.emoji['alarm_clock'], const.emoji['bell'])
+                      const.emoji['settings'],
+                      const.emoji['alarm_clock'], const.emoji['bell'])
 
 main_keyboard_m50 = tb.types.ReplyKeyboardMarkup(True)
 main_keyboard_m50.row(const.emoji['page_facing_up'] + ' Расписание',
@@ -1038,7 +1038,7 @@ def send_newsletter_to_all_handler(message):
     for user in func.get_not_banned_users(message.chat.id):
         try:
             bot.send_message(user[0], message.text, True,
-                             parse_mode='HTML', reply_markup=main_keyboard(message.chat.id))
+                             parse_mode='HTML')
         except Exception as err:
             answer = (const.emoji['cross_mark'] +
                       ' ' + str(user[0]) + '\n' + str(err))
