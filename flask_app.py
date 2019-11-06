@@ -57,8 +57,7 @@ main_keyboard_m50.row(const.emoji['info'], const.emoji['star'],
 
 
 def main_keyboard(chat_id):
-    if (chat_id in const.m50ids and
-            func.get_student_group(chat_id).lower()) == 'м50':
+    if (func.get_student_group(chat_id).lower()) == 'м50':
         return main_keyboard_m50
     return main_keyboard_btn
 
@@ -389,7 +388,7 @@ def settings_handler(message):
     func.log_me(message)
 
 
-@bot.message_handler(func=lambda mess: mess.text == const.emoji['page_facing_up'] + ' Расписание' and (mess.chat.id in const.m50ids and func.get_student_group(mess.chat.id).lower() == 'м50'),
+@bot.message_handler(func=lambda mess: mess.text == const.emoji['page_facing_up'] + ' Расписание' and (func.get_student_group(mess.chat.id).lower() == 'м50'),
                      content_types=['text'])
 def schedule_handler(message):
 
@@ -409,7 +408,7 @@ def replacements_handler(message):
     func.log_me(message)
 
 
-@bot.message_handler(func=lambda mess: mess.text == 'Сегодня' and (mess.chat.id in const.m50ids and func.get_student_group(mess.chat.id).lower() == 'м50'))
+@bot.message_handler(func=lambda mess: mess.text == 'Сегодня' and (func.get_student_group(mess.chat.id).lower() == 'м50'))
 def today_schedule_handler(message):
 
     answer = func.create_schedule_answer(message.chat.id)
@@ -417,7 +416,7 @@ def today_schedule_handler(message):
     func.log_me(message)
 
 
-@bot.message_handler(func=lambda mess: mess.text == 'Завтра' and (mess.chat.id in const.m50ids and func.get_student_group(mess.chat.id).lower() == 'м50'))
+@bot.message_handler(func=lambda mess: mess.text == 'Завтра' and (func.get_student_group(mess.chat.id).lower() == 'м50'))
 def tomorrow_schedule_handler(message):
 
     answer = func.create_schedule_answer(message.chat.id, True)
@@ -439,7 +438,7 @@ def tomorrow_replace_handler(message):
     func.log_me(message)
 
 
-@bot.message_handler(func=lambda mess: mess.text == 'Неделя' and (mess.chat.id in const.m50ids and func.get_student_group(mess.chat.id).lower() == 'м50'))
+@bot.message_handler(func=lambda mess: mess.text == 'Неделя' and (func.get_student_group(mess.chat.id).lower() == 'м50'))
 def calendar_handler(message):
 
     answer = 'Выбери день:'
@@ -834,7 +833,7 @@ def write_replacement_handler(message):
     func.log_me(message)
 
 
-# @bot.message_handler(func=lambda mess: mess.text == const.emoji['bust_in_silhouette'] and (mess.chat.id in const.m50ids and func.get_student_group(mess.chat.id).lower() == 'м50'),
+# @bot.message_handler(func=lambda mess: mess.text == const.emoji['bust_in_silhouette'] and (func.get_student_group(mess.chat.id).lower() == 'м50'),
 #                      content_types=['text'])
 # def teacher_schedule_handler(message):
 
@@ -850,7 +849,7 @@ def write_replacement_handler(message):
 
 # @bot.message_handler(func=lambda mess: mess.reply_to_message is not None and
 #                      mess.reply_to_message.from_user.username ==
-#                      bot_username and (mess.chat.id in const.m50ids and func.get_student_group(mess.chat.id).lower() == 'м50') and
+#                      bot_username and (func.get_student_group(mess.chat.id).lower() == 'м50') and
 #                      ('Введи Фамилию преподавателя:' in
 #                       mess.reply_to_message.text or
 #                       'препoдавателя' in
@@ -1405,7 +1404,7 @@ def select_teacher_id_handler(call_back):
     func.call_back_log_me(call_back)
 
 
-@bot.callback_query_handler(func=lambda call_back: call_back.data == 'Отмена' and (call_back.message.chat.id in const.m50ids and func.get_student_group(call_back.message.chat.id).lower() == 'м50'))
+@bot.callback_query_handler(func=lambda call_back: call_back.data == 'Отмена' and (func.get_student_group(call_back.message.chat.id).lower() == 'м50'))
 def cancel_handler(call_back):
     bot.send_chat_action(call_back.message.chat.id, 'typing')
     answer = 'Отмена'
@@ -1424,7 +1423,7 @@ def cancel_handler(call_back):
 
 @bot.callback_query_handler(func=lambda call_back:
                             (call_back.data in const.week_day_number.keys() or
-                             call_back.data == 'Вся неделя') and (call_back.message.chat.id in const.m50ids and func.get_student_group(call_back.message.chat.id).lower() == 'м50'))
+                             call_back.data == 'Вся неделя') and (func.get_student_group(call_back.message.chat.id).lower() == 'м50'))
 def select_week_day_schedule_handler(call_back):
     day = ''
     if call_back.data == 'Вся неделя':
@@ -1555,7 +1554,7 @@ def select_week_day_replace_handler(call_back):
 
 
 @bot.callback_query_handler(func=lambda call_back:
-                            'Расписание на неделю' in call_back.message.text and (call_back.message.chat.id in const.m50ids and func.get_student_group(call_back.message.chat.id).lower() == 'м50'))
+                            'Расписание на неделю' in call_back.message.text and (func.get_student_group(call_back.message.chat.id).lower() == 'м50'))
 def all_week_schedule_handler(call_back):
     if (call_back.data == 'Текущее (' + const.emoji['arrow_up'] + ')' or
             call_back.data == 'Текущее (' + const.emoji['arrow_down'] + ')'):
