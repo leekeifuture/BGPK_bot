@@ -4,6 +4,7 @@
 
 import re
 import os
+import config as conf
 from xlrd import open_workbook
 from collections import Counter
 
@@ -11,6 +12,8 @@ from collections import Counter
 path = os.environ['PATH_TO_BOT_DIRECTORY']
 
 collage_folder = path + '/collage constants/'
+
+admin_ids = [conf.my_id, '650459589']
 
 types = [
     {'Alias': 'STUD',
@@ -155,7 +158,7 @@ student_groups = [
 ]
 
 
-site_prefix = 'http://www.bspc.brest.by/ru/uchashchimsya/zamena-zanyatij/'
+site_prefix = 'http://www.bspc.bstu.by/ru/uchashchimsya/zamena-zanyatij/'
 
 ponedelnik = site_prefix + '169-zamena-ponedelnik'
 vtornik = site_prefix + '170-zamena-vtornik'

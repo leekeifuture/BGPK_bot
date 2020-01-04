@@ -2224,7 +2224,7 @@ def callback_query_text_handler(call_back):
 
 @bot.message_handler(content_types=['text'])
 def handle_text(message):
-    if str(message.chat.id) == conf.my_id:
+    if str(message.chat.id) in conf.admin_ids:
         if message.text.split()[0].isdigit():
             text = message.text.split()
             chat_id = text[0]
