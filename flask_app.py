@@ -381,7 +381,7 @@ def settings_handler(message):
     settings_keyboard.row(re_entrance, 'Завершить')
     settings_keyboard.row('« Назад', 'Поддержка')
 
-    if message.chat.id == int(conf.my_id):
+    if str(message.chat.id) in const.admin_ids:
         settings_keyboard.row('Управление')
 
     bot.send_message(message.chat.id, answer, reply_markup=settings_keyboard)
@@ -953,7 +953,7 @@ def users_callback_handler(message):
 
 
 @bot.message_handler(func=lambda mess: mess.text == 'Управление' and
-                     mess.chat.id == int(conf.my_id),
+                     str(mess.chat.id) in const.admin_ids,
                      content_types=['text'])
 def manage_handler(message):
 
@@ -966,7 +966,7 @@ def manage_handler(message):
 
 
 @bot.message_handler(func=lambda mess: mess.text == 'Сокращение звонков' and
-                     mess.chat.id == int(conf.my_id),
+                     str(mess.chat.id) in const.admin_ids,
                      content_types=['text'])
 def abridged_calls_handler(message):
 
@@ -977,7 +977,7 @@ def abridged_calls_handler(message):
 
 
 @bot.message_handler(func=lambda mess: mess.text == 'Рассылка' and
-                     mess.chat.id == int(conf.my_id),
+                     str(mess.chat.id) in const.admin_ids,
                      content_types=['text'])
 def newsletter_handler(message):
 
@@ -990,7 +990,7 @@ def newsletter_handler(message):
 
 
 @bot.message_handler(func=lambda mess: mess.text == 'Студентам' and
-                     mess.chat.id == int(conf.my_id),
+                     str(mess.chat.id) in const.admin_ids,
                      content_types=['text'])
 def students_newsletter_handler(message):
 
@@ -1003,7 +1003,7 @@ def students_newsletter_handler(message):
 
 
 @bot.message_handler(func=lambda mess: mess.text == 'Преподавателям' and
-                     mess.chat.id == int(conf.my_id),
+                     str(mess.chat.id) in const.admin_ids,
                      content_types=['text'])
 def teachers_newsletter_handler(message):
 
@@ -1016,7 +1016,7 @@ def teachers_newsletter_handler(message):
 
 
 @bot.message_handler(func=lambda mess: mess.text == 'Всем' and
-                     mess.chat.id == int(conf.my_id),
+                     str(mess.chat.id) in const.admin_ids,
                      content_types=['text'])
 def all_newsletter_handler(message):
 
@@ -1028,7 +1028,7 @@ def all_newsletter_handler(message):
 
 @bot.message_handler(func=lambda mess: mess.reply_to_message is not None and
                      mess.reply_to_message.from_user.username ==
-                     bot_username and mess.chat.id == int(conf.my_id) and
+                     bot_username and str(mess.chat.id) in const.admin_ids and
                      mess.reply_to_message.text ==
                      'Укажи сообщение для отправки:',
                      content_types=['text'])
@@ -1052,7 +1052,7 @@ def send_newsletter_to_all_handler(message):
                      mess.reply_to_message.from_user.username ==
                      bot_username and
                      'Укажи дату сокращенных пар' in mess.reply_to_message.text
-                     and mess.chat.id == int(conf.my_id),
+                     and str(mess.chat.id) in const.admin_ids,
                      content_types=['text'])
 def save_abridged_call_handler(message):
 
@@ -2224,7 +2224,7 @@ def callback_query_text_handler(call_back):
 
 @bot.message_handler(content_types=['text'])
 def handle_text(message):
-    if str(message.chat.id) in conf.admin_ids:
+    if str(message.chat.id) in const.admin_ids:
         if message.text.split()[0].isdigit():
             text = message.text.split()
             chat_id = text[0]
