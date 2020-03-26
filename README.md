@@ -2,6 +2,8 @@
 
 ## Getting started
 
+BGPK bot was created for Polytechnic College for convenience way viewing schedule and replacements (changes in schedule)
+
 * Username: @BGPK_bot
 
 * Or you can use this [link](https://t.me/BGPK_bot)
