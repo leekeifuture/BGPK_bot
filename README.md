@@ -1,4 +1,4 @@
-![bgpk_bot](https://i.imgur.com/6C45TNs.png "BGPK bot")
+![bgpk_bot](img/BGPK_bot_logo.png "BGPK bot")
 
 ## Getting started
 
