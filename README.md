@@ -2,7 +2,7 @@
 
 ## Getting started
 
-BGPK bot was created for Polytechnic College for convenience way viewing schedule and replacements (changes in schedule)
+BGPK bot - telegram bot for Polytechnic College which provides convenience way viewing schedule and replacements (changes in schedule)
 
 * Username: @BGPK_bot
 
