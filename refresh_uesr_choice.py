@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-#!/usr/bin/python3.6
+# !/usr/bin/python3.6
 
+
+from sqlite3 import connect
 
 from constants import path
-from sqlite3 import connect
 
 
 def main():

@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-#!/usr/bin/python3.6
+# !/usr/bin/python3.6
 
 
 import datetime as dt
 from sqlite3 import connect
-
 
 if dt.datetime.isoweekday(dt.datetime.now()) != 7:
     isoweekday = dt.datetime.isoweekday(dt.datetime.now())

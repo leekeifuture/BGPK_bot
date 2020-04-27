@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
-#!/usr/bin/python3.6
+# !/usr/bin/python3.6
 
 
-import re
 import os
-import config as conf
-from xlrd import open_workbook
+import re
 from collections import Counter
 
+from xlrd import open_workbook
+
+import config as conf
 
 path = os.environ['PATH_TO_BOT_DIRECTORY']
 
@@ -40,7 +41,6 @@ brly_aliases = {
     'ю': 'YUR'
 }
 
-
 courses = [
     {'Alias': '1',
      'Course': '1 курс'},
@@ -59,21 +59,21 @@ student_groups = [
             {'StudentGroupName': 'С89'},
             {'StudentGroupName': 'Ср24'}
         ]
-     },
+    },
     {'STR2':
         [
             {'StudentGroupName': 'С86'},
             {'StudentGroupName': 'С87'},
             {'StudentGroupName': 'Ср23'}
         ]
-     },
+    },
     {'STR3':
         [
             {'StudentGroupName': 'С84'},
             {'StudentGroupName': 'С85'},
             {'StudentGroupName': 'Ср22'}
         ]
-     },
+    },
     {'STR4':
         [
             {'StudentGroupName': 'С81'},
@@ -81,77 +81,76 @@ student_groups = [
             {'StudentGroupName': 'С83'},
             {'StudentGroupName': 'Ср21'}
         ]
-     },
+    },
     {'RAD1':
         [
             {'StudentGroupName': 'Р55'},
             {'StudentGroupName': 'Р56'},
             {'StudentGroupName': 'Э1'}
         ]
-     },
+    },
     {'RAD2':
         [
             {'StudentGroupName': 'Р53'},
             {'StudentGroupName': 'Р54'}
         ]
-     },
+    },
     {'RAD3':
         [
             {'StudentGroupName': 'Р51'},
             {'StudentGroupName': 'Р52'}
         ]
-     },
+    },
     {'RAD4':
         [
             {'StudentGroupName': 'Р49'},
             {'StudentGroupName': 'Р50'}
         ]
-     },
+    },
     {'MEH1':
         [
             {'StudentGroupName': 'М59'},
             {'StudentGroupName': 'М60'}
         ]
-     },
+    },
     {'MEH2':
         [
             {'StudentGroupName': 'М56'},
             {'StudentGroupName': 'М57'},
             {'StudentGroupName': 'Мс58'}
         ]
-     },
+    },
     {'MEH3':
         [
             {'StudentGroupName': 'М53'},
             {'StudentGroupName': 'М54'},
             {'StudentGroupName': 'Мс55'}
         ]
-     },
+    },
     {'MEH4':
         [
             {'StudentGroupName': 'М50'},
             {'StudentGroupName': 'М51'},
             {'StudentGroupName': 'Мс52'}
         ]
-     },
+    },
     {'YUR1':
         [
             {'StudentGroupName': 'Ю46'}
         ]
-     },
+    },
     {'YUR2':
         [
             {'StudentGroupName': 'Ю44'},
             {'StudentGroupName': 'Юс45'}
         ]
-     },
+    },
     {'YUR3':
         [
             {'StudentGroupName': 'Ю43'}
         ]
-     },
+    },
 ]
-
 
 site_prefix = 'http://www.bspc.bstu.by/ru/uchashchimsya/zamena-zanyatij/'
 
@@ -279,7 +278,7 @@ num_day_titles = {
 }
 
 week_days = ['понедельник', 'вторник', 'среда',
-             'четверг',     'пятница', 'суббота']
+             'четверг', 'пятница', 'суббота']
 
 day_list = [
     'первое', 'второе', 'третье', 'четвёртое', 'пятое', 'шестое', 'седьмое',
@@ -299,7 +298,8 @@ month_list = [
 
 month_only_list = {
     1: 'январь', 2: 'февраль', 3: 'март', 4: 'апрель', 5: 'май', 6: 'июнь',
-    7: 'июль', 8: 'август', 9: 'сентябрь', 10: 'октябрь', 11: 'ноябрь', 12: 'декабрь'
+    7: 'июль', 8: 'август', 9: 'сентябрь', 10: 'октябрь', 11: 'ноябрь',
+    12: 'декабрь'
 }
 
 lesson_time = {
@@ -392,14 +392,12 @@ not_events_for_teachers = 'Нет событий'
 
 notify = ''
 
-
 table_lessons = {}
 lessons_workbook = open_workbook(collage_folder + '/lessons/Lessons.xls')
 lessons_sheet = lessons_workbook.sheet_by_index(0)
 for i in range(lessons_sheet.nrows):
     table_lessons[lessons_sheet.cell_value(i, 1).replace(' ', '').lower()] = (
         lessons_sheet.cell_value(i, 0).strip())
-
 
 teachers = {}
 teachers_workbook = open_workbook(collage_folder + '/teachers/Teachers.xls')
@@ -412,7 +410,6 @@ for i in range(teachers_sheet.nrows):
 
 sub_pattern = r'[^\w+]'
 pattern = re.compile(r'\w+')
-
 
 cap_teachers = [teachers[str(i)] for i in teachers.keys()]
 
@@ -450,14 +447,14 @@ if duplicate:
             if teacher_name[index] == teacher_name[ind]:
                 sp_te = cap_teachers[ind].split()
                 teacher_name[ind] = (
-                    sp_te[0] + ' ' +
-                    sp_te[1][:2] + '. ' +
-                    sp_te[2][:2] + '.')
+                        sp_te[0] + ' ' +
+                        sp_te[1][:2] + '. ' +
+                        sp_te[2][:2] + '.')
         sp_te = cap_teachers[index].split()
         teacher_name[index] = (
-            sp_te[0] + ' ' +
-            sp_te[1][:2] + '. ' +
-            sp_te[2][:2] + '.')
+                sp_te[0] + ' ' +
+                sp_te[1][:2] + '. ' +
+                sp_te[2][:2] + '.')
 
 ## TABLE ##
 
@@ -497,15 +494,14 @@ if duplicate:
             if table_teacher_name[index] == table_teacher_name[ind]:
                 sp_te = table_cap_teachers[ind].split()
                 table_teacher_name[ind] = (
-                    sp_te[0] + ' ' +
-                    sp_te[1][:2] + '. ' +
-                    sp_te[2][:2] + '.')
+                        sp_te[0] + ' ' +
+                        sp_te[1][:2] + '. ' +
+                        sp_te[2][:2] + '.')
         sp_te = table_cap_teachers[index].split()
         table_teacher_name[index] = (
-            sp_te[0] + ' ' +
-            sp_te[1][:2] + '. ' +
-            sp_te[2][:2] + '.')
-
+                sp_te[0] + ' ' +
+                sp_te[1][:2] + '. ' +
+                sp_te[2][:2] + '.')
 
 existing_groups = []
 for student_group in student_groups:
@@ -584,7 +580,8 @@ for file in files:
                             lesson_row[1:]).split('/')
                         if groups_sheet.ncols >= 4:
                             audience = cls(str(groups_sheet.cell_value(
-                                i + row, 3)).replace('.0', '').replace('с/з', 'спорт. зал'))
+                                i + row, 3)).replace('.0', '').replace('с/з',
+                                                                       'спорт. зал'))
                         else:
                             audience = ''
 
@@ -594,7 +591,8 @@ for file in files:
                             elif lesson_row[0] == '2':
                                 week = 'DOWN'
 
-                            if day == 6 and (day_of_week != '1' and day_of_week != '2'):
+                            if day == 6 and (
+                                    day_of_week != '1' and day_of_week != '2'):
                                 lesson_day = str(day_of_week) + 's'
                             else:
                                 lesson_day = str(day_of_week)
@@ -613,9 +611,12 @@ for file in files:
                             time = (
                                 lesson_time[lesson_day])
                             lesson = (
-                                '/'.join(set([resub(table_lessons[lssns]) for lssns in half_lesson])))
+                                '/'.join(set(
+                                    [resub(table_lessons[lssns]) for lssns in
+                                     half_lesson])))
                             teachers = (
-                                [resub(table_teacher_name[int(tchr_id) - 1]) for tchr_id in all_teachers[1:].split()])
+                                [resub(table_teacher_name[int(tchr_id) - 1]) for
+                                 tchr_id in all_teachers[1:].split()])
                             if len(teachers) == len(set(teachers)):
                                 teacher = '/'.join(teachers)
                             else:
@@ -633,13 +634,11 @@ for file in files:
                             (schedule[group][week][day - 1]
                              .append(day_student_shedule))
 
-
 teachers_shedule = {}
 
 for teacher in teacher_name:
     teachers_shedule[teacher] = {'UP': [[], [], [], [], [], []],
                                  'DOWN': [[], [], [], [], [], []]}
-
 
 existing_teachers = []
 
@@ -687,8 +686,8 @@ for group in existing_groups:
                             if teacher == dived_teacher:
                                 (teachers_shedule[teacher][week]
                                  [schedule[group][week]
-                                  .index(day)]
-                                    .append(day_shedule))
+                                 .index(day)]
+                                 .append(day_shedule))
 
                     if (name_of_teacher.strip() not in existing_teachers and
                             '/' not in name_of_teacher):
@@ -698,8 +697,8 @@ for group in existing_groups:
                             '/' not in name_of_teacher):
                         (teachers_shedule[teacher][week]
                          [schedule[group][week]
-                          .index(day)]
-                            .append(day_shedule))
+                         .index(day)]
+                         .append(day_shedule))
 
 remove_teachers = []
 

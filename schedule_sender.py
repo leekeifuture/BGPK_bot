@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
-#!/usr/bin/python3.6
+# !/usr/bin/python3.6
 
 
-import sys
-import config as conf
 import datetime as dt
-from time import sleep
-import functions as func
-import constants as const
-from telebot import TeleBot
+import sys
 from sqlite3 import connect
+from time import sleep
 
+import config as conf
+import constants as const
+import functions as func
+from telebot import TeleBot
 
 bot = TeleBot(conf.token)
 
@@ -59,8 +59,9 @@ def main(date):
 
             answer = 'Расписание на завтра:\n\n'
             answer += const.emoji['calendar'] + ' '
-            answer += (const.num_day[str(dt.datetime.isoweekday(dt.datetime.now() +
-                                                                dt.timedelta(days=1)))] +
+            answer += (const.num_day[
+                           str(dt.datetime.isoweekday(dt.datetime.now() +
+                                                      dt.timedelta(days=1)))] +
                        ', ')
             full_date = func.get_date(True)
             answer += full_date[0] + '\n'
@@ -86,26 +87,27 @@ def main(date):
                     day_info = const.teachers_shedule[
                         const.teacher_name[const.cap_teachers.index(group)]]
                 except:
-                    bot.send_message(conf.my_id,  str(dt.datetime.now())[:-7] +
+                    bot.send_message(conf.my_id, str(dt.datetime.now())[:-7] +
                                      ' | ' + 'Ошибка при рассылке расписания '
-                                     'для {} "<b>({})</b>"\U00002026:'
-                                     '\n\n'.format(str(irs),
-                                                   group) +
+                                             'для {} "<b>({})</b>"\U00002026:'
+                                             '\n\n'.format(str(irs),
+                                                           group) +
                                      str(sys.exc_info()[1]))
             else:
                 try:
                     day_info = const.schedule[group]
                 except:
-                    bot.send_message(conf.my_id,  str(dt.datetime.now())[:-7] +
+                    bot.send_message(conf.my_id, str(dt.datetime.now())[:-7] +
                                      ' | ' + 'Ошибка при рассылке расписания '
-                                     'для {} "<b>({})</b>"\U00002026:'
-                                     '\n\n'.format(str(irs),
-                                                   group) +
+                                             'для {} "<b>({})</b>"\U00002026:'
+                                             '\n\n'.format(str(irs),
+                                                           group) +
                                      str(sys.exc_info()[1]))
             try:
-                day_info = day_info[week][dt.datetime.isoweekday(dt.datetime.now() +
-                                                                 dt.timedelta(
-                    days=td)) - 1]
+                day_info = day_info[week][
+                    dt.datetime.isoweekday(dt.datetime.now() +
+                                           dt.timedelta(
+                                               days=td)) - 1]
             except:
                 continue
 

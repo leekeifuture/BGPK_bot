@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-#!/usr/bin/python3.6
+# !/usr/bin/python3.6
 
 
 from os import environ
-
 
 my_id = environ['MY_TELEGRAM_ID']  # my id
 

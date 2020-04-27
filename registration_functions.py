@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
-#!/usr/bin/python3.6
+# !/usr/bin/python3.6
 
 
-import re
 import json
+import re
 import sqlite3 as sl3
+from collections import Counter
+from datetime import datetime
+
+from bs4 import BeautifulSoup
+
 import constants as const
 from telebot import types
-from bs4 import BeautifulSoup
-from datetime import datetime
-from collections import Counter
 
 
 def set_next_step(user_id, next_step):
@@ -345,9 +347,9 @@ def select_teacher(message):
 
         if len(teachers) == 0:
             answer += ('Преподаватель "<b>' + message.text + '</b>" '
-                       'не найден.\nЕсли по какой-то причине отсусвует '
-                       'какой либо преподаватель, просьба сразу сообщить '
-                       '<a href="https://t.me/lee_kei">разработчику</a>.')
+                                                             'не найден.\nЕсли по какой-то причине отсусвует '
+                                                             'какой либо преподаватель, просьба сразу сообщить '
+                                                             '<a href="https://t.me/lee_kei">разработчику</a>.')
 
             bot.send_message(message.chat.id, answer, True,
                              parse_mode='HTML')
@@ -379,14 +381,14 @@ def select_teacher(message):
                             if short_teachers[index] == short_teachers[ind]:
                                 sp_te = teachers[0][ind].split()
                                 short_teachers[ind] = (
-                                    sp_te[0] + ' ' +
-                                    sp_te[1][:2] + '. ' +
-                                    sp_te[2][:2] + '.')
+                                        sp_te[0] + ' ' +
+                                        sp_te[1][:2] + '. ' +
+                                        sp_te[2][:2] + '.')
                         sp_te = teachers[0][index].split()
                         short_teachers[index] = (
-                            sp_te[0] + ' ' +
-                            sp_te[1][:2] + '. ' +
-                            sp_te[2][:2] + '.')
+                                sp_te[0] + ' ' +
+                                sp_te[1][:2] + '. ' +
+                                sp_te[2][:2] + '.')
             else:
                 short_teachers = teachers[0]
 
@@ -435,9 +437,9 @@ def select_teacher(message):
                     'Введи ФИО преподавателя' not in message.text and
                     'Слишком много преподавателей' not in message.text):
                 answer += ('Преподаватель "<b>' + message.text + '</b>" '
-                           'не найден.\nЕсли по какой-то причине отсусвует '
-                           'какой либо преподаватель, просьба сразу сообщить '
-                           '<a href="https://t.me/lee_kei">разработчику</a>.')
+                                                                 'не найден.\nЕсли по какой-то причине отсусвует '
+                                                                 'какой либо преподаватель, просьба сразу сообщить '
+                                                                 '<a href="https://t.me/lee_kei">разработчику</a>.')
 
                 bot.send_message(message.chat.id, answer, True,
                                  parse_mode='HTML')

@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
-#!/usr/bin/python3.6
+# !/usr/bin/python3.6
 
 
+import datetime as dt
 import sys
 from re import sub
-import datetime as dt
-import config as conf
-from time import sleep
-import functions as func
-import constants as const
 from sqlite3 import connect
-from telebot import TeleBot
+from time import sleep
+
 from bs4 import BeautifulSoup
 
+import config as conf
+import constants as const
+import functions as func
+from telebot import TeleBot
 
 bot = TeleBot(conf.token)
 
@@ -77,7 +78,7 @@ def parse(html, parse_day, request_day):
             valid_info = str(dataa) + str(all_page)
             print(valid_info.replace('\n', ''))
             print('\n' + str(dt.datetime.now())[:-7] + ' | ' + '!!! PARSING '
-                       + str(weekday) + ' !!!' + '\n')
+                  + str(weekday) + ' !!!' + '\n')
         except:
             print('\n\n' + str(dt.datetime.now())[:-7] + ' | ' +
                   str(sys.exc_info()[1]) + '\n\n')
@@ -249,14 +250,15 @@ def parse(html, parse_day, request_day):
                             row, id_send_repl)
 
                 answer = const.emoji['anticlockwise'] + \
-                    ' ' + dataaa.capitalize() + answer
+                         ' ' + dataaa.capitalize() + answer
 
                 try:
                     bot.send_message(id_send_repl, answer, parse_mode='HTML')
                     have_repl.append(id_send_repl)
                 except Exception as err:
                     print(err)
-                    bot.send_message(conf.my_id, const.emoji['cross_mark'] + ' ' +
+                    bot.send_message(conf.my_id,
+                                     const.emoji['cross_mark'] + ' ' +
                                      str(id_send_repl) + '\n' + str(err))
                     continue
 
@@ -313,12 +315,14 @@ def parse(html, parse_day, request_day):
                                          .format(group,
                                                  func.day_of_week_parsing_day(
                                                      parse_day,
-                                                     dt.datetime.isoweekday(c))) +
+                                                     dt.datetime.isoweekday(
+                                                         c))) +
                                          dataaa[-10:] + ').', parse_mode='HTML')
                         not_have_repl.append(inzs)
                     except Exception as err:
                         print(err)
-                        bot.send_message(conf.my_id, const.emoji['cross_mark'] + ' ' +
+                        bot.send_message(conf.my_id,
+                                         const.emoji['cross_mark'] + ' ' +
                                          str(inzs) + '\n' + str(err))
                         continue
 
@@ -346,14 +350,18 @@ def parse(html, parse_day, request_day):
 
     elif (dt.datetime.strftime(dt.datetime.now(), '%H:%M') == '23:50' and
           ((dt.datetime.isoweekday(dt.datetime.now()) == 6 and
-            dataaa.replace(' ', '')[-10:][:2] == (dt.datetime.strftime(dt.date.today() +
-                                                                       dt.timedelta(days=-5), '%d') or
-                                                  dt.datetime.strftime(dt.date.today() + dt.timedelta(days=-12), '%d'))) or
+            dataaa.replace(' ', '')[-10:][:2] == (
+                    dt.datetime.strftime(dt.date.today() +
+                                         dt.timedelta(days=-5), '%d') or
+                    dt.datetime.strftime(
+                        dt.date.today() + dt.timedelta(days=-12), '%d'))) or
            (dt.datetime.isoweekday(dt.datetime.now()) != 6 and
-              dataaa.replace(' ', '')[-10:][:2] == (dt.datetime.strftime(dt.date.today() +
-                                                                         dt.timedelta(days=-6), '%d') or
-                                                    dt.datetime.strftime(dt.date.today() + dt.timedelta(days=-13), '%d')))
-           )):
+            dataaa.replace(' ', '')[-10:][:2] == (
+                    dt.datetime.strftime(dt.date.today() +
+                                         dt.timedelta(days=-6), '%d') or
+                    dt.datetime.strftime(
+                        dt.date.today() + dt.timedelta(days=-13), '%d')))
+          )):
 
         sql_con = connect(const.path + 'Parse.db')
         cursor = sql_con.cursor()
